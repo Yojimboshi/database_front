@@ -1,0 +1,100 @@
+.admin-page {
+  text-align: center;
+  padding: 50px;
+}
+
+
+.admin-page {
+  text-align: center;
+  padding: 50px;
+  background-color: #f4f4f4;
+  /* A light gray background for the dashboard */
+  min-height: 100vh;
+  /* Ensuring the dashboard occupies the full viewport height */
+}
+
+/* Header */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  /* Dark background for the header */
+  color: #fff;
+  /* White text color for the header */
+  padding: 20px 50px;
+  /* Some padding for spacing */
+}
+
+/* Side Navigation */
+.admin-sidebar {
+  background-color: #444;
+  /* Dark background for the sidebar */
+  color: #fff;
+  /* White text color for the sidebar */
+  width: 250px;
+  /* Set a fixed width for the sidebar */
+  height: 100%;
+  /* Full height */
+  position: fixed;
+  /* Fixed position */
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  /* Add a scrollbar if content overflows */
+}
+
+.admin-sidebar a {
+  display: block;
+  padding: 15px;
+  text-decoration: none;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.admin-sidebar a:hover {
+  background-color: #555;
+  /* A slightly lighter gray for hover effect */
+}
+
+/* Main content */
+.admin-content {
+  margin-left: 260px;
+  /* To account for the sidebar's width */
+  padding: 20px;
+  background-color: #e9e9e9;
+  /* A different shade of gray for contrast */
+}
+
+/* Cards */
+.card {
+  background-color: #fff;
+  /* White background for cards */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* A slight shadow for depth */
+  border-radius: 8px;
+  /* Rounded corners */
+  margin-bottom: 20px;
+  /* Some space between cards */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+td {
+  background-color: #fff;
+}
