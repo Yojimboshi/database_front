@@ -73,8 +73,9 @@ const AdminHome: FC = () => {
     
 
     useEffect(() => {
+        console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
-            // Redirect user to the login page if the token has expired.
+            console.log('Error: Token might be expired or invalid.');
             window.location.href = "/admin/login"; // Adjust to your route structure
         }
     }, [accessToken]);
@@ -132,7 +133,7 @@ const AdminHome: FC = () => {
         fetchUsers();
     }, [page, accessToken]);
 
-    console.log("Rendering AdminHome");
+
     return (
         <div className="admin-page">
 
@@ -146,6 +147,7 @@ const AdminHome: FC = () => {
             <nav className="admin-sidebar">
                 <Link to="/admin/current">Current Admin Status</Link>
                 <Link to="/adminHome/manageUsers">Manage Users</Link>
+                <Link to="/adminHome/usersList">Users List</Link>
                 <Link to="/admin/reports">View Reports</Link>
                 <Link to="/admin/settings">Settings</Link>
                 <Link to="/admin/packages">Manage Packages</Link>

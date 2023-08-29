@@ -5,6 +5,8 @@ import UserLogin from './pages/UserLogin';
 import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
 import ManageUsersPage from './pages/ManageUsersPage';
+import UsersList from './components/admin/UsersList';
+
 import './App.css';
 
 const App: React.FC = () => {
@@ -18,6 +20,7 @@ const App: React.FC = () => {
     <Route path="/admin" element={<AdminLogin />} />
     <Route path="/adminHome/*" element={<AdminHome />}>
         <Route path="manageUsers/*" element={<ManageUsersPage />} />
+        <Route path="usersList" element={<UsersList />} />
         {/* Add other nested routes for AdminHome here */}
     </Route>
     <Route path="/adminRegister" element={<AdminRegister />} />

@@ -66,6 +66,12 @@
   /* A different shade of gray for contrast */
 }
 
+.admin-content td {
+  background-color: #fff;
+  color: #333; /* Set text color to dark grey for contrast */
+}
+
+
 /* Cards */
 .card {
   background-color: #fff;

@@ -58,7 +58,7 @@ const AdminLogin: React.FC = () => {
             // Store the access token in localStorage
             setAccessToken(accessToken);
             setRefreshToken(refreshTokenFromCookie);
-                console.log(accessToken);
+
             navigate('/adminHome', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
         } catch (error) {
             if (axios.isAxiosError(error)) {
