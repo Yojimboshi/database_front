@@ -60,6 +60,26 @@ const AdminHome: FC = () => {
         }
     };
 
+    const hasTokenExpired = (token: string): boolean => {
+        try {
+            const decodedToken: DecodedToken = jwt_decode(token);
+            const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
+            return decodedToken.exp <= currentTime;
+        } catch (error: any) {
+            console.error("Error decoding the access token:", error.message);
+            return true; // Treat any decoding error as an expired token
+        }
+    };
+    
+
+    useEffect(() => {
+        if (!accessToken || hasTokenExpired(accessToken)) {
+            // Redirect user to the login page if the token has expired.
+            window.location.href = "/admin/login"; // Adjust to your route structure
+        }
+    }, [accessToken]);
+    
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -100,7 +120,7 @@ const AdminHome: FC = () => {
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
                     console.error('Error: Token might be expired or invalid.');
-                    // Handle error, maybe redirect to login page
+                    window.location.href = "/admin/login";
                 } else {
                     console.error('Error fetching users:', error.message);
                 }

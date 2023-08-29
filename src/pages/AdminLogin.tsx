@@ -52,12 +52,13 @@ const AdminLogin: React.FC = () => {
                 }); // Send data to the server's register API
 
             const { accessToken } = response.data; // Access the accessToken from the response data
+            sessionStorage.setItem('accessToken', accessToken);
             const refreshTokenFromCookie = Cookies.get('refreshToken');
             if (!refreshTokenFromCookie) throw new Error('Refresh token not found in cookies');
             // Store the access token in localStorage
             setAccessToken(accessToken);
             setRefreshToken(refreshTokenFromCookie);
-
+                console.log(accessToken);
             navigate('/adminHome', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
         } catch (error) {
             if (axios.isAxiosError(error)) {

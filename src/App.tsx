@@ -17,7 +17,7 @@ const App: React.FC = () => {
       <Routes>
     <Route path="/admin" element={<AdminLogin />} />
     <Route path="/adminHome/*" element={<AdminHome />}>
-        <Route path="manageUsers" element={<ManageUsersPage />} />
+        <Route path="manageUsers/*" element={<ManageUsersPage />} />
         {/* Add other nested routes for AdminHome here */}
     </Route>
     <Route path="/adminRegister" element={<AdminRegister />} />

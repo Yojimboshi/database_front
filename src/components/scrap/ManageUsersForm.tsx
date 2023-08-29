@@ -1,10 +1,8 @@
-// ManageUserForms.tsx
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 // AddUserForm Component
-export const AddUserForm: React.FC = () => {
+export const AddUser: React.FC = () => {
     return (
         <div>
             {/* Implementation of AddUserForm */}
@@ -23,7 +21,7 @@ export const UserDetails: React.FC = () => {
 }
 
 // BanUser Component
-export const BanUser: React.FC = () => {
+export const UpdateUser: React.FC = () => {
     const { userId } = useParams();
     return (
         <div>
@@ -33,7 +31,7 @@ export const BanUser: React.FC = () => {
 }
 
 // UnbanUser Component
-export const UnbanUser: React.FC = () => {
+export const BanUser: React.FC = () => {
     const { userId } = useParams();
     return (
         <div>

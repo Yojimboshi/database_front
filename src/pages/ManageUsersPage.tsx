@@ -1,7 +1,7 @@
 // ManageUsersPage.tsx
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { AddUser, UserDetails, UpdateUser, BanUser } from '../components/admin/ManageUsersForm';
+import { AddUser, UserDetails, UpdateUser, BanUser } from '../components/scrap/ManageUsersForm';
 
 const ManageUsersPage: React.FC = () => {
     console.log("Rendering ManageUsersPage");
