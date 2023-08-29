@@ -98,3 +98,24 @@ th {
 td {
   background-color: #fff;
 }
+
+.admin-buttons {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px; /* If you want spacing between the buttons */
+}
+
+.admin-buttons button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-buttons button:hover {
+  background-color: #555;
+}

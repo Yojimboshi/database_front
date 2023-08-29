@@ -2,7 +2,8 @@ import React, { useState, useEffect, FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import ManageUsersForm from '../components/admin/ManageUsersForm';
+import { Routes, Route, Outlet } from 'react-router-dom';
+import ManageUsersForm from './ManageUsersPage';
 
 interface User {
     id: number;
@@ -41,7 +42,7 @@ const AdminHome: FC = () => {
                 console.error('Error refreshing access token:', refreshResponse.data);
                 return null;
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Error refreshing access token:', error.response?.data || error.message);
             return null;
         }
@@ -53,7 +54,7 @@ const AdminHome: FC = () => {
             const decodedToken: DecodedToken = jwt_decode(token);
             const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
             return (decodedToken.exp - currentTime) <= REFRESH_TIME;
-        } catch (error:any) {
+        } catch (error: any) {
             console.error("Error decoding the access token:", error.message);
             return false; // Treat any decoding error as an expired token
         }
@@ -63,25 +64,25 @@ const AdminHome: FC = () => {
         const fetchUsers = async () => {
             try {
                 let headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
-    
+
                 let response = await fetch(`/api/admin/users?page=${page}`, { headers });
-    
+
                 if (response.status === 200) {
                     const data = await response.json();
                     setUsers(data.users);
                     setTotalPages(data.totalPages);
-    
+
                     if (accessToken && isAccessTokenExpiring(accessToken)) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
                             headers = { Authorization: `Bearer ${newAccessToken}` };
-                            
+
                             response = await fetch(`/api/admin/users?page=${page}`, { headers });
                             if (response.status === 200) {
                                 const retryData = await response.json();
                                 setUsers(retryData.users);
                                 setTotalPages(retryData.totalPages);
-    
+
                                 setAccessToken(newAccessToken);
                                 sessionStorage.setItem('accessToken', newAccessToken);
                                 console.log("NEW TOKEN", newAccessToken);
@@ -107,11 +108,11 @@ const AdminHome: FC = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchUsers();
     }, [page, accessToken]);
-    
 
+    console.log("Rendering AdminHome");
     return (
         <div className="admin-page">
 
@@ -124,7 +125,7 @@ const AdminHome: FC = () => {
             {/* Sidebar */}
             <nav className="admin-sidebar">
                 <Link to="/admin/current">Current Admin Status</Link>
-                <Link to="/admin/users">Manage Users</Link>
+                <Link to="/adminHome/manageUsers">Manage Users</Link>
                 <Link to="/admin/reports">View Reports</Link>
                 <Link to="/admin/settings">Settings</Link>
                 <Link to="/admin/packages">Manage Packages</Link>
@@ -140,35 +141,7 @@ const AdminHome: FC = () => {
             {/* Main Content */}
             <main className="admin-content">
                 <h2>Welcome [Admin Name]</h2> {/* You might replace [Admin Name] with actual admin name fetched from the API */}
-
-                {/* Manage Users Section */}
-                <section className="card">
-                    <h3>Manage Users</h3>
-                    {/* Add New User Form */}
-                    <ManageUsersForm />
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.map(user => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.username}</td>
-                                    <td>
-                                        {/* Example actions, you'd have more actions and their respective endpoints */}
-                                        <Link to={`/admin/users/ban/${user.id}`}>Ban</Link>
-                                        <Link to={`/admin/users/unban/${user.id}`}>Unban</Link>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
+                <Outlet /> {/* Child routes defined in App will be rendered here */}
 
                 {/* Other sections like reports, settings, etc. would go here. 
              You can structure them similar to the Manage Users section. */}

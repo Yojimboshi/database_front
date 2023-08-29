@@ -1,18 +1,43 @@
-import { FC } from 'react';
-import axios from 'axios';
-import { useUserManagement } from '../../hooks/useUserManagement';
+// ManageUserForms.tsx
 
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import React from 'react';
+import { useParams } from 'react-router-dom';
 
-const ManageUsersForm: FC = () => {
-    const { newUserForm, handleCreateUser } = useUserManagement();
-    
+// AddUserForm Component
+export const AddUserForm: React.FC = () => {
     return (
-        <div className="add-user-form">
-            <h4>Add New User</h4>
-            <button onClick={handleCreateUser}>Add User</button>
+        <div>
+            {/* Implementation of AddUserForm */}
         </div>
     );
-};
+}
 
-export default ManageUsersForm;
+// UserDetails Component
+export const UserDetails: React.FC = () => {
+    const { userId } = useParams();
+    return (
+        <div>
+            {/* Implementation of UserDetails using userId */}
+        </div>
+    );
+}
+
+// BanUser Component
+export const BanUser: React.FC = () => {
+    const { userId } = useParams();
+    return (
+        <div>
+            {/* Implementation of BanUser using userId */}
+        </div>
+    );
+}
+
+// UnbanUser Component
+export const UnbanUser: React.FC = () => {
+    const { userId } = useParams();
+    return (
+        <div>
+            {/* Implementation of UnbanUser using userId */}
+        </div>
+    );
+}
