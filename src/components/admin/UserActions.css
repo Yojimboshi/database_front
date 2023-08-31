@@ -1,0 +1,12 @@
+/* Form styles */
+.formGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 600px; /* or any width you prefer */
+    margin: 0 auto; /* center the grid */
+}
+
+.formRow{
+    grid-column: span 2; /* makes the item take the full width */
+}

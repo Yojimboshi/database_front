@@ -165,8 +165,6 @@ const AdminHome: FC = () => {
                 <h2>Welcome [Admin Name]</h2> {/* You might replace [Admin Name] with actual admin name fetched from the API */}
                 <Outlet /> {/* Child routes defined in App will be rendered here */}
 
-                {/* Other sections like reports, settings, etc. would go here. 
-             You can structure them similar to the Manage Users section. */}
             </main>
         </div>
     );

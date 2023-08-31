@@ -11,6 +11,7 @@ interface User {
     email: string;
     role: string;
     accountStatus: string;
+    isEmpty: boolean;
 }
 
 const UsersList: React.FC = () => {
@@ -49,6 +50,7 @@ const UsersList: React.FC = () => {
                             <th>Email</th>
                             <th>Role</th>
                             <th>Status</th>
+                            <th>IsEmpty</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +62,7 @@ const UsersList: React.FC = () => {
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
                                 <td>{user.accountStatus}</td>
+                                <td>{user.isEmpty ? 'true' : 'false'}</td>
                             </tr>
                         ))}
                     </tbody>
