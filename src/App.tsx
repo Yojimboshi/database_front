@@ -5,6 +5,7 @@ import UserLogin from './pages/UserLogin';
 import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
 import ManageUsersPage from './pages/ManageUsersPage';
+import TestApiPage from './pages/TestApiPage'
 import UsersList from './components/admin/UsersList';
 
 import './App.css';
@@ -25,6 +26,8 @@ const App: React.FC = () => {
     </Route>
     <Route path="/adminRegister" element={<AdminRegister />} />
     <Route path="/user" element={<UserLogin />} />
+    <Route path="/test-api" component={TestApiPage} />
+
     <Route path="*" element={<div>Select a page from above to navigate.</div>} />
 </Routes>
 

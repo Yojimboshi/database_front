@@ -1,0 +1,51 @@
+📦database_front_vite
+ ┣ 📂src
+ ┃ ┣ 📂assets
+ ┃ ┃ ┗ 📜react.svg
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂admin
+ ┃ ┃ ┃ ┣ 📜Dashboard.tsx
+ ┃ ┃ ┃ ┣ 📜GlobalSettings.tsx
+ ┃ ┃ ┃ ┣ 📜Packages.tsx
+ ┃ ┃ ┃ ┣ 📜Reports.tsx
+ ┃ ┃ ┃ ┣ 📜Upgrades.tsx
+ ┃ ┃ ┃ ┣ 📜UserActions.css
+ ┃ ┃ ┃ ┣ 📜UserActions.tsx
+ ┃ ┃ ┃ ┗ 📜UsersList.tsx
+ ┃ ┃ ┣ 📂modal
+ ┃ ┃ ┃ ┣ 📜Modal.css
+ ┃ ┃ ┃ ┗ 📜Modal.tsx
+ ┃ ┃ ┣ 📂user
+ ┃ ┃ ┃ ┣ 📜AddChild.tsx
+ ┃ ┃ ┃ ┣ 📜Profile.tsx
+ ┃ ┃ ┃ ┣ 📜Settings.tsx
+ ┃ ┃ ┃ ┗ 📜UpgradeHistory.tsx
+ ┃ ┃ ┗ 📜other.js
+ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜useAdmin.ts
+ ┃ ┃ ┗ 📜useUsers.ts
+ ┃ ┣ 📂pages
+ ┃ ┃ ┣ 📜Admin.css
+ ┃ ┃ ┣ 📜AdminHome.tsx
+ ┃ ┃ ┣ 📜AdminLogin.tsx
+ ┃ ┃ ┣ 📜AdminRegister.tsx
+ ┃ ┃ ┣ 📜ManageUsersPage.tsx
+ ┃ ┃ ┣ 📜User.css
+ ┃ ┃ ┗ 📜UserLogin.tsx
+ ┃ ┣ 📜App.css
+ ┃ ┣ 📜App.tsx
+ ┃ ┣ 📜index.css
+ ┃ ┣ 📜main.tsx
+ ┃ ┗ 📜vite-env.d.ts
+ ┣ 📜.env
+ ┣ 📜.eslintrc.cjs
+ ┣ 📜.gitignore
+ ┣ 📜index.html
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┣ 📜postcss.config.js
+ ┣ 📜README.md
+ ┣ 📜tailwind.config.js
+ ┣ 📜tsconfig.json
+ ┣ 📜tsconfig.node.json
+ ┗ 📜vite.config.ts

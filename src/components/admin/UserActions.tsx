@@ -12,6 +12,7 @@ interface AddUserFormData {
     password: string;
     packageId: string;
     parentId: string;
+    position: 'left' | 'right' | '';
     retypePassword: string;
     isEmpty: boolean;
 }
@@ -40,6 +41,7 @@ export const AddUser: React.FC = () => {
         password: '',
         packageId: '',
         parentId: '',
+        position: '',
         retypePassword: '',
         isEmpty: false
     });
@@ -99,14 +101,34 @@ export const AddUser: React.FC = () => {
                     </option>
                 ))}
             </select>
-
-
             <input
                 type="text"
                 placeholder="Parent ID"
                 value={formData.parentId}
                 onChange={(e) => setFormData({ ...formData, parentId: e.target.value })}
             />
+            <div className={"formRow"}>
+                <label>
+                    <input
+                        type="radio"
+                        name="position"
+                        value="left"
+                        checked={formData.position === 'left'}
+                        onChange={(e) => setFormData({ ...formData, position: e.target.value as 'left' | 'right' })}
+                    />
+                    Left
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="position"
+                        value="right"
+                        checked={formData.position === 'right'}
+                        onChange={(e) => setFormData({ ...formData, position: e.target.value as 'left' | 'right' })}
+                    />
+                    Right
+                </label>
+            </div>
             <input
                 type="password"
                 placeholder="Password"
