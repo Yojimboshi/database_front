@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const GetUserSettings = () => {
-    // Logic to fetch the user settings
-    // ...
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const GetUserSettings: React.FC = () => {
+    const [settings, setSettings] = useState(null);
+
+    useEffect(() => {
+        axios.get(`${VITE_API_BASE_URL}/api/v1/users/settings`)
+            .then(response => setSettings(response.data))
+            .catch(error => console.error('Error fetching user settings:', error));
+    }, []);
 
     return (
         <div>
             <h2>User Settings</h2>
-            {/* Display the data here */}
+            {settings && <p>Theme: {settings.theme}</p>}
+            {/* ... other settings details */}
         </div>
     );
 }

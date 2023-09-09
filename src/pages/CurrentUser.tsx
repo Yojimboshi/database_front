@@ -1,32 +1,26 @@
-import React, { useState, useEffect, FC } from 'react';
-import { Link, useLocation,useNavigate , Route, Outlet  } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate, Route, Outlet } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import ManageUsersForm from './ManageUsersPage';
+
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const REFRESH_TIME = 5 * 60;
 
 interface User {
     id: number;
     username: string;
     // add other user attributes as needed
 }
-
 interface DecodedToken {
     exp: number;
     [key: string]: any;
 }
 
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const REFRESH_TIME = 20 * 60 ; // 20 minutes
 
-const AdminHome: FC = () => {
+const CurrentUser: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
-    const [users, setUsers] = useState<User[]>([]);
-    const [page, setPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(0);
-    const [isLoading, setIsLoading] = useState(true);
-
+    const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(() => sessionStorage.getItem('accessToken') || location.state?.accessToken);
     const refreshToken = location.state?.refreshToken;
 
@@ -39,6 +33,7 @@ const AdminHome: FC = () => {
         navigate('/');
     };
 
+    
     const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
         try {
             const refreshResponse = await axios.post(
@@ -80,104 +75,72 @@ const AdminHome: FC = () => {
             return true; // Treat any decoding error as an expired token
         }
     };
-    
 
     useEffect(() => {
         console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
-            window.location.href = "/admin/login"; // Adjust to your route structure
+            navigate("/user/login"); 
+            return;
         }
-    }, [accessToken]);
-    
 
-    useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchCurrentUser = async () => {
             try {
-                let headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+                const headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
-                let response = await fetch(`/api/admin/users?page=${page}`, { headers });
+                const response = await fetch(`${VITE_API_BASE_URL}/api/users/current`, { headers });
 
                 if (response.status === 200) {
                     const data = await response.json();
-                    setUsers(data.users);
-                    setTotalPages(data.totalPages);
+                    setUser(data.user);
 
                     if (accessToken && isAccessTokenExpiring(accessToken)) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
-                            headers = { Authorization: `Bearer ${newAccessToken}` };
-
-                            response = await fetch(`/api/admin/users?page=${page}`, { headers });
-                            if (response.status === 200) {
-                                const retryData = await response.json();
-                                setUsers(retryData.users);
-                                setTotalPages(retryData.totalPages);
-
-                                setAccessToken(newAccessToken);
-                                sessionStorage.setItem('accessToken', newAccessToken);
-                                console.log("NEW TOKEN", newAccessToken);
-                            } else {
-                                console.error('Error fetching users after token refresh:', response.statusText);
-                            }
+                            sessionStorage.setItem('accessToken', newAccessToken);
+                            console.log("NEW TOKEN", newAccessToken);
                         } else {
                             console.error('Error refreshing access token: Unable to get new access token');
                         }
                     }
                 } else {
-                    console.error('Error fetching users:', response.statusText);
-                    // Handle error, maybe redirect to login page if token is invalid
+                    console.error('Error fetching current user:', response.statusText);
                 }
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
                     console.error('Error: Token might be expired or invalid.');
-                    window.location.href = "/admin/login";
+                    navigate("/user/login");
                 } else {
-                    console.error('Error fetching users:', error.message);
+                    console.error('Error fetching current user:', error.message);
                 }
-            } finally {
-                setIsLoading(false);
             }
         };
 
-        fetchUsers();
-    }, [page, accessToken]);
-
+        fetchCurrentUser();
+    }, [accessToken]);
 
     return (
-        <div className="admin-page">
+        <div className="user-page">
 
             {/* Header */}
-            <header className="admin-header">
-                <h1>Admin Dashboard</h1>
-                <button onClick={handleLogout}>Logout</button> {/* Replaced Link with a button */}
+            <header className="user-header">
+                <h1>User Dashboard</h1>
+                <Link to="/user/logout">Logout</Link>
             </header>
 
             {/* Sidebar */}
-            <nav className="admin-sidebar">
-                <Link to="/admin/current">Current Admin Status</Link>
-                <Link to="/adminHome/manageUsers">Manage Users</Link>
-                <Link to="/adminHome/usersList">Users List</Link>
-                <Link to="/admin/reports">View Reports</Link>
-                <Link to="/admin/settings">Settings</Link>
-                <Link to="/admin/packages">Manage Packages</Link>
-                <Link to="/admin/upgrades">Manage Upgrades</Link>
+            <nav className="user-sidebar">
+                <Link to="/user/current/childinfo">View Child Info</Link>
+                {/* Add other user links here */}
             </nav>
 
-            <div className="pagination-controls">
-                <button onClick={() => setPage(prev => Math.max(prev - 1, 1))} disabled={page === 1}>Previous</button>
-                <span>Page {page} of {totalPages}</span>
-                <button onClick={() => setPage(prev => Math.min(prev + 1, totalPages))} disabled={page === totalPages}>Next</button>
-            </div>
-
             {/* Main Content */}
-            <main className="admin-content">
-                <h2>Welcome [Admin Name]</h2> {/* You might replace [Admin Name] with actual admin name fetched from the API */}
+            <main className="user-content">
+                <h2>Welcome {user ? user.username : 'Loading...'}</h2> {/* Use user instead of User */}
                 <Outlet /> {/* Child routes defined in App will be rendered here */}
-
             </main>
         </div>
     );
 }
 
-export default AdminHome;
+export default CurrentUser;

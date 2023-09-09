@@ -59,7 +59,7 @@ const UserLogin: React.FC = () => {
             setAccessToken(accessToken);
             setRefreshToken(refreshTokenFromCookie);
 
-            navigate('/adminHome', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
+            navigate('/user/current', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error logging in user:', (error as AxiosError).response.data);
