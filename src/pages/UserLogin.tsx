@@ -46,13 +46,14 @@ const UserLogin: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response: AxiosResponse<ResponseData> = await axios.post(`${VITE_API_BASE_URL}/api/v1/users/login`,
+            const response: AxiosResponse<ResponseData> = await axios.post(`${VITE_API_BASE_URL}/users/login`,
                 formData,
                 {
                     withCredentials: true,
                 });
 
             const { accessToken } = response.data;
+            sessionStorage.setItem('accessToken', accessToken);
             const refreshTokenFromCookie = Cookies.get('refreshToken');
             if (!refreshTokenFromCookie) throw new Error('Refresh token not found in cookies');
 

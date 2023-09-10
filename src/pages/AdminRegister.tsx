@@ -49,13 +49,13 @@ const AdminRegister: React.FC = () => {
         try {
             console.log('Submitting form data:', formData); // Log form data before making the request
             const response: AxiosResponse<ResponseData> = await axios.post(
-                `${VITE_API_BASE_URL}/api/v1/admin/register`,
+                `${VITE_API_BASE_URL}/admin/register`,
                 formData
             );
             const { email } = response.data;
             alert(`Admin with email: ${email} registered successfully!`);
             // Navigate to the admin login page after successful registration
-            navigate('/adminLogin');
+            navigate('/admin');
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error registering the admin:', (error as AxiosError).response.data);
@@ -139,7 +139,7 @@ const AdminRegister: React.FC = () => {
                 <Link to="/">Go to Home</Link>
             </div>
             <div>
-                <Link to="/adminLogin">Go to Admin Login</Link>
+                <Link to="/admin">Go to Admin Login</Link>
             </div>
         </div>
     );

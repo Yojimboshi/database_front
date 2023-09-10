@@ -2,6 +2,7 @@ import React, { useState, useEffect, FC } from 'react';
 import { Link, useLocation,useNavigate , Route, Outlet  } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 import ManageUsersForm from './ManageUsersPage';
 
 interface User {
@@ -33,8 +34,8 @@ const AdminHome: FC = () => {
     const handleLogout = () => {
         // Clear the tokens
         sessionStorage.removeItem('accessToken');
+        Cookies.remove('refreshToken');
         setAccessToken(null);
-
         // Navigate to the homepage
         navigate('/');
     };
@@ -42,7 +43,7 @@ const AdminHome: FC = () => {
     const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
         try {
             const refreshResponse = await axios.post(
-                `${VITE_API_BASE_URL}/users/refreshToken`,
+                `${VITE_API_BASE_URL}/admin/refreshToken`,
                 { refreshToken }
             );
 
@@ -94,21 +95,19 @@ const AdminHome: FC = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                let headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+                let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
 
-                let response = await fetch(`/api/admin/users?page=${page}`, { headers });
+                let response = await fetch(`/admin/users?page=${page}`, { headers });
 
                 if (response.status === 200) {
                     const data = await response.json();
                     setUsers(data.users);
                     setTotalPages(data.totalPages);
-
                     if (accessToken && isAccessTokenExpiring(accessToken)) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
-                            headers = { Authorization: `Bearer ${newAccessToken}` };
-
-                            response = await fetch(`/api/admin/users?page=${page}`, { headers });
+                            headers = { Authorization: `${newAccessToken}` };
+                            response = await fetch(`/admin/users?page=${page}`, { headers });
                             if (response.status === 200) {
                                 const retryData = await response.json();
                                 setUsers(retryData.users);
@@ -128,6 +127,7 @@ const AdminHome: FC = () => {
                     console.error('Error fetching users:', response.statusText);
                     // Handle error, maybe redirect to login page if token is invalid
                 }
+
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
                     console.error('Error: Token might be expired or invalid.');

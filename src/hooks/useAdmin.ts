@@ -1,3 +1,4 @@
+// hooks/useAdmin.ts
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -42,7 +43,7 @@ interface APIError {
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const ADMIN_URL = `${VITE_API_BASE_URL}/api/v1/admin`;
+const ADMIN_URL = `${VITE_API_BASE_URL}/admin`;
 
 function useAdmin() {
     const [users, setUsers] = useState<User[]>([]);

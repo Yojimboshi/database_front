@@ -1,7 +1,7 @@
+// testApi/GetChildInfo.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import { useUsers } from '../../hooks/useUsers';
 
 interface User {
     id: number;
@@ -16,27 +16,10 @@ interface ChildInfo {
     grandchildren: User[];
 }
 
-
-
 const GetChildInfo: React.FC = () => {
-    const [childInfo, setChildInfo] = useState<ChildInfo>({
-        children: [],
-        grandchildren: []
-    });
+    const { childInfo, fetchChildInfo } = useUsers();
     const [searchUsername, setSearchUsername] = useState("");
 
-    const fetchChildInfo = (username = "") => {
-        const endpoint = `${VITE_API_BASE_URL}/api/v1/users/children`;
-        const url = username ? `${endpoint}?search=${username}` : endpoint;
-
-        axios.get(url)
-            .then(response => {
-                setChildInfo(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching child info:', error);
-            });
-    };
 
     const handleFetchClick = () => {
         fetchChildInfo();

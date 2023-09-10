@@ -7,7 +7,7 @@ const GetUserSettings: React.FC = () => {
     const [settings, setSettings] = useState(null);
 
     useEffect(() => {
-        axios.get(`${VITE_API_BASE_URL}/api/v1/users/settings`)
+        axios.get(`${VITE_API_BASE_URL}/users/settings`)
             .then(response => setSettings(response.data))
             .catch(error => console.error('Error fetching user settings:', error));
     }, []);

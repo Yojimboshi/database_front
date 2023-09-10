@@ -45,7 +45,7 @@ const AdminLogin: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
         try {
-            const response: AxiosResponse<ResponseData> = await axios.post(`${VITE_API_BASE_URL}/api/v1/admin/login`,
+            const response: AxiosResponse<ResponseData> = await axios.post(`${VITE_API_BASE_URL}/admin/login`,
                 formData,
                 {
                     withCredentials: true, // Allow cookies to be sent

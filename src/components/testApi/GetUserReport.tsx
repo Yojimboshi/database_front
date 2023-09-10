@@ -12,7 +12,7 @@ const GetUserReport: React.FC = () => {
     });
 
     useEffect(() => {
-        axios.get(`${VITE_API_BASE_URL}/api/v1/users/report`)
+        axios.get(`${VITE_API_BASE_URL}/users/report`)
             .then(response => setReport(response.data))
             .catch(error => console.error('Error fetching user report:', error));
     }, []);

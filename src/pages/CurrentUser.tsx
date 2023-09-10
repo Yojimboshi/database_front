@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, Route, Outlet } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
@@ -27,6 +28,7 @@ const CurrentUser: React.FC = () => {
     const handleLogout = () => {
         // Clear the tokens
         sessionStorage.removeItem('accessToken');
+        Cookies.remove('refreshToken');
         setAccessToken(null);
 
         // Navigate to the homepage
@@ -80,25 +82,34 @@ const CurrentUser: React.FC = () => {
         console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
-            navigate("/user/login"); 
+            navigate("/user"); 
             return;
         }
 
         const fetchCurrentUser = async () => {
             try {
-                const headers: Record<string, string> = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+                let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
 
-                const response = await fetch(`${VITE_API_BASE_URL}/api/users/current`, { headers });
+                let response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
 
                 if (response.status === 200) {
                     const data = await response.json();
                     setUser(data.user);
-
                     if (accessToken && isAccessTokenExpiring(accessToken)) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
-                            sessionStorage.setItem('accessToken', newAccessToken);
-                            console.log("NEW TOKEN", newAccessToken);
+                            headers = { Authorization: `${newAccessToken}` };
+                            const response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
+                            if (response.status === 200) {
+                                const retryData = await response.json();
+                                setUser(retryData.users);
+
+                                setAccessToken(newAccessToken);
+                                sessionStorage.setItem('accessToken', newAccessToken);
+                                console.log("NEW TOKEN", newAccessToken);
+                            } else {
+                                console.error('Error fetching users after token refresh:', response.statusText);
+                            }
                         } else {
                             console.error('Error refreshing access token: Unable to get new access token');
                         }
@@ -106,10 +117,11 @@ const CurrentUser: React.FC = () => {
                 } else {
                     console.error('Error fetching current user:', response.statusText);
                 }
+
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
                     console.error('Error: Token might be expired or invalid.');
-                    navigate("/user/login");
+                    navigate("/user");
                 } else {
                     console.error('Error fetching current user:', error.message);
                 }
@@ -125,7 +137,7 @@ const CurrentUser: React.FC = () => {
             {/* Header */}
             <header className="user-header">
                 <h1>User Dashboard</h1>
-                <Link to="/user/logout">Logout</Link>
+                <button onClick={handleLogout}>Logout</button>
             </header>
 
             {/* Sidebar */}
