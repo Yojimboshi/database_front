@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate, Route, Outlet } from 'react-router-dom'
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
+import './CurrentUser.css';
+
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
@@ -133,7 +135,6 @@ const CurrentUser: React.FC = () => {
 
     return (
         <div className="user-page">
-
             {/* Header */}
             <header className="user-header">
                 <h1>User Dashboard</h1>
@@ -143,6 +144,7 @@ const CurrentUser: React.FC = () => {
             {/* Sidebar */}
             <nav className="user-sidebar">
                 <Link to="/user/current/childinfo">View Child Info</Link>
+                <Link to="/user/current/registerUser">Register User</Link> {/* New link added */}
                 {/* Add other user links here */}
             </nav>
 

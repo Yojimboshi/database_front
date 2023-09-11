@@ -1,0 +1,29 @@
+/* /components/testApi/style.css */
+.formRow button {
+    background-color: #007BFF; /* Sets a blue background */
+    color: white;             /* Sets the text color to white */
+    padding: 10px 20px;       /* Adds padding around the button */
+    border: none;             /* Removes any default border */
+    border-radius: 5px;       /* Rounds the corners */
+    cursor: pointer;          /* Changes the mouse cursor to a hand when over the button */
+    font-size: 1rem;          /* Sets the font size */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.formRow button:hover {
+    background-color: #0056b3; /* Slightly darker blue for hover effect */
+}
+
+.formRow button:disabled {
+    background-color: #ccc; /* Sets a gray background for the disabled state */
+    cursor: not-allowed;    /* Indicates the button is not clickable */
+}
+
+.listText {
+    color: black;
+}
+
+.boldBlackText {
+    font-weight: bold;
+    color: black;
+}

@@ -1,3 +1,4 @@
+// App.tsx
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import React from 'react';
 import AdminLogin from './pages/AdminLogin';
@@ -6,6 +7,7 @@ import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
 import ManageUsersPage from './pages/ManageUsersPage';
 import UsersList from './components/admin/UsersList';
+import RegisterUser from './components/testApi/RegisterUser';
 import AppLayout from './pages/AppLayout';
 import './App.css';
 
@@ -32,7 +34,7 @@ const App: React.FC = () => {
                 <Route path="/user/current/*" element={<CurrentUser />}>
                     <Route index element={<div>User Dashboard</div>} />
                     <Route path="childinfo" element={<GetChildInfo />} />
-                    {/* ... other nested routes within CurrentUser */}
+                    <Route path="registerUser" element={<RegisterUser />} />
                 </Route>
                 <Route path="/" element={<div>Select a page from above to navigate.</div>} />
             </Routes>
