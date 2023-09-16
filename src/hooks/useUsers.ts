@@ -1,4 +1,4 @@
-// hooks/useUsers.ts
+// src/hooks/useUsers.ts
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -39,12 +39,23 @@ export function useUsers() {
         children: [],
         grandchildren: []
     });
+    const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const headers = {
         Authorization: `${sessionStorage.getItem('accessToken')}`
     };
+
+    const fetchCurrentUserPackage = async () => {
+        try {
+            const response = await axios.get(`${USER_URL}/current`, { headers });
+            setCurrentUserPackage(response.data.package);
+        } catch (error) {
+            console.error("Error fetching current user's package:", error);
+        }
+    };
+    
 
     const fetchPackages = async () => {
         try {
@@ -55,8 +66,24 @@ export function useUsers() {
         }
     };
 
+    const requestUpgrade = async (packageId: string | number) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(
+                `${USER_URL}/upgrades`,
+                { packageId }, // Sending the packageId in the body
+                { headers }
+            );
+            return response.data; // You can handle the response as needed
+        } catch (error) {
+            console.error("Error requesting an upgrade:", error);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const fetchChildInfo = async (username = "") => {
-        const accessToken = sessionStorage.getItem('accessToken');
         const endpoint = `${USER_URL}/children`;
         const url = username ? `${endpoint}?search=${username}` : endpoint;
 
@@ -82,5 +109,18 @@ export function useUsers() {
         }
     };
 
-    return { registerUser, fetchPackages,packages,childInfo, fetchChildInfo, loading, error };
+    return {
+        // Functions
+        registerUser,
+        fetchPackages,
+        packages,
+        requestUpgrade,
+        fetchChildInfo,
+        fetchCurrentUserPackage,
+        currentUserPackage,
+        // States
+        childInfo,
+        loading,
+        error,
+    };
 }

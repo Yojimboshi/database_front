@@ -87,7 +87,7 @@ const AdminHome: FC = () => {
         console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
-            window.location.href = "/admin/login"; // Adjust to your route structure
+            window.location.href = "/"; // Adjust to your route structure
         }
     }, [accessToken]);
     

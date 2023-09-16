@@ -1,3 +1,4 @@
+// src/pages/CurrentUser.tsx
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, Route, Outlet } from 'react-router-dom';
 import axios from 'axios';
@@ -145,6 +146,7 @@ const CurrentUser: React.FC = () => {
             <nav className="user-sidebar">
                 <Link to="/user/current/childinfo">View Child Info</Link>
                 <Link to="/user/current/registerUser">Register User</Link> {/* New link added */}
+                <Link to="/user/current/currentPackage">Current Package</Link> {/* New link added */}
                 {/* Add other user links here */}
             </nav>
 
