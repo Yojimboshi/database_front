@@ -5,16 +5,11 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import './CurrentUser.css';
-
+import {User, Package } from '../hooks/useUsers';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
 
-interface User {
-    id: number;
-    username: string;
-    // add other user attributes as needed
-}
 interface DecodedToken {
     exp: number;
     [key: string]: any;

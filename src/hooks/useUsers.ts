@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-interface User {
+export interface User {
     id: string | number;
     username: string;
     firstName: string;
@@ -13,7 +13,7 @@ interface User {
     isEmpty: boolean;
 }
 
-interface Package {
+export interface Package {
     id: string | number;
     packageName: string;
     price: number;
@@ -23,7 +23,7 @@ interface Package {
     maxHierarchyChildren: number;
 }
 
-interface ChildInfo {
+export interface ChildInfo {
     user?: User;
     parent?: User;
     children: User[];
@@ -39,6 +39,7 @@ export function useUsers() {
         children: [],
         grandchildren: []
     });
+    const [currentUser, setCurrentUser] = useState<User | null>(null);  // <--- Add this line
     const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -47,15 +48,15 @@ export function useUsers() {
         Authorization: `${sessionStorage.getItem('accessToken')}`
     };
 
-    const fetchCurrentUserPackage = async () => {
+    const fetchCurrentUserDetail = async () => {
         try {
             const response = await axios.get(`${USER_URL}/current`, { headers });
             setCurrentUserPackage(response.data.package);
+            setCurrentUser(response.data);  // <--- Set the current user here
         } catch (error) {
             console.error("Error fetching current user's package:", error);
         }
     };
-    
 
     const fetchPackages = async () => {
         try {
@@ -66,12 +67,17 @@ export function useUsers() {
         }
     };
 
-    const requestUpgrade = async (packageId: string | number) => {
+    const requestUpgrade = async (userId: string | number, packageId: string | number) => {
+        if (!userId) {
+            console.error("No user is currently logged in.");
+            return;
+        }
+    
         try {
             setLoading(true);
             const response = await axios.post(
                 `${USER_URL}/upgrades`,
-                { packageId }, // Sending the packageId in the body
+                { userId: userId, newPackageId: packageId },  // Use the passed userId here
                 { headers }
             );
             return response.data; // You can handle the response as needed
@@ -90,7 +96,6 @@ export function useUsers() {
         try {
             const response = await axios.get(url, { headers });
             setChildInfo(response.data);
-            console.log(response.data)
         } catch (error) {
             console.error('Error fetching child info:', error);
         }
@@ -116,8 +121,9 @@ export function useUsers() {
         packages,
         requestUpgrade,
         fetchChildInfo,
-        fetchCurrentUserPackage,
+        fetchCurrentUserDetail,
         currentUserPackage,
+        currentUser, setCurrentUser,
         // States
         childInfo,
         loading,

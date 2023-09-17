@@ -1,35 +1,21 @@
 // src/components/testApi/CurrentPackage.tsx
-import React, { useState } from 'react';
-import { useUsers } from '../../hooks/useUsers';
+import React, { useState, useEffect } from 'react';
+import { useUsers , Package} from '../../hooks/useUsers';
 import UpgradePackage from './UpgradePackage';
 
-interface Package {
-    id: string | number;
-    packageName: string;
-    price: number;
-    sponsorBonusPercentage: number;
-    matchingBonusPercentage: number;
-    hierarchyBonusPercentage: number;
-    maxHierarchyChildren: number;
-}
 
 const CurrentPackage: React.FC = () => {
-    const { packages, fetchPackages, currentUserPackage, fetchCurrentUserPackage } = useUsers();
+    const { packages, fetchPackages, currentUserPackage, fetchCurrentUserDetail, currentUser } = useUsers();
 
     // State to track the selected package for upgrading
     const [selectedPackageForUpgrade, setSelectedPackageForUpgrade] = useState<Package | null>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchPackages();
-        fetchCurrentUserPackage();
+        fetchCurrentUserDetail();
     }, []);
 
-
-
     const upgradeablePackages = packages.filter(pkg => !currentUserPackage || Number(pkg.price) > currentUserPackage.price);
-    
-    // Log the filtered upgradeable packages
-    console.log("Upgradeable Packages:", upgradeablePackages);
 
     return (
         <div className="listText"> {/* Applied listText for general color */}
@@ -56,8 +42,8 @@ const CurrentPackage: React.FC = () => {
                     </div>
                 </div>
             ))}
+            {selectedPackageForUpgrade && <UpgradePackage pkg={selectedPackageForUpgrade} user={currentUser} />}
 
-            {selectedPackageForUpgrade && <UpgradePackage pkg={selectedPackageForUpgrade} />}
         </div>
     );
 }
