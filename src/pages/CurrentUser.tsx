@@ -5,7 +5,7 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import './CurrentUser.css';
-import {User, Package } from '../hooks/useUsers';
+import {User, Package, hasCryptoAddresses  } from '../hooks/useUsers';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
@@ -140,9 +140,9 @@ const CurrentUser: React.FC = () => {
             {/* Sidebar */}
             <nav className="user-sidebar">
                 <Link to="/user/current/childinfo">View Child Info</Link>
-                <Link to="/user/current/registerUser">Register User</Link> {/* New link added */}
-                <Link to="/user/current/currentPackage">Current Package</Link> {/* New link added */}
-                {/* Add other user links here */}
+                <Link to="/user/current/registerUser">Register User</Link> 
+                <Link to="/user/current/currentPackage">Current Package</Link> 
+                <Link to="/user/current/submitReport">Submit Report</Link> 
             </nav>
 
             {/* Main Content */}

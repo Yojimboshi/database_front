@@ -13,6 +13,8 @@ import AppLayout from './pages/AppLayout';
 import './App.css';
 import CurrentUser from './pages/CurrentUser';
 import GetChildInfo from './components/testApi/GetChildInfo';
+import SubmitReport from './components/testApi/SubmitReport';
+import CryptoDeposit from './components/testApi/CryptoDeposit';
 
 const App: React.FC = () => {
     return (
@@ -36,6 +38,8 @@ const App: React.FC = () => {
                     <Route path="childinfo" element={<GetChildInfo />} />
                     <Route path="registerUser" element={<RegisterUser />} />
                     <Route path="currentPackage" element={<CurrentPackage />} />
+                    <Route path="submitReport" element={<SubmitReport />} />
+                    <Route path="crypto-deposit" element={<CryptoDeposit />} />
                 </Route>
             </Routes>
         </Router>

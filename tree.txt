@@ -1,7 +1,5 @@
 📦database_front_vite
  ┣ 📂src
- ┃ ┣ 📂assets
- ┃ ┃ ┗ 📜react.svg
  ┃ ┣ 📂components
  ┃ ┃ ┣ 📂admin
  ┃ ┃ ┃ ┣ 📜Dashboard.tsx

@@ -42,8 +42,15 @@ export function useUsers() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);  // <--- Add this line
     const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string>('');
 
+    const handleError = (operation: string, error: any) => {
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+        console.error(`Error ${operation}:`, errorMessage);
+        setError(errorMessage);
+        throw new Error(errorMessage);
+    };
+    
     const headers = {
         Authorization: `${sessionStorage.getItem('accessToken')}`
     };
@@ -54,7 +61,7 @@ export function useUsers() {
             setCurrentUserPackage(response.data.package);
             setCurrentUser(response.data);  // <--- Set the current user here
         } catch (error) {
-            console.error("Error fetching current user's package:", error);
+            handleError("fetching current user detail", error);
         }
     };
 
@@ -63,7 +70,7 @@ export function useUsers() {
             const response = await axios.get(`${USER_URL}/packages`, { headers });
             setPackages(response.data.packages);
         } catch (error) {
-            console.error("Error fetching packages:", error);
+            handleError("fetching packages", error);
         }
     };
 
@@ -72,7 +79,7 @@ export function useUsers() {
             console.error("No user is currently logged in.");
             return;
         }
-    
+
         try {
             setLoading(true);
             const response = await axios.post(
@@ -82,8 +89,7 @@ export function useUsers() {
             );
             return response.data; // You can handle the response as needed
         } catch (error) {
-            console.error("Error requesting an upgrade:", error);
-            throw error;
+            handleError("requesting an upgrade", error);
         } finally {
             setLoading(false);
         }
@@ -97,7 +103,7 @@ export function useUsers() {
             const response = await axios.get(url, { headers });
             setChildInfo(response.data);
         } catch (error) {
-            console.error('Error fetching child info:', error);
+            handleError("fetching child info", error);
         }
     };
 
@@ -107,12 +113,53 @@ export function useUsers() {
             const response = await axios.post(`${USER_URL}/child-package`, userData, { headers });
             return response.data;
         } catch (error) {
-            console.error('Error registering user:', error);
-            throw error;
+            handleError("registering user", error);
         } finally {
             setLoading(false);
         }
     };
+
+    const submitReport = async (title: string, message: string) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(
+                `${USER_URL}/reports`,
+                { title, message },
+                { headers }
+            );
+            return response.data; // Handle the response as needed
+        } catch (error) {
+            handleError("submitting report", error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    const hasCryptoAddresses = async () => {
+        try {
+          const response = await fetch('/path-to-check-if-user-has-addresses'); // replace with actual API path
+          const data = await response.json();
+          return data.hasAddresses; // assuming API returns this format
+        } catch (error) {
+            handleError("checking crypto addresses", error);
+          return false;
+        }
+      };
+    
+      const depositAddresses = async () => {
+        try {
+          const response = await fetch('/path-to-get-deposit-addresses'); // replace with actual API path
+          const data = await response.json();
+          return { 
+            erc20Address: data.erc20Address,
+            trc20Address: data.trc20Address
+          };
+        } catch (error) {
+            handleError("processing deposit cryptos", error);
+          return {};
+        }
+      };
 
     return {
         // Functions
@@ -124,6 +171,8 @@ export function useUsers() {
         fetchCurrentUserDetail,
         currentUserPackage,
         currentUser, setCurrentUser,
+        submitReport,hasCryptoAddresses,
+        depositAddresses,
         // States
         childInfo,
         loading,
