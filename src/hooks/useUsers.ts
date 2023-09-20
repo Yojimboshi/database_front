@@ -28,6 +28,7 @@ export interface ChildInfo {
     parent?: User;
     children: User[];
     grandchildren: User[];
+    greatGrandchildren: User[];
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -37,7 +38,8 @@ export function useUsers() {
     const [packages, setPackages] = useState<Package[]>([]);
     const [childInfo, setChildInfo] = useState<ChildInfo>({
         children: [],
-        grandchildren: []
+        grandchildren: [],
+        greatGrandchildren:[]
     });
     const [currentUser, setCurrentUser] = useState<User | null>(null);  // <--- Add this line
     const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
