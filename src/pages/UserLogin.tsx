@@ -29,9 +29,7 @@ const UserLogin: React.FC = () => {
         email: '',
         password: ''
     });
-
     const [accessToken, setAccessToken] = useState<string | null>(null);
-    const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -54,13 +52,9 @@ const UserLogin: React.FC = () => {
 
             const { accessToken } = response.data;
             sessionStorage.setItem('accessToken', accessToken);
-            const refreshTokenFromCookie = Cookies.get('refreshToken');
-            if (!refreshTokenFromCookie) throw new Error('Refresh token not found in cookies');
-
             setAccessToken(accessToken);
-            setRefreshToken(refreshTokenFromCookie);
-
-            navigate('/user/current', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
+            if (!Cookies.get('refreshToken')) throw new Error('Refresh token not found in cookies');
+            navigate('/user/current');
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error logging in user:', (error as AxiosError).response.data);

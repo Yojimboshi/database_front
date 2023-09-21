@@ -1,11 +1,11 @@
 // src/pages/CurrentUser.tsx
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate, Route, Outlet } from 'react-router-dom';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import './CurrentUser.css';
-import {User, Package, hasCryptoAddresses  } from '../hooks/useUsers';
+import { User } from '../hooks/useUsers';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
@@ -15,13 +15,13 @@ interface DecodedToken {
     [key: string]: any;
 }
 
-
 const CurrentUser: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(() => sessionStorage.getItem('accessToken') || location.state?.accessToken);
-    const refreshToken = location.state?.refreshToken;
+    const refreshToken = Cookies.get('refreshToken') || '';
+
 
     const handleLogout = () => {
         // Clear the tokens
@@ -33,7 +33,6 @@ const CurrentUser: React.FC = () => {
         navigate('/');
     };
 
-    
     const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
         try {
             const refreshResponse = await axios.post(
@@ -54,7 +53,6 @@ const CurrentUser: React.FC = () => {
     };
 
     const isAccessTokenExpiring = (token: string): boolean => {
-
         try {
             const decodedToken: DecodedToken = jwt_decode(token);
             const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
@@ -80,28 +78,25 @@ const CurrentUser: React.FC = () => {
         console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
-            navigate("/user"); 
+            navigate("/user");
             return;
         }
 
         const fetchCurrentUser = async () => {
             try {
                 let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
-
                 let response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
-
                 if (response.status === 200) {
                     const data = await response.json();
                     setUser(data.user);
-                    if (accessToken && isAccessTokenExpiring(accessToken)) {
+                    if (accessToken && isAccessTokenExpiring(accessToken) && refreshToken) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
                             headers = { Authorization: `${newAccessToken}` };
                             const response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
                             if (response.status === 200) {
                                 const retryData = await response.json();
-                                setUser(retryData.users);
-
+                                setUser(retryData.user);
                                 setAccessToken(newAccessToken);
                                 sessionStorage.setItem('accessToken', newAccessToken);
                                 console.log("NEW TOKEN", newAccessToken);
@@ -140,9 +135,10 @@ const CurrentUser: React.FC = () => {
             {/* Sidebar */}
             <nav className="user-sidebar">
                 <Link to="/user/current/childinfo">View Child Info</Link>
-                <Link to="/user/current/registerUser">Register User</Link> 
-                <Link to="/user/current/currentPackage">Current Package</Link> 
-                <Link to="/user/current/submitReport">Submit Report</Link> 
+                <Link to="/user/current/registerUser">Register User</Link>
+                <Link to="/user/current/currentPackage">Current Package</Link>
+                <Link to="/user/current/submitReport">Submit Report</Link>
+                <Link to="/user/current/crypto-deposit">Crypto Deposit</Link>
             </nav>
 
             {/* Main Content */}

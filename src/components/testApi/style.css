@@ -27,3 +27,79 @@
     font-weight: bold;
     color: black;
 }
+
+/* Overall container styling */
+.cryptoDepositContainer {
+    padding: 20px;
+    background-color: #f4f4f4; /* Light gray background */
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(64, 28, 63, 0.1); /* A subtle shadow for depth */
+    font-family: Arial, sans-serif; /* Ensure a consistent font is used */
+}
+
+.cryptoDepositContainer h2 {
+    color: #333; /* Darker text color for header */
+    font-weight: bold;
+    margin-bottom: 20px; /* Spacing between header and table */
+}
+
+/* Style for the button when no addresses are present */
+.cryptoDepositContainer button {
+    background-color: #d9dcdf;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.cryptoDepositContainer button:hover {
+    background-color: #0056b3;
+}
+
+.cryptoDepositContainer select {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    color: #333; /* Slightly darker text color for better readability */
+    border: 1px solid #e0e0e0;
+    padding: 8px 12px;
+    padding-right: 25px; /* Extra padding for the arrow space */
+    font-size: 1rem;
+    border-radius: 4px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.cryptoDepositContainer select:hover, 
+.cryptoDepositContainer select:focus {
+    border-color: #007BFF;
+}
+
+/* Pseudo arrow for the dropdown */
+.cryptoDepositContainer select:before {
+    content: "▼"; /* This is your arrow */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Ensure it doesn't block the dropdown click */
+    color: #333; /* Same color as dropdown text */
+}
+
+.cryptoDepositTable td {
+    vertical-align: middle; /* Aligns content to middle */
+}
+
+/* Background color fix for table rows */
+.cryptoDepositTable tbody tr {
+    background-color: #f4f4f4; /* Same as container background for consistent look */
+}
+
+.cryptoDepositTable tbody tr:hover {
+    background-color: #e8e8e8; /* Lighter gray color for hover effect on rows */
+}

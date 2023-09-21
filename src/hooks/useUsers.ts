@@ -138,30 +138,37 @@ export function useUsers() {
         }
     };
 
-    const hasCryptoAddresses = async () => {
+    const fetchDepositData = async () => {
         try {
-          const response = await fetch('/path-to-check-if-user-has-addresses'); // replace with actual API path
-          const data = await response.json();
-          return data.hasAddresses; // assuming API returns this format
+            const response = await axios.get(`${USER_URL}/deposit`, { headers });
+            const { hasAddresses, erc20Address, trc20Address } = response.data;
+            
+            return {
+                hasAddresses,
+                erc20Address,
+                trc20Address
+            };
         } catch (error) {
-            handleError("checking crypto addresses", error);
-          return false;
+            handleError("fetching deposit data", error);
+            return {
+                hasAddresses: false
+            };
         }
-      };
+    };
     
-      const depositAddresses = async () => {
+    
+    const generateNewAddress = async () => {
         try {
-          const response = await fetch('/path-to-get-deposit-addresses'); // replace with actual API path
-          const data = await response.json();
-          return { 
-            erc20Address: data.erc20Address,
-            trc20Address: data.trc20Address
-          };
+            const response = await axios.post(`${USER_URL}/generate-deposit-address`, {}, { headers });
+            return {
+                erc20Address: response.data.erc20Address,
+                trc20Address: response.data.trc20Address
+            };
         } catch (error) {
-            handleError("processing deposit cryptos", error);
-          return {};
+            handleError("generating new address", error);
+            return {};
         }
-      };
+    };
 
     return {
         // Functions
@@ -173,8 +180,8 @@ export function useUsers() {
         fetchCurrentUserDetail,
         currentUserPackage,
         currentUser, setCurrentUser,
-        submitReport,hasCryptoAddresses,
-        depositAddresses,
+        submitReport,fetchDepositData,
+        generateNewAddress,
         // States
         childInfo,
         loading,

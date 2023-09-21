@@ -1,3 +1,4 @@
+// src/pages/AdminHome.tsx
 import React, { useState, useEffect, FC } from 'react';
 import { Link, useLocation,useNavigate , Route, Outlet  } from 'react-router-dom';
 import axios from 'axios';
@@ -29,7 +30,8 @@ const AdminHome: FC = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const [accessToken, setAccessToken] = useState<string | null>(() => sessionStorage.getItem('accessToken') || location.state?.accessToken);
-    const refreshToken = location.state?.refreshToken;
+    const refreshToken = Cookies.get('refreshToken') || '';
+
 
     const handleLogout = () => {
         // Clear the tokens
@@ -82,12 +84,11 @@ const AdminHome: FC = () => {
         }
     };
     
-
     useEffect(() => {
         console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
-            window.location.href = "/"; // Adjust to your route structure
+            navigate('/');
         }
     }, [accessToken]);
     
@@ -95,24 +96,24 @@ const AdminHome: FC = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
-
-                let response = await fetch(`/admin/users?page=${page}`, { headers });
-
+                let headers: Record<string, string> = {};
+                if (accessToken) {
+                    headers["Authorization"] = accessToken;
+                }
+                let response = await fetch(`${VITE_API_BASE_URL}/admin/users?page=${page}`, { headers });
                 if (response.status === 200) {
                     const data = await response.json();
                     setUsers(data.users);
                     setTotalPages(data.totalPages);
-                    if (accessToken && isAccessTokenExpiring(accessToken)) {
+                    if (accessToken && isAccessTokenExpiring(accessToken) && refreshToken) {
                         const newAccessToken = await refreshAccessToken(refreshToken);
                         if (newAccessToken) {
                             headers = { Authorization: `${newAccessToken}` };
-                            response = await fetch(`/admin/users?page=${page}`, { headers });
+                            let response = await fetch(`${VITE_API_BASE_URL}/admin/users?page=${page}`, { headers });
                             if (response.status === 200) {
                                 const retryData = await response.json();
                                 setUsers(retryData.users);
                                 setTotalPages(retryData.totalPages);
-
                                 setAccessToken(newAccessToken);
                                 sessionStorage.setItem('accessToken', newAccessToken);
                                 console.log("NEW TOKEN", newAccessToken);
@@ -139,10 +140,8 @@ const AdminHome: FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchUsers();
     }, [page, accessToken]);
-
 
     return (
         <div className="admin-page">

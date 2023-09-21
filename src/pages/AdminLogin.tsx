@@ -1,3 +1,4 @@
+// src/pages/AdminLogin.tsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
@@ -8,18 +9,14 @@ type FormData = {
     email: string;
     password: string;
 }
-
 type ResponseData = {
     accessToken: string;
 }
-
 type AxiosError = {
     response: {
         data: any,
     }
 }
-
-
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,9 +25,7 @@ const AdminLogin: React.FC = () => {
         email: '',
         password: ''
     });
-
     const [accessToken, setAccessToken] = useState<string | null>(null);
-    const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -53,13 +48,10 @@ const AdminLogin: React.FC = () => {
 
             const { accessToken } = response.data; // Access the accessToken from the response data
             sessionStorage.setItem('accessToken', accessToken);
-            const refreshTokenFromCookie = Cookies.get('refreshToken');
-            if (!refreshTokenFromCookie) throw new Error('Refresh token not found in cookies');
-            // Store the access token in localStorage
             setAccessToken(accessToken);
-            setRefreshToken(refreshTokenFromCookie);
+            if (!Cookies.get('refreshToken')) throw new Error('Refresh token not found in cookies');
+            navigate('/adminHome');
 
-            navigate('/adminHome', { state: { accessToken, refreshToken: refreshTokenFromCookie } });
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error logging in user:', (error as AxiosError).response.data);
