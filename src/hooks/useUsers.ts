@@ -39,7 +39,7 @@ export function useUsers() {
     const [childInfo, setChildInfo] = useState<ChildInfo>({
         children: [],
         grandchildren: [],
-        greatGrandchildren:[]
+        greatGrandchildren: []
     });
     const [currentUser, setCurrentUser] = useState<User | null>(null);  // <--- Add this line
     const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
@@ -52,7 +52,7 @@ export function useUsers() {
         setError(errorMessage);
         throw new Error(errorMessage);
     };
-    
+
     const headers = {
         Authorization: `${sessionStorage.getItem('accessToken')}`
     };
@@ -138,25 +138,6 @@ export function useUsers() {
         }
     };
 
-    const fetchDepositData = async () => {
-        try {
-            const response = await axios.get(`${USER_URL}/deposit`, { headers });
-            const { hasAddresses, erc20Address, trc20Address } = response.data;
-            
-            return {
-                hasAddresses,
-                erc20Address,
-                trc20Address
-            };
-        } catch (error) {
-            handleError("fetching deposit data", error);
-            return {
-                hasAddresses: false
-            };
-        }
-    };
-    
-    
     const generateNewAddress = async () => {
         try {
             const response = await axios.post(`${USER_URL}/generate-deposit-address`, {}, { headers });
@@ -170,6 +151,55 @@ export function useUsers() {
         }
     };
 
+    const fetchDepositData = async () => {
+        try {
+            const response = await axios.get(`${USER_URL}/deposit`, { headers });
+            const { hasAddresses, erc20Address, trc20Address } = response.data;
+
+            return {
+                hasAddresses,
+                erc20Address,
+                trc20Address
+            };
+        } catch (error) {
+            handleError("fetching deposit data", error);
+            return {
+                hasAddresses: false
+            };
+        }
+    };
+
+    const withdraw = async (
+        amount: number,
+        address: string,
+        currency: 'ETH' | 'TRX',
+        network: 'ERC20' | 'TRC20' | 'BEP20' | 'MATIC'
+    ) => {
+        try {
+            const response = await axios.post(`${USER_URL}/withdraw`,
+                {
+                    amount: amount,
+                    address: address,
+                    currency: currency,
+                    network: network  // Passing the network to the backend
+                },
+                { headers }
+            );
+
+            return {
+                success: true,
+                message: response.data.message,
+                txHash: response.data.txHash ? response.data.txHash : null
+            };
+        } catch (error:any) {
+            handleError("processing withdrawal", error);
+            return {
+                success: false,
+                message: error.response && error.response.data ? error.response.data.message : "An error occurred"
+            };
+        }
+    };
+
     return {
         // Functions
         registerUser,
@@ -180,8 +210,9 @@ export function useUsers() {
         fetchCurrentUserDetail,
         currentUserPackage,
         currentUser, setCurrentUser,
-        submitReport,fetchDepositData,
-        generateNewAddress,
+        submitReport, generateNewAddress,
+        fetchDepositData,
+        withdraw,
         // States
         childInfo,
         loading,

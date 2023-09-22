@@ -29,7 +29,7 @@
 }
 
 /* Overall container styling */
-.cryptoDepositContainer {
+.CryptoWalletContainer {
     padding: 20px;
     background-color: #f4f4f4; /* Light gray background */
     border-radius: 8px;
@@ -37,14 +37,14 @@
     font-family: Arial, sans-serif; /* Ensure a consistent font is used */
 }
 
-.cryptoDepositContainer h2 {
+.CryptoWalletContainer h2 {
     color: #333; /* Darker text color for header */
     font-weight: bold;
     margin-bottom: 20px; /* Spacing between header and table */
 }
 
 /* Style for the button when no addresses are present */
-.cryptoDepositContainer button {
+.CryptoWalletContainer button {
     background-color: #d9dcdf;
     color: white;
     padding: 10px 20px;
@@ -55,11 +55,11 @@
     transition: background-color 0.3s;
 }
 
-.cryptoDepositContainer button:hover {
+.CryptoWalletContainer button:hover {
     background-color: #0056b3;
 }
 
-.cryptoDepositContainer select {
+.CryptoWalletContainer select {
     position: relative;
     width: 100%;
     background-color: #fff;
@@ -75,13 +75,13 @@
     -moz-appearance: none;
 }
 
-.cryptoDepositContainer select:hover, 
-.cryptoDepositContainer select:focus {
+.CryptoWalletContainer select:hover, 
+.CryptoWalletContainer select:focus {
     border-color: #007BFF;
 }
 
 /* Pseudo arrow for the dropdown */
-.cryptoDepositContainer select:before {
+.CryptoWalletContainer select:before {
     content: "▼"; /* This is your arrow */
     position: absolute;
     right: 10px;
@@ -91,15 +91,15 @@
     color: #333; /* Same color as dropdown text */
 }
 
-.cryptoDepositTable td {
+.CryptoWalletTable td {
     vertical-align: middle; /* Aligns content to middle */
 }
 
 /* Background color fix for table rows */
-.cryptoDepositTable tbody tr {
+.CryptoWalletTable tbody tr {
     background-color: #f4f4f4; /* Same as container background for consistent look */
 }
 
-.cryptoDepositTable tbody tr:hover {
+.CryptoWalletTable tbody tr:hover {
     background-color: #e8e8e8; /* Lighter gray color for hover effect on rows */
 }

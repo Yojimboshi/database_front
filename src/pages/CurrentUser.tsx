@@ -125,26 +125,29 @@ const CurrentUser: React.FC = () => {
     }, [accessToken]);
 
     return (
-        <div className="user-page">
+        <div className="grid grid-cols-[1fr,3fr] gap-5 h-screen p-5">
+
             {/* Header */}
-            <header className="user-header">
-                <h1>User Dashboard</h1>
-                <button onClick={handleLogout}>Logout</button>
+            <header className="col-span-full flex justify-between items-center bg-gray-600 p-2 rounded-lg shadow-md text-white">
+                <h1 className="m-0">User Dashboard</h1>
+                <button onClick={handleLogout} className="px-3 py-1 bg-red-500 rounded text-white hover:bg-red-600 transition-colors">
+                    Logout
+                </button>
             </header>
 
             {/* Sidebar */}
-            <nav className="user-sidebar">
-                <Link to="/user/current/childinfo">View Child Info</Link>
-                <Link to="/user/current/registerUser">Register User</Link>
-                <Link to="/user/current/currentPackage">Current Package</Link>
-                <Link to="/user/current/submitReport">Submit Report</Link>
-                <Link to="/user/current/crypto-deposit">Crypto Deposit</Link>
+            <nav className="bg-gray-200 p-4 rounded-lg shadow-md">
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/childinfo">View Child Info</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/registerUser">Register User</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/currentPackage">Current Package</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/submitReport">Submit Report</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/crypto-wallet">Crypto Wallet</Link>
             </nav>
 
             {/* Main Content */}
-            <main className="user-content">
-                <h2>Welcome {user ? user.username : 'Loading...'}</h2> {/* Use user instead of User */}
-                <Outlet /> {/* Child routes defined in App will be rendered here */}
+            <main className="bg-white p-5 rounded-lg shadow-md">
+                <h2 className="mt-0">Welcome {user ? user.username : 'Loading...'}</h2>
+                <Outlet />
             </main>
         </div>
     );

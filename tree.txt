@@ -1,5 +1,7 @@
 📦database_front_vite
  ┣ 📂src
+ ┃ ┣ 📂assets
+ ┃ ┃ ┗ 📜react.svg
  ┃ ┣ 📂components
  ┃ ┃ ┣ 📂admin
  ┃ ┃ ┃ ┣ 📜Dashboard.tsx
@@ -13,6 +15,25 @@
  ┃ ┃ ┣ 📂modal
  ┃ ┃ ┃ ┣ 📜Modal.css
  ┃ ┃ ┃ ┗ 📜Modal.tsx
+ ┃ ┃ ┣ 📂scrap
+ ┃ ┃ ┃ ┣ 📜ManageUsersForm.tsx
+ ┃ ┃ ┃ ┣ 📜UserDetails.tsx
+ ┃ ┃ ┃ ┗ 📜UserTable.tsx
+ ┃ ┃ ┣ 📂testApi
+ ┃ ┃ ┃ ┣ 📜CryptoWallet.tsx
+ ┃ ┃ ┃ ┣ 📜CurrentPackage.tsx
+ ┃ ┃ ┃ ┣ 📜GenerateDepositAddress.tsx
+ ┃ ┃ ┃ ┣ 📜GetChildInfo.tsx
+ ┃ ┃ ┃ ┣ 📜GetUpgradeHistory.tsx
+ ┃ ┃ ┃ ┣ 📜GetUserReport.tsx
+ ┃ ┃ ┃ ┣ 📜GetUserSettings.tsx
+ ┃ ┃ ┃ ┣ 📜RegisterUser.tsx
+ ┃ ┃ ┃ ┣ 📜RequestUpgrade.tsx
+ ┃ ┃ ┃ ┣ 📜style.css
+ ┃ ┃ ┃ ┣ 📜SubmitReport.tsx
+ ┃ ┃ ┃ ┣ 📜UpdateUserSettings.tsx
+ ┃ ┃ ┃ ┣ 📜UpgradePackage.tsx
+ ┃ ┃ ┃ ┗ 📜Withdrawal.tsx
  ┃ ┃ ┣ 📂user
  ┃ ┃ ┃ ┣ 📜AddChild.tsx
  ┃ ┃ ┃ ┣ 📜Profile.tsx
@@ -27,6 +48,9 @@
  ┃ ┃ ┣ 📜AdminHome.tsx
  ┃ ┃ ┣ 📜AdminLogin.tsx
  ┃ ┃ ┣ 📜AdminRegister.tsx
+ ┃ ┃ ┣ 📜AppLayout.tsx
+ ┃ ┃ ┣ 📜CurrentUser.css
+ ┃ ┃ ┣ 📜CurrentUser.tsx
  ┃ ┃ ┣ 📜ManageUsersPage.tsx
  ┃ ┃ ┣ 📜User.css
  ┃ ┃ ┗ 📜UserLogin.tsx
@@ -44,6 +68,7 @@
  ┣ 📜postcss.config.js
  ┣ 📜README.md
  ┣ 📜tailwind.config.js
+ ┣ 📜tree.txt
  ┣ 📜tsconfig.json
  ┣ 📜tsconfig.node.json
  ┗ 📜vite.config.ts
