@@ -49,11 +49,9 @@ const UserLogin: React.FC = () => {
                 {
                     withCredentials: true,
                 });
-
             const { accessToken } = response.data;
             sessionStorage.setItem('accessToken', accessToken);
             setAccessToken(accessToken);
-            if (!Cookies.get('refreshToken')) throw new Error('Refresh token not found in cookies');
             navigate('/user/current');
         } catch (error) {
             if (axios.isAxiosError(error)) {

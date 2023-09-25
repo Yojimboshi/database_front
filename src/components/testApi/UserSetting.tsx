@@ -35,9 +35,6 @@ const UserSetting: React.FC = () => {
 
                     <dt className="boldBlackText">API Key:</dt>
                     <dd className="listText">{currentUserSetting.apiKey || "Not set"}</dd>
-
-                    <dt className="boldBlackText">Billing Preference:</dt>
-                    <dd className="listText">{currentUserSetting.billingPreference}</dd>
                 </dl>
             )}
         </div>

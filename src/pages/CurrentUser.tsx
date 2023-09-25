@@ -33,11 +33,14 @@ const CurrentUser: React.FC = () => {
         navigate('/');
     };
 
-    const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
+    const refreshAccessToken = async (): Promise<string | null> => {
         try {
             const refreshResponse = await axios.post(
                 `${VITE_API_BASE_URL}/users/refreshToken`,
-                { refreshToken }
+                {},
+                {
+                    withCredentials: true,
+                }
             );
 
             if (refreshResponse.status === 200) {
@@ -75,49 +78,35 @@ const CurrentUser: React.FC = () => {
     };
 
     useEffect(() => {
-        console.log("Checking token expiration...");
-        if (!accessToken || hasTokenExpired(accessToken)) {
-            console.log('Error: Token might be expired or invalid.');
-            navigate("/user");
-            return;
-        }
-
         const fetchCurrentUser = async () => {
-            try {
-                let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
-                let response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
-                if (response.status === 200) {
-                    const data = await response.json();
-                    setUser(data.user);
-                    if (accessToken && isAccessTokenExpiring(accessToken) && refreshToken) {
-                        const newAccessToken = await refreshAccessToken(refreshToken);
-                        if (newAccessToken) {
-                            headers = { Authorization: `${newAccessToken}` };
-                            const response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
-                            if (response.status === 200) {
-                                const retryData = await response.json();
-                                setUser(retryData.user);
-                                setAccessToken(newAccessToken);
-                                sessionStorage.setItem('accessToken', newAccessToken);
-                                console.log("NEW TOKEN", newAccessToken);
-                            } else {
-                                console.error('Error fetching users after token refresh:', response.statusText);
-                            }
-                        } else {
-                            console.error('Error refreshing access token: Unable to get new access token');
-                        }
+            let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
+            
+            const executeFetch = async () => {
+                try {
+                    let response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        setUser(data.user);
+                    } else {
+                        console.error('Error fetching current user:', response.statusText);
                     }
-                } else {
-                    console.error('Error fetching current user:', response.statusText);
-                }
-
-            } catch (error: any) {
-                if (error.response && error.response.status === 401) {
-                    console.error('Error: Token might be expired or invalid.');
-                    navigate("/user");
-                } else {
+                } catch (error: any) {
                     console.error('Error fetching current user:', error.message);
                 }
+            };
+
+            if (accessToken && isAccessTokenExpiring(accessToken)) {
+                const newAccessToken = await refreshAccessToken();
+                if (newAccessToken) {
+                    setAccessToken(newAccessToken);
+                    sessionStorage.setItem('accessToken', newAccessToken);
+                    headers = { Authorization: `${newAccessToken}` };
+                    await executeFetch();
+                } else {
+                    console.error('Error refreshing access token: Unable to get new access token');
+                }
+            } else {
+                await executeFetch();
             }
         };
 

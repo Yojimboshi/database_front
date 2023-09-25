@@ -49,9 +49,7 @@ const AdminLogin: React.FC = () => {
             const { accessToken } = response.data; // Access the accessToken from the response data
             sessionStorage.setItem('accessToken', accessToken);
             setAccessToken(accessToken);
-            if (!Cookies.get('refreshToken')) throw new Error('Refresh token not found in cookies');
             navigate('/adminHome');
-
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Error logging in user:', (error as AxiosError).response.data);

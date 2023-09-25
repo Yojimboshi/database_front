@@ -1,10 +1,9 @@
 // src/pages/AdminHome.tsx
 import React, { useState, useEffect, FC } from 'react';
-import { Link, useLocation,useNavigate , Route, Outlet  } from 'react-router-dom';
+import { useLocation, useNavigate,Link ,Outlet} from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
-import ManageUsersForm from './ManageUsersPage';
 
 interface User {
     id: number;
@@ -23,7 +22,6 @@ const REFRESH_TIME = 20 * 60 ; // 20 minutes
 const AdminHome: FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
     const [users, setUsers] = useState<User[]>([]);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
@@ -42,50 +40,38 @@ const AdminHome: FC = () => {
         navigate('/');
     };
 
-    const refreshAccessToken = async (refreshToken: string): Promise<string | null> => {
+    const refreshAccessToken = async (): Promise<string | null> => {
         try {
             const refreshResponse = await axios.post(
                 `${VITE_API_BASE_URL}/admin/refreshToken`,
-                { refreshToken }
+                {},
+                {
+                    withCredentials: true,
+                }
             );
 
             if (refreshResponse.status === 200) {
                 return refreshResponse.data.accessToken;
-            } else {
-                console.error('Error refreshing access token:', refreshResponse.data);
-                return null;
             }
         } catch (error: any) {
             console.error('Error refreshing access token:', error.response?.data || error.message);
-            return null;
         }
+        return null;
     };
 
     const isAccessTokenExpiring = (token: string): boolean => {
-
-        try {
-            const decodedToken: DecodedToken = jwt_decode(token);
-            const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
-            return (decodedToken.exp - currentTime) <= REFRESH_TIME;
-        } catch (error: any) {
-            console.error("Error decoding the access token:", error.message);
-            return false; // Treat any decoding error as an expired token
-        }
+        const decodedToken: DecodedToken = jwt_decode(token);
+        const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
+        return (decodedToken.exp - currentTime) <= REFRESH_TIME;
     };
 
     const hasTokenExpired = (token: string): boolean => {
-        try {
-            const decodedToken: DecodedToken = jwt_decode(token);
-            const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
-            return decodedToken.exp <= currentTime;
-        } catch (error: any) {
-            console.error("Error decoding the access token:", error.message);
-            return true; // Treat any decoding error as an expired token
-        }
+        const decodedToken: DecodedToken = jwt_decode(token);
+        const currentTime = Date.now() / 1000;
+        return decodedToken.exp <= currentTime;
     };
     
     useEffect(() => {
-        console.log("Checking token expiration...");
         if (!accessToken || hasTokenExpired(accessToken)) {
             console.log('Error: Token might be expired or invalid.');
             navigate('/');
@@ -96,39 +82,32 @@ const AdminHome: FC = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                let headers: Record<string, string> = {};
-                if (accessToken) {
-                    headers["Authorization"] = accessToken;
-                }
-                let response = await fetch(`${VITE_API_BASE_URL}/admin/users?page=${page}`, { headers });
-                if (response.status === 200) {
-                    const data = await response.json();
-                    setUsers(data.users);
-                    setTotalPages(data.totalPages);
-                    if (accessToken && isAccessTokenExpiring(accessToken) && refreshToken) {
-                        const newAccessToken = await refreshAccessToken(refreshToken);
-                        if (newAccessToken) {
-                            headers = { Authorization: `${newAccessToken}` };
-                            let response = await fetch(`${VITE_API_BASE_URL}/admin/users?page=${page}`, { headers });
-                            if (response.status === 200) {
-                                const retryData = await response.json();
-                                setUsers(retryData.users);
-                                setTotalPages(retryData.totalPages);
-                                setAccessToken(newAccessToken);
-                                sessionStorage.setItem('accessToken', newAccessToken);
-                                console.log("NEW TOKEN", newAccessToken);
-                            } else {
-                                console.error('Error fetching users after token refresh:', response.statusText);
-                            }
-                        } else {
-                            console.error('Error refreshing access token: Unable to get new access token');
-                        }
+                let currentToken = accessToken;
+
+                if (currentToken && isAccessTokenExpiring(currentToken) && refreshToken) {
+                    const newAccessToken = await refreshAccessToken();
+                    if (newAccessToken) {
+                        sessionStorage.setItem('accessToken', newAccessToken);
+                        console.log("NEW TOKEN", newAccessToken);
+                        setAccessToken(newAccessToken);
+                        currentToken = newAccessToken;
+                    } else {
+                        console.error('Error refreshing access token: Unable to get new access token');
                     }
-                } else {
-                    console.error('Error fetching users:', response.statusText);
-                    // Handle error, maybe redirect to login page if token is invalid
                 }
 
+                if (currentToken) {
+                    const response = await fetch(`${VITE_API_BASE_URL}/admin/users?page=${page}`, {
+                        headers: { Authorization: `${currentToken}` }
+                    });
+                    
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        setUsers(data.users);
+                    } else {
+                        console.error('Error fetching users:', response.statusText);
+                    }
+                }
             } catch (error: any) {
                 if (error.response && error.response.status === 401) {
                     console.error('Error: Token might be expired or invalid.');
@@ -136,10 +115,9 @@ const AdminHome: FC = () => {
                 } else {
                     console.error('Error fetching users:', error.message);
                 }
-            } finally {
-                setIsLoading(false);
             }
         };
+
         fetchUsers();
     }, [page, accessToken]);
 
