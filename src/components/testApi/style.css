@@ -103,3 +103,18 @@
 .CryptoWalletTable tbody tr:hover {
     background-color: #e8e8e8; /* Lighter gray color for hover effect on rows */
 }
+
+/* Additional styles for the description list inside the container */
+.settingsList {
+    margin: 0;
+    padding: 0;
+}
+
+.settingsList dt {
+    margin-top: 10px;
+}
+
+.settingsList dd {
+    margin-left: 20px;
+    margin-top: 5px;
+}

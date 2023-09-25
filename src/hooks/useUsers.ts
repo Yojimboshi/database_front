@@ -31,6 +31,18 @@ export interface ChildInfo {
     greatGrandchildren: User[];
 }
 
+export interface UserSettingData {
+    userId: number | string;
+    notificationPreference: 'email' | 'push' | 'both' | 'none';
+    privacySetting: 'public' | 'private' | 'friends_only';
+    itemsPerPage: number;
+    language: string;
+    darkMode: boolean;
+    integration: 'slack' | 'other_integration'; // Adjust based on your possible integrations
+    apiKey: string;
+    billingPreference: 'monthly' | 'annually';
+}
+
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const USER_URL = `${VITE_API_BASE_URL}/users`;
 
@@ -41,10 +53,30 @@ export function useUsers() {
         grandchildren: [],
         greatGrandchildren: []
     });
-    const [currentUser, setCurrentUser] = useState<User | null>(null);  // <--- Add this line
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [currentUserPackage, setCurrentUserPackage] = useState<Package | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [currentUserSetting, setCurrentUserSetting] = useState<UserSettingData | null>(null);
+    const [loading, setLoadingState] = useState(false); // Keep just this loading state
     const [error, setError] = useState<string>('');
+
+    // Sample empty loading animation function
+    const showLoadingAnimation = (show: boolean) => {
+        if (show) {
+            // Placeholder: Code to display the loading animation
+            console.log("Loading animation started"); // Just for demonstration purposes
+        } else {
+            // Placeholder: Code to hide the loading animation
+            console.log("Loading animation stopped"); // Just for demonstration purposes
+        }
+    };
+
+    const setLoading = (state: boolean) => {
+        // Updating the loading state with the provided value
+        setLoadingState(state);
+
+        // Toggle the loading animation based on the state
+        showLoadingAnimation(state);
+    };
 
     const handleError = (operation: string, error: any) => {
         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
@@ -69,11 +101,15 @@ export function useUsers() {
 
     const fetchPackages = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${USER_URL}/packages`, { headers });
             setPackages(response.data.packages);
         } catch (error) {
             handleError("fetching packages", error);
+        } finally {
+            setLoading(false);  // Stop loading animation and reset loading state
         }
+
     };
 
     const requestUpgrade = async (userId: string | number, packageId: string | number) => {
@@ -102,10 +138,13 @@ export function useUsers() {
         const url = username ? `${endpoint}?search=${username}` : endpoint;
 
         try {
+            setLoading(true)
             const response = await axios.get(url, { headers });
             setChildInfo(response.data);
         } catch (error) {
             handleError("fetching child info", error);
+        } finally {
+            setLoading(false);  // Stop loading animation and reset loading state
         }
     };
 
@@ -140,6 +179,7 @@ export function useUsers() {
 
     const generateNewAddress = async () => {
         try {
+            setLoading(true)
             const response = await axios.post(`${USER_URL}/generate-deposit-address`, {}, { headers });
             return {
                 erc20Address: response.data.erc20Address,
@@ -148,11 +188,14 @@ export function useUsers() {
         } catch (error) {
             handleError("generating new address", error);
             return {};
+        } finally {
+            setLoading(false);  // Stop loading animation and reset loading state
         }
     };
 
     const fetchDepositData = async () => {
         try {
+            setLoading(true)
             const response = await axios.get(`${USER_URL}/deposit`, { headers });
             const { hasAddresses, erc20Address, trc20Address } = response.data;
 
@@ -166,6 +209,8 @@ export function useUsers() {
             return {
                 hasAddresses: false
             };
+        } finally {
+            setLoading(false);  // Stop loading animation and reset loading state
         }
     };
 
@@ -176,6 +221,7 @@ export function useUsers() {
         network: 'ERC20' | 'TRC20' | 'BEP20' | 'MATIC'
     ) => {
         try {
+            setLoading(true);
             const response = await axios.post(`${USER_URL}/withdraw`,
                 {
                     amount: amount,
@@ -191,31 +237,93 @@ export function useUsers() {
                 message: response.data.message,
                 txHash: response.data.txHash ? response.data.txHash : null
             };
-        } catch (error:any) {
+        } catch (error: any) {
             handleError("processing withdrawal", error);
             return {
                 success: false,
                 message: error.response && error.response.data ? error.response.data.message : "An error occurred"
             };
+        } finally {
+            setLoading(false);
         }
     };
 
+    const transfer = async (
+        amount: number,
+        recipient: string,
+        tokenSymbol: 'ETH' | 'TRX'
+    ) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${USER_URL}/transfer`,
+                {
+                    amount: amount,
+                    recipient: recipient,
+                    tokenSymbol: tokenSymbol
+                },
+                { headers }
+            );
+    
+            return {
+                success: true,
+                message: response.data.message,
+                txHash: response.data.txHash ? response.data.txHash : null
+            };
+        } catch (error: any) {
+            handleError("processing transfer", error);
+            return {
+                success: false,
+                message: error.response && error.response.data ? error.response.data.message : "An error occurred"
+            };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateUserSettings = async (newSettings: UserSettingData) => {
+        try {
+            const response = await axios.put(`${USER_URL}/settings`, newSettings, { headers });
+            if (response.data.success) {
+                setCurrentUserSetting(newSettings); // If you want to update the state only when the backend update is successful.
+            }
+            return response.data; // You can return the response or a custom message based on your needs.
+        } catch (error) {
+            console.error('Error updating user settings:', error);
+            throw error; // This allows you to handle the error in the component if needed.
+        }
+    };
+
+    const fetchUserSettings = async () => {
+        try {
+            const response = await axios.get(`${USER_URL}/settings`, { headers });
+            setCurrentUserSetting(response.data.data);
+        } catch (error) {
+            console.error('Error fetching user settings:', error);
+        }
+    };
+    
+    
     return {
         // Functions
         registerUser,
         fetchPackages,
-        packages,
         requestUpgrade,
         fetchChildInfo,
         fetchCurrentUserDetail,
-        currentUserPackage,
-        currentUser, setCurrentUser,
+        setCurrentUser,
         submitReport, generateNewAddress,
         fetchDepositData,
-        withdraw,
+        withdraw,transfer,
+        updateUserSettings,
+        fetchUserSettings,
+        setLoading,
         // States
+        currentUser,
+        currentUserPackage,
+        packages,
         childInfo,
-        loading,
         error,
+        loading,
+        currentUserSetting
     };
 }
