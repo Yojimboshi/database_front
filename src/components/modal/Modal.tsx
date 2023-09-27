@@ -1,3 +1,4 @@
+// src/components/modal/Modal.tsx
 import './Modal.css';
 
 interface ModalProps {

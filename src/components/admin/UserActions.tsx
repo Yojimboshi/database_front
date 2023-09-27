@@ -1,8 +1,8 @@
+// src/components/admin/UserActions.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAdmin from '../../hooks/useAdmin';
 import './UserActions.css';
-
 
 interface AddUserFormData {
     username: string;
@@ -32,7 +32,8 @@ interface UserDetailsProps {
 }
 
 // AddUserForm Component
-export const AddUser: React.FC = () => {
+export const AddUser: React.FC<{ onClose: () => void }> = ({ onClose }) => { 
+    const [isModalOpen, setModalOpen] = useState(false);
     const [formData, setFormData] = useState<AddUserFormData>({
         username: '',
         firstName: '',
@@ -58,12 +59,12 @@ export const AddUser: React.FC = () => {
         e.preventDefault();
         try {
             await addUser(formData);
-            navigate('/*'); // Change this to history.push if you're on v5
+            onClose();
         } catch (error) {
             console.error("Error adding user:", error);
         }
     }
-
+    
     return (
         <form onSubmit={handleSubmit} className={"formGrid"}>
             <input
@@ -234,9 +235,9 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                 </div>
             </div>
         </div>
+        
     );
 }
-
 
 // BanUser Component
 export const UpdateUser: React.FC = () => {

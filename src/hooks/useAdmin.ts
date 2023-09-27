@@ -120,18 +120,23 @@ function useAdmin() {
             setLoading(true);
             const response = await axios.post(`${ADMIN_URL}/users/child-package`, userData, { headers });
 
-            if (!response.data.success) {
+            if (response.data.message === "User added successfully") {
+                // Handle success here
+                console.log("User added successfully");
+            } else {
+                // Handle error here
+                console.error("Error message from server:", response.data.message);
                 throw new Error(response.data.message);
             }
             return response.data;
         } catch (err: any) {
+            console.error("Error in addUser:", err);
             setError(err.response ? err.response.data : err);
             throw err;
         } finally {
             setLoading(false);
         }
     };
-
 
     const banUser = async (userId: string) => {
         try {

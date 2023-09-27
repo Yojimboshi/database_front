@@ -5,7 +5,7 @@ import AdminLogin from './pages/AdminLogin';
 import UserLogin from './pages/UserLogin';
 import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
-import ManageUsersPage from './pages/ManageUsersPage';
+import ManageUsersPage from './components/admin/ManageUsersPage';
 import UsersList from './components/admin/UsersList';
 import RegisterUser from './components/user/RegisterUser';
 import CurrentPackage from './components/user/CurrentPackage';
