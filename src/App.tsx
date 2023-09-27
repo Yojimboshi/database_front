@@ -7,15 +7,15 @@ import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
 import ManageUsersPage from './pages/ManageUsersPage';
 import UsersList from './components/admin/UsersList';
-import RegisterUser from './components/testApi/RegisterUser';
-import CurrentPackage from './components/testApi/CurrentPackage';
+import RegisterUser from './components/user/RegisterUser';
+import CurrentPackage from './components/user/CurrentPackage';
 import AppLayout from './pages/AppLayout';
 import './App.css';
 import CurrentUser from './pages/CurrentUser';
-import GetChildInfo from './components/testApi/GetChildInfo';
-import SubmitReport from './components/testApi/SubmitReport';
-import CryptoWallet from './components/testApi/CryptoWallet';
-import UserSetting from './components/testApi/UserSetting';
+import GetChildInfo from './components/user/GetChildInfo';
+import SubmitReport from './components/user/SubmitReport';
+import CryptoWallet from './components/user/CryptoWallet';
+import UserSetting from './components/user/UserSetting';
 
 
 const App: React.FC = () => {

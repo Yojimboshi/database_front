@@ -1,0 +1,9 @@
+# Ignore .env files
+.env
+
+# Ignore the node_modules directory and its contents
+node_modules/
+
+# Ignore specific files or directories within the .git directory
+.git/logs/
+.git/hooks/
