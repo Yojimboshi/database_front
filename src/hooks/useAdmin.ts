@@ -138,42 +138,35 @@ function useAdmin() {
         }
     };
 
-    const banUser = async (userId: string) => {
+    const toggleAccountStatus = async (userId: string, action: 'ban' | 'restrict' | 'activate') => {
         try {
-            await axios.post(`${ADMIN_URL}/users/ban/${userId}`, {}, { headers });
+            await axios.post(`${ADMIN_URL}/users/toggle-ban/${userId}?action=${action}`, {}, { headers });
             // Maybe update the users state here or refetch users to show the updated status
         } catch (err: any) {
-            setError(err);
-        }
-    };
-
-    const unbanUser = async (userId: string) => {
-        try {
-            await axios.post(`${ADMIN_URL}/users/unban/${userId}`, {}, { headers });
-            // Maybe update the users state here or refetch users to show the updated status
-        } catch (err: any) {
-            setError(err);
+            setError(err.response ? err.response.data : err);
         }
     };
 
     // ... other action functions like updateSettings, addUserOrChild etc.
 
     return {
-        ADMIN_URL,
-        users,
-        reports,
-        globalSettings,
+        // Functions
         fetchPackages,
-        packages,
-        upgrades,
-        loading,
-        error,
         fetchUsers,
         fetchUserByUsername,
         fetchReports,
         addUser,
-        banUser,
-        unbanUser,
+        toggleAccountStatus,
+
+        // State
+        ADMIN_URL,
+        users,
+        reports,
+        globalSettings,
+        packages,
+        upgrades,
+        loading,
+        error,
     };
 }
 

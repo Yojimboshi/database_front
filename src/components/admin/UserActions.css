@@ -10,3 +10,8 @@
 .formRow{
     grid-column: span 2; /* makes the item take the full width */
 }
+
+button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
