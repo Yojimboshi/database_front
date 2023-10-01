@@ -1,13 +1,10 @@
-// src/components/testApi/GetChildInfo.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
-import './style.css';
 
 const GetChildInfo: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
     const [searchUsername, setSearchUsername] = useState("");
-
 
     const handleFetchClick = () => {
         fetchChildInfo();
@@ -18,38 +15,60 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
+    const renderBinaryTree = (node: ChildInfo | null) => {
+        if (!node) return null;
+
+        return (
+            <div className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
+                <span className="col-span-2 border border-solid w-8 h-8 rounded-full flex items-center justify-center mx-auto">{node.username}</span>
+                {node.children.map((child) => (
+                    <div key={child.id} className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
+                        {renderBinaryTree(child)}
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
     return (
-        <div>
-            <h2>Child Info</h2>
-            <div className="formRow">
-                <button onClick={handleFetchClick}>Fetch</button>
+        <div className="p-4">
+            <h2 className="text-2xl font-bold">Child Info</h2>
+            <div className="flex items-center space-x-2 mb-4">
+                <button onClick={handleFetchClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Fetch</button>
                 <input
                     type="text"
                     placeholder="Search username..."
                     value={searchUsername}
                     onChange={e => setSearchUsername(e.target.value)}
+                    className="border rounded py-2 px-4 w-64"
                 />
-                <button onClick={handleSearchClick}>Search</button>
+                <button onClick={handleSearchClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
             </div>
-            <h3 className="boldBlackText">Children</h3>
-            <ul className="listText">
-                {childInfo.children.map(child => (
-                    <li key={child.id}>{child.username}</li>
-                ))}
-            </ul>
-            <h3 className="boldBlackText">Grandchildren</h3>
-            <ul className="listText">
-                {childInfo.grandchildren.map(child => (
-                    <li key={child.id}>{child.username}</li>
-                ))}
-            </ul>
-            <h3 className="boldBlackText">Great Grandchildren</h3>
-            <ul className="listText">
-                {childInfo.greatGrandchildren.map(child => (
-                    <li key={child.id}>{child.username}</li>
-                ))}
-            </ul>
 
+            {/* Render the binary tree with children and grandchildren names */}
+            <article className="binary-tree">
+                {renderBinaryTree(childInfo)}
+            </article>
+
+            {/* Data showing */}
+            <h3 className="text-lg font-bold">Children</h3>
+            <ul className="list-disc pl-4">
+                {childInfo.children.map(child => (
+                    <li key={child.id} className="mb-2">{child.username}</li>
+                ))}
+            </ul>
+            <h3 className="text-lg font-bold mt-4">Grandchildren</h3>
+            <ul className="list-disc pl-4">
+                {childInfo.grandchildren.map(child => (
+                    <li key={child.id} className="mb-2">{child.username}</li>
+                ))}
+            </ul>
+            <h3 className="text-lg font-bold mt-4">Great Grandchildren</h3>
+            <ul className="list-disc pl-4">
+                {childInfo.greatGrandchildren.map(child => (
+                    <li key={child.id} className="mb-2">{child.username}</li>
+                ))}
+            </ul>
         </div>
     );
 }
