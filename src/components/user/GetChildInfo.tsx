@@ -1,5 +1,5 @@
 // src/components/testApi/GetChildInfo.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
 import './style.css';
@@ -8,10 +8,8 @@ const GetChildInfo: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
     const [searchUsername, setSearchUsername] = useState("");
 
-
     const handleFetchClick = () => {
         fetchChildInfo();
-        console.log(childInfo);
     };
 
     const handleSearchClick = () => {

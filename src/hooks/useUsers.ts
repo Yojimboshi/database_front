@@ -1,6 +1,6 @@
 // src/hooks/useUsers.ts
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export interface User {
     id: string | number;
@@ -79,10 +79,16 @@ export function useUsers() {
     };
 
     const handleError = (operation: string, error: any) => {
-        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+        let errorMessage;
+    
+        if (axios.isAxiosError(error)) {
+            errorMessage = (error.response?.data as any)?.message || "An unknown error occurred.";
+        } else {
+            errorMessage = error.message || "An unknown error occurred.";
+        }
+    
         console.error(`Error ${operation}:`, errorMessage);
         setError(errorMessage);
-        throw new Error(errorMessage);
     };
 
     const headers = {
