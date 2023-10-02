@@ -11,6 +11,7 @@ export interface User {
     role: string;
     accountStatus: string;
     isEmpty: boolean;
+    parentId: number;
 }
 
 export interface Package {

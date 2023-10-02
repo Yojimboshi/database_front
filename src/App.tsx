@@ -16,6 +16,7 @@ import GetChildInfo from './components/user/GetChildInfo';
 import SubmitReport from './components/user/SubmitReport';
 import CryptoWallet from './components/user/CryptoWallet';
 import UserSetting from './components/user/UserSetting';
+import TestingGet from './components/user/testing'
 
 
 const App: React.FC = () => {
@@ -43,6 +44,7 @@ const App: React.FC = () => {
                     <Route path="submitReport" element={<SubmitReport />} />
                     <Route path="crypto-wallet" element={<CryptoWallet />} />
                     <Route path="settings" element={<UserSetting />} />
+                    <Route path='testing' element={<TestingGet />} />
                 </Route>
             </Routes>
         </Router>

@@ -59,6 +59,7 @@ const CurrentUser: React.FC = () => {
         try {
             const decodedToken: DecodedToken = jwt_decode(token);
             const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
+            console.log("Access Token Time: ",decodedToken.exp - currentTime);
             return (decodedToken.exp - currentTime) <= REFRESH_TIME;
         } catch (error: any) {
             console.error("Error decoding the access token:", error.message);
@@ -132,6 +133,7 @@ const CurrentUser: React.FC = () => {
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/submitReport">Submit Report</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/crypto-wallet">Crypto Wallet</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/settings">User Settings</Link> 
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/testing">Testing</Link> 
             </nav>
 
             {/* Main Content */}

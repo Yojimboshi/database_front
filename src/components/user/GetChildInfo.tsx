@@ -15,20 +15,20 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
-    const renderBinaryTree = (node: ChildInfo | null) => {
-        if (!node) return null;
+    // const renderBinaryTree = (node: ChildInfo | null) => {
+    //     if (!node) return null;
 
-        return (
-            <div className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
-                <span className="col-span-2 border border-solid w-8 h-8 rounded-full flex items-center justify-center mx-auto">{node.username}</span>
-                {node.children.map((child) => (
-                    <div key={child.id} className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
-                        {renderBinaryTree(child)}
-                    </div>
-                ))}
-            </div>
-        );
-    };
+    //     return (
+    //         <div className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
+    //             <span className="col-span-2 border border-solid w-8 h-8 rounded-full flex items-center justify-center mx-auto">{node.username}</span>
+    //             {node.children.map((child) => (
+    //                 <div key={child.id} className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
+    //                     {renderBinaryTree(child)}
+    //                 </div>
+    //             ))}
+    //         </div>
+    //     );
+    // };
 
     return (
         <div className="p-4">
@@ -45,28 +45,23 @@ const GetChildInfo: React.FC = () => {
                 <button onClick={handleSearchClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>
             </div>
 
-            {/* Render the binary tree with children and grandchildren names */}
-            <article className="binary-tree">
-                {renderBinaryTree(childInfo)}
-            </article>
-
             {/* Data showing */}
-            <h3 className="text-lg font-bold">Children</h3>
+            <h3 className="font-bold text-slate-900">Children</h3>
             <ul className="list-disc pl-4">
                 {childInfo.children.map(child => (
-                    <li key={child.id} className="mb-2">{child.username}</li>
+                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
                 ))}
             </ul>
-            <h3 className="text-lg font-bold mt-4">Grandchildren</h3>
+            <h3 className="text-slate-900 font-bold mt-4">Grandchildren</h3>
             <ul className="list-disc pl-4">
                 {childInfo.grandchildren.map(child => (
-                    <li key={child.id} className="mb-2">{child.username}</li>
+                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
                 ))}
             </ul>
-            <h3 className="text-lg font-bold mt-4">Great Grandchildren</h3>
+            <h3 className="text-slate-900 font-bold mt-4">Great Grandchildren</h3>
             <ul className="list-disc pl-4">
                 {childInfo.greatGrandchildren.map(child => (
-                    <li key={child.id} className="mb-2">{child.username}</li>
+                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
                 ))}
             </ul>
         </div>
