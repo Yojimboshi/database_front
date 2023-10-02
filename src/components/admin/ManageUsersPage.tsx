@@ -1,9 +1,9 @@
-// ManageUsersPage.tsx
-import React, { useState } from 'react';
+// src/components/admin/ManageUsersPage.tsx
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, Outlet } from 'react-router-dom';
-import { AddUser, UserDetails, UpdateUser, BanUser } from '../components/admin/UserActions';
-import useAdmin from '../hooks/useAdmin';
-import Modal from '../components/modal/Modal';
+import { AddUser, UserDetails, UpdateUser, BanUser } from './UserActions';
+import useAdmin from '../../hooks/useAdmin';
+import Modal from '../modal/Modal';
 import './Admin.css';
 
 
@@ -15,16 +15,20 @@ const ManageUsersPage: React.FC = () => {
     const [detailedUserInfo, setDetailedUserInfo] = useState<any | null>(null);
 
     const openAddUserModal = () => {
-        setModalContent(<AddUser />);
+        setModalContent(<AddUser onClose={closeModal} />);
         setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalContent(null); // clear modal content on close
     };
 
     const openUserDetailsModal = async (username: string) => {
         const userInfo = await fetchUserByUsername(username);
-        setModalContent(<UserDetails user={userInfo} />);
+        setModalContent(() => <UserDetails user={userInfo} onClose={closeModal} refreshUserDetails={() => openUserDetailsModal(username)} />);
         setModalOpen(true);
     };
-
 
     const handleSearch = () => {
         fetchUsers(10, 'createdAt', 'DESC', searchTerm);
@@ -87,7 +91,7 @@ const ManageUsersPage: React.FC = () => {
                 <Route path="/unban/:userId" element={<BanUser />} />
             </Routes>
 
-            <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
                 {modalContent}
             </Modal>
         </div>

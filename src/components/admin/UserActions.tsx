@@ -1,8 +1,8 @@
+// src/components/admin/UserActions.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAdmin from '../../hooks/useAdmin';
 import './UserActions.css';
-
 
 interface AddUserFormData {
     username: string;
@@ -17,6 +17,12 @@ interface AddUserFormData {
     isEmpty: boolean;
 }
 
+interface UserDetailsProps {
+    user: any;  // Adjust the 'any' type as necessary
+    onClose: () => void;
+    refreshUserDetails: () => void;  // Add this line
+}
+
 interface Package {
     id: string | number;
     packageName: string;
@@ -27,12 +33,9 @@ interface Package {
     maxHierarchyChildren: number;
 }
 
-interface UserDetailsProps {
-    user: any;  // Define a more specific type if possible
-}
-
 // AddUserForm Component
-export const AddUser: React.FC = () => {
+export const AddUser: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+    const [isModalOpen, setModalOpen] = useState(false);
     const [formData, setFormData] = useState<AddUserFormData>({
         username: '',
         firstName: '',
@@ -58,7 +61,7 @@ export const AddUser: React.FC = () => {
         e.preventDefault();
         try {
             await addUser(formData);
-            navigate('/*'); // Change this to history.push if you're on v5
+            onClose();
         } catch (error) {
             console.error("Error adding user:", error);
         }
@@ -161,7 +164,19 @@ export const AddUser: React.FC = () => {
 }
 
 // UserDetails Component
-export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
+export const UserDetails: React.FC<UserDetailsProps> = ({ user, onClose, refreshUserDetails }) => {
+    const { toggleAccountStatus } = useAdmin();
+
+    const handleToggleStatus = async (newStatus: 'ban' | 'restrict' | 'activate') => {
+        try {
+            await toggleAccountStatus(user.id, newStatus);
+
+            refreshUserDetails();
+        } catch (error) {
+            console.error("Error toggling user status:", error);
+        }
+    };
+
     if (!user) return <div>Loading...</div>;
 
     return (
@@ -186,11 +201,6 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                 <div className="modal-field">
                     <strong>Role:</strong>
                     <span>{user.role}</span>
-                </div>
-
-                <div className="modal-field">
-                    <strong>Status:</strong>
-                    <span>{user.accountStatus}</span>
                 </div>
 
                 <div className="modal-field">
@@ -232,11 +242,24 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                     <strong>Is Empty:</strong>
                     <span>{user.isEmpty ? 'Yes' : 'No'}</span>
                 </div>
+                <div className="modal-field">
+                    <strong>Status:</strong>
+                    <span>{user.accountStatus}</span>
+                    <button disabled={user.accountStatus === 'active'} onClick={() => handleToggleStatus('activate')}>
+                        Activate
+                    </button>
+                    <button disabled={user.accountStatus === 'banned'} onClick={() => handleToggleStatus('ban')}>
+                        Ban
+                    </button>
+                    <button disabled={user.accountStatus === 'restricted'} onClick={() => handleToggleStatus('restrict')}>
+                        Restrict
+                    </button>
+                </div>
+
             </div>
         </div>
     );
 }
-
 
 // BanUser Component
 export const UpdateUser: React.FC = () => {

@@ -120,11 +120,17 @@ function useAdmin() {
             setLoading(true);
             const response = await axios.post(`${ADMIN_URL}/users/child-package`, userData, { headers });
 
-            if (!response.data.success) {
+            if (response.data.message === "User added successfully") {
+                // Handle success here
+                console.log("User added successfully");
+            } else {
+                // Handle error here
+                console.error("Error message from server:", response.data.message);
                 throw new Error(response.data.message);
             }
             return response.data;
         } catch (err: any) {
+            console.error("Error in addUser:", err);
             setError(err.response ? err.response.data : err);
             throw err;
         } finally {
@@ -132,43 +138,35 @@ function useAdmin() {
         }
     };
 
-
-    const banUser = async (userId: string) => {
+    const toggleAccountStatus = async (userId: string, action: 'ban' | 'restrict' | 'activate') => {
         try {
-            await axios.post(`${ADMIN_URL}/users/ban/${userId}`, {}, { headers });
+            await axios.post(`${ADMIN_URL}/users/toggle-ban/${userId}?action=${action}`, {}, { headers });
             // Maybe update the users state here or refetch users to show the updated status
         } catch (err: any) {
-            setError(err);
-        }
-    };
-
-    const unbanUser = async (userId: string) => {
-        try {
-            await axios.post(`${ADMIN_URL}/users/unban/${userId}`, {}, { headers });
-            // Maybe update the users state here or refetch users to show the updated status
-        } catch (err: any) {
-            setError(err);
+            setError(err.response ? err.response.data : err);
         }
     };
 
     // ... other action functions like updateSettings, addUserOrChild etc.
 
     return {
-        ADMIN_URL,
-        users,
-        reports,
-        globalSettings,
+        // Functions
         fetchPackages,
-        packages,
-        upgrades,
-        loading,
-        error,
         fetchUsers,
         fetchUserByUsername,
         fetchReports,
         addUser,
-        banUser,
-        unbanUser,
+        toggleAccountStatus,
+
+        // State
+        ADMIN_URL,
+        users,
+        reports,
+        globalSettings,
+        packages,
+        upgrades,
+        loading,
+        error,
     };
 }
 
