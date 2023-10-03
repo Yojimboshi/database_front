@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUsers } from '../../hooks/useUsers';
 
 const TestingGet: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
+    console.log(childInfo);
 
     useEffect(() => {
         fetchChildInfo();
@@ -11,7 +12,10 @@ const TestingGet: React.FC = () => {
     // Check if childInfo is available and has a user object
     const username = childInfo && childInfo.user ? childInfo.user.username : '';
     const children = childInfo && childInfo.children ? childInfo.children : [];
-    const grandchildren = childInfo && childInfo.grandchildren ? childInfo.grandchildren : [];
+
+    // Find the left and right children based on leftChildId and rightChildId
+    const leftChild = children.find(child => child.id === childInfo?.user?.leftChildId);
+    const rightChild = children.find(child => child.id === childInfo?.user?.rightChildId);
 
     return (
         <div>
@@ -20,21 +24,23 @@ const TestingGet: React.FC = () => {
             <ul>
                 {children.map((child, index) => (
                     <li key={index} className='text-slate-900'>
-                        ID: {child.id}, Parent ID: {child.parentId},{child.username}
+                        ID: {child.id}, Parent ID: {child.parentId}, Name: {child.username}, Left: {child.leftChildId}, Right: {child.rightChildId}
                     </li>
                 ))}
             </ul>
 
-            <p className='text-slate-900'>Grandchildren:</p>
-            <ul>
-                {grandchildren.map((grandchild, index) => (
-                    <li key={index} className='text-slate-900'>
-                        ID: {grandchild.id}, Parent ID:{grandchild.parentId},name{grandchild.username}
-                    </li>
-                ))}
-            </ul>
+            <div>
+                <div className='flex flex-col'>
+                    <div>
+                        <button>{username}</button>
+                    </div>
+                    <div>{/*First Role*/}
+                        <button>{leftChild ? leftChild.username : 'No Left Child'}</button>
+                        <button>{rightChild ? rightChild.username : 'No Right Child'}</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        
     );
 }
 
