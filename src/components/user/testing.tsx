@@ -17,8 +17,13 @@ const TestingGet: React.FC = () => {
     const leftChild = children.find(child => child.id === childInfo?.user?.leftChildId);
     const rightChild = children.find(child => child.id === childInfo?.user?.rightChildId);
 
-    console.log("Left: ",leftChild?.leftChildId);
-    console.log("Right: ", rightChild?.rightChildId);
+    console.log("Left: ",leftChild);
+    console.log("Right: ", rightChild);
+
+    const checkChildren = () => {
+        const userID = childInfo && childInfo.user? childInfo.user.id : '';
+
+    }
 
     return (
         <div>

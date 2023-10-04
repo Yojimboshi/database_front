@@ -8,39 +8,29 @@ const GetChildInfo: React.FC = () => {
 
     const handleFetchClick = () => {
         fetchChildInfo();
-        console.log(childInfo);
     };
 
     const handleSearchClick = () => {
         fetchChildInfo(searchUsername);
     };
 
-    const findChildren = ( id : number | string ) => {
+    const childrenData = ( id : number | string ) => {
         if(id === null){
             return null;
         }
-        
+
         const childrenInfo = childInfo.children.find((children) => children.id === id);
 
+        console.log(childrenInfo);
+
         if(childrenInfo){
-            return childrenInfo.username;
+            return childrenInfo;
         }else{
             return null;
         }
     }
 
-    const grandchildrenFindById = (id: number | null) => {
-        if (id === null) {
-            return null; // Handle the case where ID is null
-        }
-        const userInfo = childInfo.grandchildren.find((grandchildren) => grandchildren.id === id);
-        
-        if(userInfo){
-            return userInfo.username;
-        }else{
-            return null;
-        }
-    };
+    console.log(childInfo);
 
     return (
         <div className="p-4">
@@ -61,51 +51,11 @@ const GetChildInfo: React.FC = () => {
             <div className="grid grid-rows-4 grid-cols-7 border border-sky-400">
                 {childInfo?.user && (
                     <h3 className='text-slate-900 col-start-4 col-end-5'>{childInfo.user.username}</h3>
+                    // <h3 className='text-slate-900 col-start-4 col-end-5'>{childInfo.user.leftChildId}</h3>
                 )}
-                {/* Children part */}
-                <ul className="list-disc border border-black">
-                    {childInfo?.user && (
-                        <p>{childInfo.user.id}</p>
-                        // {findChildren(childInfo.user.id)} error part
-                    )}
-                </ul>
-                {/* grandchildren part */}
-                <ul className="list-disc pl-4">
-                <div> 
+                {/* Children Data */}
+                <ul className="list-disc">
                     
-                    {childInfo.children && childInfo.children.map((child) => (
-                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
-                            <div>
-                                {child.leftChildId !== null ? (
-                                    <>
-                                        {grandchildrenFindById(child.leftChildId) && (
-                                            <>
-                                                {grandchildrenFindById(child.leftChildId)}
-                                            </>
-                                        )}
-                                    </>
-                                ) : "NULL"}
-                            </div>
-                        </li>
-                    ))}
-                    </div>
-                    <div>
-                    {childInfo.children && childInfo.children.map((child) => (
-                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
-                            <div>
-                                {child.rightChildId !== null ? (
-                                    <>
-                                        {grandchildrenFindById(child.rightChildId) && (
-                                            <>
-                                                {grandchildrenFindById(child.rightChildId)}
-                                            </>
-                                        )}
-                                    </>
-                                ) : "NULL"}
-                            </div>
-                        </li>
-                    ))}
-                    </div>
                 </ul>
             </div>
 
