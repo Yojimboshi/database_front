@@ -1,3 +1,4 @@
+// src/components/user/GetChildInfo.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
@@ -15,31 +16,32 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
-    const findChildren = ( id : number | string ) => {
-        if(id === null){
-            return null;
-        }
-        
-        const childrenInfo = childInfo.children.find((children) => children.id === id);
+    const findChildren = (id: number | string) => {
+        console.log(`Searching for children with ID: ${id}`);
+        if (!id) return null;
 
-        if(childrenInfo){
-            return childrenInfo.username;
-        }else{
-            return null;
+        const child = childInfo.children.find((c) => c.id === id);
+        if (child) {
+            console.log(`Child found with username: ${child.username}`);
+            return child.username;
         }
-    }
 
-    const grandchildrenFindById = (id: number | null) => {
-        if (id === null) {
-            return null; // Handle the case where ID is null
+        console.log('Child not found.');
+        return null;
+    };
+
+    const findGrandchild = (id: number | null) => {
+        console.log(`Searching for grandchild with ID: ${id}`);
+        if (!id) return null;
+
+        const grandchild = childInfo.grandchildren.find((g) => g.id === id);
+        if (grandchild) {
+            console.log(`Grandchild found with username: ${grandchild.username}`);
+            return grandchild.username;
         }
-        const userInfo = childInfo.grandchildren.find((grandchildren) => grandchildren.id === id);
-        
-        if(userInfo){
-            return userInfo.username;
-        }else{
-            return null;
-        }
+
+        console.log('Grandchild not found.');
+        return null;
     };
 
     return (
@@ -64,51 +66,35 @@ const GetChildInfo: React.FC = () => {
                 )}
                 {/* Children part */}
                 <ul className="list-disc border border-black">
-                    {childInfo?.user && (
-                        <p>{childInfo.user.id}</p>
-                        // {findChildren(childInfo.user.id)} error part
-                    )}
+                    {childInfo?.user ? (
+                        <>
+                            <p>{childInfo.user.id}</p>
+                            {findChildren(childInfo.user.id)}
+                        </>
+                    ) : null}
                 </ul>
                 {/* grandchildren part */}
                 <ul className="list-disc pl-4">
-                <div> 
-                    
-                    {childInfo.children && childInfo.children.map((child) => (
-                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
-                            <div>
-                                {child.leftChildId !== null ? (
-                                    <>
-                                        {grandchildrenFindById(child.leftChildId) && (
-                                            <>
-                                                {grandchildrenFindById(child.leftChildId)}
-                                            </>
-                                        )}
-                                    </>
-                                ) : "NULL"}
-                            </div>
-                        </li>
-                    ))}
-                    </div>
-                    <div>
-                    {childInfo.children && childInfo.children.map((child) => (
-                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
-                            <div>
-                                {child.rightChildId !== null ? (
-                                    <>
-                                        {grandchildrenFindById(child.rightChildId) && (
-                                            <>
-                                                {grandchildrenFindById(child.rightChildId)}
-                                            </>
-                                        )}
-                                    </>
-                                ) : "NULL"}
-                            </div>
-                        </li>
-                    ))}
-                    </div>
+                    {childInfo.children?.map((child) => {
+                        const leftChildName = findGrandchild(child.leftChildId);
+                        const rightChildName = findGrandchild(child.rightChildId);
+                        return (
+                            <React.Fragment key={child.id}>
+                                <li key={`left-${child.id}`} className="mb-2 mr-6 text-slate-900 list-none">
+                                    <div>
+                                        {leftChildName || "NULL"}
+                                    </div>
+                                </li>
+                                <li key={`right-${child.id}`} className="mb-2 mr-6 text-slate-900 list-none">
+                                    <div>
+                                        {rightChildName || "NULL"}
+                                    </div>
+                                </li>
+                            </React.Fragment>
+                        );
+                    })}
                 </ul>
             </div>
-
         </div>
     );
 }
