@@ -15,7 +15,7 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
-    const findChildren = ( id : number | null ) => {
+    const findChildren = ( id : number | string ) => {
         if(id === null){
             return null;
         }
@@ -66,11 +66,7 @@ const GetChildInfo: React.FC = () => {
                 <ul className="list-disc border border-black">
                     {childInfo?.user && (
                         <p>{childInfo.user.id}</p>
-                        {childInfo?.user?.id !== null ?(
-                            <>
-                                {findChildren(childInfo.user.id)}
-                            </>
-                        ):"NULL"}
+                        // {findChildren(childInfo.user.id)} error part
                     )}
                 </ul>
                 {/* grandchildren part */}
