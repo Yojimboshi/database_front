@@ -17,6 +17,9 @@ const TestingGet: React.FC = () => {
     const leftChild = children.find(child => child.id === childInfo?.user?.leftChildId);
     const rightChild = children.find(child => child.id === childInfo?.user?.rightChildId);
 
+    console.log("Left: ",leftChild?.leftChildId);
+    console.log("Right: ", rightChild?.rightChildId);
+
     return (
         <div>
             <p className='text-slate-900'>Username: {username}</p>
@@ -35,8 +38,14 @@ const TestingGet: React.FC = () => {
                         <button>{username}</button>
                     </div>
                     <div>{/*First Role*/}
-                        <button>{leftChild ? leftChild.username : 'No Left Child'}</button>
-                        <button>{rightChild ? rightChild.username : 'No Right Child'}</button>
+                        <button>{leftChild ? leftChild.username : 'NULL'}</button>
+                        <button>{rightChild ? rightChild.username : 'NULL'}</button>
+                    </div>
+                    <div>
+                        <button></button>
+                        <button></button>
+                        <button></button>
+                        <button></button>
                     </div>
                 </div>
             </div>

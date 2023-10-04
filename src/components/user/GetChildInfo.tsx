@@ -15,20 +15,32 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
-    // const renderBinaryTree = (node: ChildInfo | null) => {
-    //     if (!node) return null;
+    const findChildren = ( id : number | null ) => {
+        if(id === null){
+            return null;
+        }
+        
+        const childrenInfo = childInfo.children.find((children) => children.id === id);
 
-    //     return (
-    //         <div className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
-    //             <span className="col-span-2 border border-solid w-8 h-8 rounded-full flex items-center justify-center mx-auto">{node.username}</span>
-    //             {node.children.map((child) => (
-    //                 <div key={child.id} className="grid grid-cols-2 grid-rows-auto gap-2 mt-4 relative">
-    //                     {renderBinaryTree(child)}
-    //                 </div>
-    //             ))}
-    //         </div>
-    //     );
-    // };
+        if(childrenInfo){
+            return childrenInfo.username;
+        }else{
+            return null;
+        }
+    }
+
+    const grandchildrenFindById = (id: number | null) => {
+        if (id === null) {
+            return null; // Handle the case where ID is null
+        }
+        const userInfo = childInfo.grandchildren.find((grandchildren) => grandchildren.id === id);
+        
+        if(userInfo){
+            return userInfo.username;
+        }else{
+            return null;
+        }
+    };
 
     return (
         <div className="p-4">
@@ -46,24 +58,61 @@ const GetChildInfo: React.FC = () => {
             </div>
 
             {/* Data showing */}
-            <h3 className="font-bold text-slate-900">Children</h3>
-            <ul className="list-disc pl-4">
-                {childInfo.children.map(child => (
-                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
-                ))}
-            </ul>
-            <h3 className="text-slate-900 font-bold mt-4">Grandchildren</h3>
-            <ul className="list-disc pl-4">
-                {childInfo.grandchildren.map(child => (
-                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
-                ))}
-            </ul>
-            <h3 className="text-slate-900 font-bold mt-4">Great Grandchildren</h3>
-            <ul className="list-disc pl-4">
-                {childInfo.greatGrandchildren.map(child => (
-                    <li key={child.id} className="mb-2 text-slate-900 list-none">{child.username}</li>
-                ))}
-            </ul>
+            <div className="grid grid-rows-4 grid-cols-7 border border-sky-400">
+                {childInfo?.user && (
+                    <h3 className='text-slate-900 col-start-4 col-end-5'>{childInfo.user.username}</h3>
+                )}
+                {/* Children part */}
+                <ul className="list-disc border border-black">
+                    {childInfo?.user && (
+                        <p>{childInfo.user.id}</p>
+                        {childInfo?.user?.id !== null ?(
+                            <>
+                                {findChildren(childInfo.user.id)}
+                            </>
+                        ):"NULL"}
+                    )}
+                </ul>
+                {/* grandchildren part */}
+                <ul className="list-disc pl-4">
+                <div> 
+                    
+                    {childInfo.children && childInfo.children.map((child) => (
+                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
+                            <div>
+                                {child.leftChildId !== null ? (
+                                    <>
+                                        {grandchildrenFindById(child.leftChildId) && (
+                                            <>
+                                                {grandchildrenFindById(child.leftChildId)}
+                                            </>
+                                        )}
+                                    </>
+                                ) : "NULL"}
+                            </div>
+                        </li>
+                    ))}
+                    </div>
+                    <div>
+                    {childInfo.children && childInfo.children.map((child) => (
+                        <li key={child.id} className="mb-2 mr-6 text-slate-900 list-none">
+                            <div>
+                                {child.rightChildId !== null ? (
+                                    <>
+                                        {grandchildrenFindById(child.rightChildId) && (
+                                            <>
+                                                {grandchildrenFindById(child.rightChildId)}
+                                            </>
+                                        )}
+                                    </>
+                                ) : "NULL"}
+                            </div>
+                        </li>
+                    ))}
+                    </div>
+                </ul>
+            </div>
+
         </div>
     );
 }
