@@ -1,3 +1,4 @@
+// src/components/user/GetChildInfo.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
@@ -8,29 +9,43 @@ const GetChildInfo: React.FC = () => {
 
     const handleFetchClick = () => {
         fetchChildInfo();
+        console.log(childInfo);
     };
 
     const handleSearchClick = () => {
         fetchChildInfo(searchUsername);
     };
 
-    const childrenData = ( id : number | string ) => {
-        if(id === null){
-            return null;
-        }
+    const findChildren = (id: number | string) => {
+        console.log(`Searching for children with ID: ${id}`);
+        
+        if (!id) return null;
 
-        const childrenInfo = childInfo.children.find((children) => children.id === id);
+        if(!childInfo || !childInfo.user) return null;
 
-        console.log(childrenInfo);
+        const userID = childInfo.user.id;
 
-        if(childrenInfo){
-            return childrenInfo;
+        if(userID === id){
+            const left = childInfo.user.leftChildId;
+            const right = childInfo.user.rightChildId;
+            const leftChildrenInfo = childInfo.children.find((c) => c.id === left);
+            const rightChidrenInfo = childInfo.children.find((r) => r.id === right);
+            console.log("Before Find: ",left);
+            console.log("After Find: ",leftChildrenInfo);
         }else{
-            return null;
+            console.log("Cannot Work");
         }
-    }
 
-    console.log(childInfo);
+        // const child = childInfo.children.filter((c) => c.parentId === id);
+        // const usernames = child.map((child) => child.username);
+        
+        // if(usernames){
+        //     return usernames;
+        // }
+
+        console.log('Child not found.');
+        return null;
+    };
 
     return (
         <div className="p-4">
@@ -51,14 +66,16 @@ const GetChildInfo: React.FC = () => {
             <div className="grid grid-rows-4 grid-cols-7 border border-sky-400">
                 {childInfo?.user && (
                     <h3 className='text-slate-900 col-start-4 col-end-5'>{childInfo.user.username}</h3>
-                    // <h3 className='text-slate-900 col-start-4 col-end-5'>{childInfo.user.leftChildId}</h3>
                 )}
-                {/* Children Data */}
-                <ul className="list-disc">
-                    
+                {/* Children part */}
+                <ul className="list-disc border border-black">
+                    {childInfo?.user ? (
+                        <div className='text-slate-900'>
+                            {findChildren(childInfo.user.id)}
+                        </div>
+                    ) : null}
                 </ul>
             </div>
-
         </div>
     );
 }
