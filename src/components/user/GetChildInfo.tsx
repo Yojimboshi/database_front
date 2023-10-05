@@ -6,8 +6,8 @@ import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
 const GetChildInfo: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
     const [searchUsername, setSearchUsername] = useState("");
-    const [leftChildUsername, setLeftChildUsername] = useState<string | null>(null);
-    const [rightChildUsername, setRightChildUsername] = useState<string | null>(null);
+    const [leftChildUsername, setLeftChildUsername] = useState<string>(""); // Initialized to empty string
+    const [rightChildUsername, setRightChildUsername] = useState<string>(""); // Initialized to empty string
     const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<string[]>([]);
     const [rightGrandchildUsername, setRightGrandchildUsername] = useState<string[]>([]);
 
@@ -17,24 +17,28 @@ const GetChildInfo: React.FC = () => {
     };
 
     const handleSearchClick = () => {
+        // Reset all states first
+        setLeftChildUsername("");
+        setRightChildUsername("");
+        setLeftGrandchildUsername([]);
+        setRightGrandchildUsername([]);
+
+        // Now fetch new data
         fetchChildInfo(searchUsername);
-        // Reset the left and right child usernames when performing a new search
-        setLeftChildUsername(null);
-        setRightChildUsername(null);
     };
 
     const findLeftAndRightChildren = (id: number | string) => {
         if (!id) return null;
-    
+
         if (!childInfo || !childInfo.user) return null;
-    
+
         let leftChildrenUsername: string | null = null;
         let rightChildrenUsername: string | null = null;
         let leftChildrenID: string | number | null = null;
         let rightChildrenID: string | number | null = null;
         let leftGrandchildrenUsernames: string[] = [];
         let rightGrandchildrenUsernames: string[] = [];
-    
+
         if (childInfo.user.id === id) {
             if (childInfo.user !== null) {
                 const leftChildren = childInfo.children.find(
@@ -53,8 +57,8 @@ const GetChildInfo: React.FC = () => {
                 }
             }
         }
-    
-        if (leftChildrenID !== null) {
+
+        if (leftChildrenID) {
             const leftGrandchildrenInfo = childInfo.grandchildren.filter(
                 (grandchild) => grandchild.parentId === leftChildrenID
             );
@@ -63,8 +67,8 @@ const GetChildInfo: React.FC = () => {
             );
             setLeftGrandchildUsername(leftGrandchildrenUsernames);
         }
-    
-        if (rightChildrenID !== null) {
+
+        if (rightChildrenID) {
             const rightGrandchildrenInfo = childInfo.grandchildren.filter(
                 (grandchild) => grandchild.parentId === rightChildrenID
             );
@@ -73,10 +77,10 @@ const GetChildInfo: React.FC = () => {
             );
             setRightGrandchildUsername(rightGrandchildrenUsernames);
         }
-    
+
         // Update the state with the left and right child usernames
-        setLeftChildUsername(leftChildrenUsername);
-        setRightChildUsername(rightChildrenUsername);
+        setLeftChildUsername(leftChildrenUsername || "");
+        setRightChildUsername(rightChildrenUsername || "");
     };
 
     // Call findLeftAndRightChildren when childInfo changes
@@ -116,7 +120,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
@@ -128,7 +131,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
@@ -142,7 +144,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
@@ -154,7 +155,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
@@ -168,7 +168,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
@@ -180,7 +179,6 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     ) : (
                         <div className='border border-black text-slate-900'>
-                            null
                         </div>
                     )}
                 </ul>
