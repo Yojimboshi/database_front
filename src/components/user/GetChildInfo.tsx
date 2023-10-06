@@ -27,6 +27,16 @@ const GetChildInfo: React.FC = () => {
         fetchChildInfo(searchUsername);
     };
 
+    const handleChildUsernameClick = (childUsername: string) => {
+        // setChangeUsername(childUsername);        
+        setLeftChildUsername("");
+        setRightChildUsername("");
+        setLeftGrandchildUsername([]);
+        setRightGrandchildUsername([]);
+        fetchChildInfo(childUsername);
+        console.log("Can work");
+    };
+
     const findLeftAndRightChildren = (id: number | string) => {
         if (!id) return null;
 
@@ -87,7 +97,7 @@ const GetChildInfo: React.FC = () => {
     useEffect(() => {
         if (childInfo && childInfo.user) {
             findLeftAndRightChildren(childInfo.user.id);
-            console.log("Call function effect");
+            // console.log(childInfo.user.id);
         }
     }, [childInfo]);
 
@@ -109,28 +119,34 @@ const GetChildInfo: React.FC = () => {
             {/* Data showing */}
             <div className="grid grid-rows-5 grid-cols-7">
                 {childInfo?.user && (
-                    <h3 className='text-slate-900 col-start-4 col-end-5 border border-black'>{childInfo.user.username}</h3>
+                    <h3 className='text-slate-900 col-start-4 col-end-5 border'>{childInfo.user.username}</h3>
                 )}
+                <ul className='col-start-3 col-end-4'>
+                    <div className='border'></div>
+                </ul>
+                <ul className='col-start-5 col-end-6'>
+                    <div className='border'></div>
+                </ul>
                 {/* Children part */}
                 {/* Left Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-2 col-end-3">
                     {leftChildUsername !== null ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftChildUsername)}>
                             {leftChildUsername}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7">
                     {rightChildUsername !== null ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightChildUsername)}>
                             {rightChildUsername}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
@@ -139,22 +155,22 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-1 col-end-2">
                     {leftGrandchildUsername.length > 0 ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0])}>
                             {leftGrandchildUsername[0]}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
                     {leftGrandchildUsername.length > 1 ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1])}>
                             {leftGrandchildUsername[1]}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
@@ -163,22 +179,22 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-5 col-end-6">
                     {rightGrandchildUsername.length > 0 ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[0])}>
                             {rightGrandchildUsername[0]}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
                     {rightGrandchildUsername.length > 1 ? (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[1])}>
                             {rightGrandchildUsername[1]}
                         </div>
                     ) : (
-                        <div className='border border-black text-slate-900'>
+                        <div className='border text-slate-900'>
                         </div>
                     )}
                 </ul>
