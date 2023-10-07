@@ -46,6 +46,9 @@ const AdminHome: FC = () => {
                 `${VITE_API_BASE_URL}/admin/refreshToken`,
                 {},
                 {
+                    headers: {
+                        Authorization: `${accessToken}`
+                    },
                     withCredentials: true,
                 }
             );
