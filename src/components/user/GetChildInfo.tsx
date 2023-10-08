@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
+import userIcon from '../../../images/user_icon.jpg';
 
 const GetChildInfo: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
@@ -10,6 +11,8 @@ const GetChildInfo: React.FC = () => {
     const [rightChildUsername, setRightChildUsername] = useState<string>(""); // Initialized to empty string
     const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<string[]>([]);
     const [rightGrandchildUsername, setRightGrandchildUsername] = useState<string[]>([]);
+    const [selectedNodesHistory, setSelectedNodesHistory] = useState<string[]>([]);
+    console.log(selectedNodesHistory);
 
     const handleFetchClick = () => {
         fetchChildInfo();
@@ -33,8 +36,25 @@ const GetChildInfo: React.FC = () => {
         setRightChildUsername("");
         setLeftGrandchildUsername([]);
         setRightGrandchildUsername([]);
+        const newSelectedNodesHistory = [...selectedNodesHistory, childUsername];
+    setSelectedNodesHistory(newSelectedNodesHistory);
         fetchChildInfo(childUsername);
         console.log("Can work");
+    };
+
+    const handleGoBackClick = () => {
+        // Remove the last selected node from the history
+        const newSelectedNodesHistory = selectedNodesHistory.slice(0, -1);
+        setSelectedNodesHistory(newSelectedNodesHistory);
+    
+        // Get the previous node (if any) and fetch its child info
+        const previousNode = newSelectedNodesHistory[newSelectedNodesHistory.length - 1];
+        if (previousNode) {
+            fetchChildInfo(previousNode);
+        } else {
+            // If the history is empty, fetch the top-level data (initial state)
+            fetchChildInfo();
+        }
     };
 
     const findLeftAndRightChildren = (id: number | string) => {
@@ -119,35 +139,45 @@ const GetChildInfo: React.FC = () => {
             {/* Data showing */}
             <div className="grid grid-rows-5 grid-cols-7">
                 {childInfo?.user && (
-                    <h3 className='text-slate-900 col-start-4 col-end-5 border'>{childInfo.user.username}</h3>
+                    <div className="col-start-4 col-end-5">
+                        <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto"/>
+                        <h3 className='text-slate-900'>{childInfo.user.username}</h3>
+                    </div>
                 )}
-                <ul className='col-start-3 col-end-4'>
-                    <div className='border'></div>
-                </ul>
-                <ul className='col-start-5 col-end-6'>
-                    <div className='border'></div>
-                </ul>
                 {/* Children part */}
                 {/* Left Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-2 col-end-3">
                     {leftChildUsername !== null ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftChildUsername)}>
-                            {leftChildUsername}
-                        </div>
+                        <>
+                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftChildUsername)}>
+                                {leftChildUsername}
+                            </div>
+                        </>
                     ) : (
-                        <div className='border text-slate-900'>
+                        <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Children */}
-                <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7">
+                <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7 relative">
                     {rightChildUsername !== null ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightChildUsername)}>
-                            {rightChildUsername}
+                    <>
+                        <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                        <div
+                        className="text-slate-900 cursor-pointer"
+                        onClick={() => handleChildUsernameClick(rightChildUsername)}
+                        >
+                        {rightChildUsername}
                         </div>
+                        {/* Line to connect to parent */}
+                        <div className="absolute h-full w-0.5 bg-gray-400 left-1/2 top-0 transform -translate-x-1/2">
+                        {/* Arrowhead */}
+                        <div className="absolute w-3 h-3 bg-gray-400 transform rotate-45 -translate-x-1 -top-1.5"></div>
+                        </div>
+                    </>
                     ) : (
-                        <div className='border text-slate-900'>
-                        </div>
+                    <div className="text-slate-900"></div>
                     )}
                 </ul>
 
@@ -155,22 +185,28 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-1 col-end-2">
                     {leftGrandchildUsername.length > 0 ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0])}>
-                            {leftGrandchildUsername[0]}
-                        </div>
+                        <>
+                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0])}>
+                                {leftGrandchildUsername[0]}
+                            </div>
+                        </>
                     ) : (
-                        <div className='border text-slate-900'>
+                        <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
                     {leftGrandchildUsername.length > 1 ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1])}>
-                            {leftGrandchildUsername[1]}
-                        </div>
+                        <>
+                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1])}>
+                                {leftGrandchildUsername[1]}
+                            </div>
+                        </>
                     ) : (
-                        <div className='border text-slate-900'>
+                        <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
@@ -179,26 +215,33 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-5 col-end-6">
                     {rightGrandchildUsername.length > 0 ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[0])}>
-                            {rightGrandchildUsername[0]}
-                        </div>
+                        <>
+                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[0])}>
+                                {rightGrandchildUsername[0]}
+                            </div>
+                        </>
                     ) : (
-                        <div className='border text-slate-900'>
+                        <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
                     {rightGrandchildUsername.length > 1 ? (
-                        <div className='border text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[1])}>
-                            {rightGrandchildUsername[1]}
-                        </div>
+                        <>
+                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[1])}>
+                                {rightGrandchildUsername[1]}
+                            </div>
+                        </>
                     ) : (
-                        <div className='border text-slate-900'>
+                        <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
             </div>
+            <button onClick={handleGoBackClick}>Go Back</button>
         </div>
     );
 }
