@@ -12,15 +12,15 @@ const GetChildInfo: React.FC = () => {
     const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<string[]>([]);
     const [rightGrandchildUsername, setRightGrandchildUsername] = useState<string[]>([]);
     const [selectedNodesHistory, setSelectedNodesHistory] = useState<string[]>([]);
-    console.log(selectedNodesHistory);
+    console.log("Not from the function: ",childInfo);
 
     const handleFetchClick = () => {
+        console.log("Working on the fetch function....");
         fetchChildInfo();
-        console.log(childInfo);
     };
 
     const handleSearchClick = () => {
-        // Reset all states first
+        console.log("Working on the search function...");
         setLeftChildUsername("");
         setRightChildUsername("");
         setLeftGrandchildUsername([]);
@@ -31,7 +31,7 @@ const GetChildInfo: React.FC = () => {
     };
 
     const handleChildUsernameClick = (childUsername: string) => {
-        // setChangeUsername(childUsername);        
+        console.log("Working on the username clicking function....");
         setLeftChildUsername("");
         setRightChildUsername("");
         setLeftGrandchildUsername([]);
@@ -43,6 +43,7 @@ const GetChildInfo: React.FC = () => {
     };
 
     const handleGoBackClick = () => {
+        console.log("Woring on the go back function....");
         // Remove the last selected node from the history
         const newSelectedNodesHistory = selectedNodesHistory.slice(0, -1);
         setSelectedNodesHistory(newSelectedNodesHistory);
@@ -53,11 +54,12 @@ const GetChildInfo: React.FC = () => {
             fetchChildInfo(previousNode);
         } else {
             // If the history is empty, fetch the top-level data (initial state)
-            fetchChildInfo();
+            alert("There is no history member information! Please fetch the user information first.")
         }
     };
 
     const findLeftAndRightChildren = (id: number | string) => {
+        console.log("Working on fetch information function...");
         if (!id) return null;
 
         if (!childInfo || !childInfo.user) return null;
@@ -71,6 +73,7 @@ const GetChildInfo: React.FC = () => {
 
         if (childInfo.user.id === id) {
             if (childInfo.user !== null) {
+                console.log("Finding the children part...");
                 const leftChildren = childInfo.children.find(
                     (leftChild) => leftChild.id === childInfo.user?.leftChildId
                 );
@@ -89,6 +92,7 @@ const GetChildInfo: React.FC = () => {
         }
 
         if (leftChildrenID) {
+            console.log("finding the left grandchildren...");
             const leftGrandchildrenInfo = childInfo.grandchildren.filter(
                 (grandchild) => grandchild.parentId === leftChildrenID
             );
@@ -99,6 +103,7 @@ const GetChildInfo: React.FC = () => {
         }
 
         if (rightChildrenID) {
+            console.log("finding the right grandchildren...");
             const rightGrandchildrenInfo = childInfo.grandchildren.filter(
                 (grandchild) => grandchild.parentId === rightChildrenID
             );
@@ -147,7 +152,7 @@ const GetChildInfo: React.FC = () => {
                 {/* Children part */}
                 {/* Left Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-2 col-end-3">
-                    {leftChildUsername !== null ? (
+                    {leftChildUsername !== null && leftChildUsername !== "" ? (
                         <>
                             <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
                             <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftChildUsername)}>
@@ -161,19 +166,11 @@ const GetChildInfo: React.FC = () => {
                 </ul>
                 {/* Right Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7 relative">
-                    {rightChildUsername !== null ? (
+                    {rightChildUsername !== null && rightChildUsername !== "" ? (
                     <>
                         <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                        <div
-                        className="text-slate-900 cursor-pointer"
-                        onClick={() => handleChildUsernameClick(rightChildUsername)}
-                        >
-                        {rightChildUsername}
-                        </div>
-                        {/* Line to connect to parent */}
-                        <div className="absolute h-full w-0.5 bg-gray-400 left-1/2 top-0 transform -translate-x-1/2">
-                        {/* Arrowhead */}
-                        <div className="absolute w-3 h-3 bg-gray-400 transform rotate-45 -translate-x-1 -top-1.5"></div>
+                        <div className="text-slate-900 cursor-pointer" onClick={() => handleChildUsernameClick(rightChildUsername)}>
+                            {rightChildUsername}
                         </div>
                     </>
                     ) : (
