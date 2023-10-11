@@ -14,6 +14,9 @@ export interface User {
     parentId: number;
     leftChildId: number;
     rightChildId: number;
+    leftCarryForward: number;
+    rightCarryForward: number;
+    packageId: number;
 }
 
 export interface Package {

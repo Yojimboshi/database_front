@@ -3,44 +3,51 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
 import userIcon from '../../../images/user_icon.jpg';
+import style from './style.css';
 
 const GetChildInfo: React.FC = () => {
     const { childInfo, fetchChildInfo } = useUsers();
     const [searchUsername, setSearchUsername] = useState("");
-    const [leftChildUsername, setLeftChildUsername] = useState<string>(""); // Initialized to empty string
-    const [rightChildUsername, setRightChildUsername] = useState<string>(""); // Initialized to empty string
-    const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<string[]>([]);
+    const [leftChildInfo, setLeftChildInfo] = useState<User | null>(null);
+    const [rightChildInfo, setRightChildInfo] = useState<User | null>(null);
+    const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<User[]>([]);
+    // const [leftGrandchildUsername, setLeftGrandchildUsername] = useState<string[]>([]);
     const [rightGrandchildUsername, setRightGrandchildUsername] = useState<string[]>([]);
     const [selectedNodesHistory, setSelectedNodesHistory] = useState<string[]>([]);
-    console.log("Not from the function: ",childInfo);
+    const shouldShowGoBackButton = selectedNodesHistory.length > 0;
 
     const handleFetchClick = () => {
         console.log("Working on the fetch function....");
         fetchChildInfo();
     };
 
-    const handleSearchClick = () => {
-        console.log("Working on the search function...");
-        setLeftChildUsername("");
-        setRightChildUsername("");
+    const handleChildUsernameClick = (childUsername: string) => {
+        console.log("Working on the username clicking function....");
+    
+        // Clear multiple state variables
         setLeftGrandchildUsername([]);
         setRightGrandchildUsername([]);
-
+        setLeftChildInfo(null); // Clear leftChildInfo
+        setRightChildInfo(null); // Clear leftChildInfo
+        const newSelectedNodesHistory = [...selectedNodesHistory, childUsername];
+        setSelectedNodesHistory(newSelectedNodesHistory);
+        fetchChildInfo(childUsername);
+    };
+    
+    const handleSearchClick = () => {
+        console.log("Working on the search function...");
+    
+        // Clear multiple state variables
+        // setRightChildUsername("");
+        setLeftGrandchildUsername([]);
+        setRightGrandchildUsername([]);
+        setLeftChildInfo(null); // Clear leftChildInfo
+        setRightChildInfo(null); // Clear leftChildInfo
+    
         // Now fetch new data
         fetchChildInfo(searchUsername);
     };
-
-    const handleChildUsernameClick = (childUsername: string) => {
-        console.log("Working on the username clicking function....");
-        setLeftChildUsername("");
-        setRightChildUsername("");
-        setLeftGrandchildUsername([]);
-        setRightGrandchildUsername([]);
-        const newSelectedNodesHistory = [...selectedNodesHistory, childUsername];
-    setSelectedNodesHistory(newSelectedNodesHistory);
-        fetchChildInfo(childUsername);
-        console.log("Can work");
-    };
+    
 
     const handleGoBackClick = () => {
         console.log("Woring on the go back function....");
@@ -54,7 +61,7 @@ const GetChildInfo: React.FC = () => {
             fetchChildInfo(previousNode);
         } else {
             // If the history is empty, fetch the top-level data (initial state)
-            alert("There is no history member information! Please fetch the user information first.")
+            fetchChildInfo();
         }
     };
 
@@ -64,8 +71,6 @@ const GetChildInfo: React.FC = () => {
 
         if (!childInfo || !childInfo.user) return null;
 
-        let leftChildrenUsername: string | null = null;
-        let rightChildrenUsername: string | null = null;
         let leftChildrenID: string | number | null = null;
         let rightChildrenID: string | number | null = null;
         let leftGrandchildrenUsernames: string[] = [];
@@ -81,12 +86,12 @@ const GetChildInfo: React.FC = () => {
                     (rightChild) => rightChild.id === childInfo.user?.rightChildId
                 );
                 if (leftChildren) {
-                    leftChildrenUsername = leftChildren.username;
                     leftChildrenID = leftChildren.id;
+                    setLeftChildInfo(leftChildren);
                 }
                 if (rightChildren) {
-                    rightChildrenUsername = rightChildren.username;
                     rightChildrenID = rightChildren.id;
+                    setRightChildInfo(rightChildren);
                 }
             }
         }
@@ -99,7 +104,9 @@ const GetChildInfo: React.FC = () => {
             leftGrandchildrenUsernames = leftGrandchildrenInfo.map(
                 (grandchild) => grandchild.username
             );
-            setLeftGrandchildUsername(leftGrandchildrenUsernames);
+            console.log(leftGrandchildrenInfo);
+            // setLeftGrandchildUsername(leftGrandchildrenUsernames);
+            setLeftGrandchildUsername(leftGrandchildrenInfo);
         }
 
         if (rightChildrenID) {
@@ -112,10 +119,6 @@ const GetChildInfo: React.FC = () => {
             );
             setRightGrandchildUsername(rightGrandchildrenUsernames);
         }
-
-        // Update the state with the left and right child usernames
-        setLeftChildUsername(leftChildrenUsername || "");
-        setRightChildUsername(rightChildrenUsername || "");
     };
 
     // Call findLeftAndRightChildren when childInfo changes
@@ -144,33 +147,57 @@ const GetChildInfo: React.FC = () => {
             {/* Data showing */}
             <div className="grid grid-rows-5 grid-cols-7">
                 {childInfo?.user && (
+                    <>
                     <div className="col-start-4 col-end-5">
                         <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto"/>
                         <h3 className='text-slate-900'>{childInfo.user.username}</h3>
                     </div>
+                    {/* Line */}
+                    <div className='line-1 col-start-1 col-end-8 overflow-hidden flex flex-col'>
+                        <div className='flex'>
+                            <div className='border border-black w-32 h-7 border-l-0 border-t-0'></div>
+                            <div className='border border-black w-32 h-7 border-r-0 border-t-0 border-l-0'></div>
+                        </div>
+                        <div className='flex'>
+                            <div className='border border-black h-7 w-32 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border border-black h-7 w-32 border-t-0 border-b-0 border-l-0'></div>
+                        </div>
+                    </div>
+                    </>
                 )}
                 {/* Children part */}
                 {/* Left Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-2 col-end-3">
-                    {leftChildUsername !== null && leftChildUsername !== "" ? (
-                        <>
+                    {leftChildInfo !== null ? (
+                        <div className='tooltip text-slate-900 cursor-pointer'>
                             <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftChildUsername)}>
-                                {leftChildUsername}
+                            <div className="username-info" onClick={() => handleChildUsernameClick(leftChildInfo.username)}>
+                                {leftChildInfo.username}
+                                <div className='tooltiptext flex flex-col'>
+                                <p>Left Carry Forward: {leftChildInfo.leftCarryForward}</p>
+                                <p>Right Carry Forward: {leftChildInfo.rightCarryForward}</p> 
+                                <p>Package ID: {leftChildInfo.packageId}</p>
                             </div>
-                        </>
+                            </div>
+                        </div>
                     ) : (
                         <div className='text-slate-900'>
                         </div>
                     )}
                 </ul>
+
                 {/* Right Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7 relative">
-                    {rightChildUsername !== null && rightChildUsername !== "" ? (
+                    {rightChildInfo !== null  ? (
                     <>
                         <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                        <div className="text-slate-900 cursor-pointer" onClick={() => handleChildUsernameClick(rightChildUsername)}>
-                            {rightChildUsername}
+                        <div className="username-info text-slate-900 cursor-pointer" onClick={() => handleChildUsernameClick(rightChildInfo.username)}>
+                            {rightChildInfo.username}
+                            <div className='tooltiptext flex flex-col'>
+                                <p>Left Carry Forward: {rightChildInfo.leftCarryForward}</p>
+                                <p>Right Carry Forward: {rightChildInfo.rightCarryForward}</p> 
+                                <p>Package ID: {rightChildInfo.packageId}</p>
+                            </div>
                         </div>
                     </>
                     ) : (
@@ -184,8 +211,13 @@ const GetChildInfo: React.FC = () => {
                     {leftGrandchildUsername.length > 0 ? (
                         <>
                             <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0])}>
-                                {leftGrandchildUsername[0]}
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0].username)}>
+                                {leftGrandchildUsername[0].username}
+                                <div className='tooltiptextGrandchild flex flex-col'>
+                                    <p>Left Carry Forward: {leftGrandchildUsername[0].leftCarryForward}</p>
+                                    <p>Right Carry Forward: {leftGrandchildUsername[0].rightCarryForward}</p> 
+                                    <p>Package ID: {leftGrandchildUsername[0].packageId}</p>
+                                </div>
                             </div>
                         </>
                     ) : (
@@ -193,13 +225,19 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     )}
                 </ul>
+
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
                     {leftGrandchildUsername.length > 1 ? (
                         <>
                             <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1])}>
-                                {leftGrandchildUsername[1]}
+                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1].username)}>
+                                {leftGrandchildUsername[1].username}
+                                <div className='tooltiptextGrandchild flex flex-col'>
+                                    <p>Left Carry Forward: {leftGrandchildUsername[1].leftCarryForward}</p>
+                                    <p>Right Carry Forward: {leftGrandchildUsername[1].rightCarryForward}</p> 
+                                    <p>Package ID: {leftGrandchildUsername[1].packageId}</p>
+                                </div>
                             </div>
                         </>
                     ) : (
@@ -207,6 +245,22 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     )}
                 </ul>
+
+                {/* Grandchildren Line Part */}
+                {leftGrandchildUsername.length > 0 ?(
+                    <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
+                        <div className='flex'>
+                            <div className='border border-black w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                        </div>
+                        <div className='flex'>
+                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                        </div>
+                    </div>
+                ):(
+                    <div></div>
+                )}
 
                 {/* Right Side */}
                 {/* Left Grandchildren */}
@@ -237,8 +291,26 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     )}
                 </ul>
+
+                {/* Grandchildren Line Part */}
+                {rightGrandchildUsername.length > 0 ?(
+                    <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
+                        <div className='flex'>
+                            <div className='border border-black w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                        </div>
+                        <div className='flex'>
+                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                        </div>
+                    </div>
+                ):(
+                    <div></div>
+                )}
             </div>
-            <button onClick={handleGoBackClick}>Go Back</button>
+            {shouldShowGoBackButton && (
+                <button onClick={handleGoBackClick}>Go Back</button>
+            )}
         </div>
     );
 }

@@ -118,3 +118,65 @@
     margin-left: 20px;
     margin-top: 5px;
 }
+
+.line-1{
+    margin-left: 5.5rem;
+}
+
+.line-2{
+    margin-left: 1.7rem;
+}
+
+.tooltip {
+    display: inline-block;
+    position: relative;
+}
+
+.username-info {
+    display: inline-block;
+    position: relative;
+    z-index: 1; /* Ensure the username is above other elements */
+    cursor: pointer; /* Add pointer cursor to make it obvious it's clickable */
+}
+
+.username-info:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 12rem; /* Let it adjust to content */
+    max-width: 20rem !important; /* Limit the maximum width */
+    background-color: gray;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    top: 100%; /* Position it below the username */
+    left: 0; /* Align it with the username */
+    transform: translate(0, 5px); /* Offset it slightly below */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltiptextGrandchild {
+    visibility: hidden;
+    width: 12rem; /* Let it adjust to content */
+    max-width: 20rem !important; /* Limit the maximum width */
+    background-color: gray;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    transform: translate(0, 5px); /* Offset it slightly below */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltiptextGrandchild:hover {
+    visibility: visible;
+    opacity: 1;
+}
