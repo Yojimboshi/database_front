@@ -1,8 +1,10 @@
 // src/components/user/GetChildInfo.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import RegisterNewUser from './RegisterNewUser';
 import { useUsers, User, ChildInfo } from '../../hooks/useUsers';
 import userIcon from '../../../images/user_icon.jpg';
+import Modal from '../modal/Modal';
 import './style.css';
 
 const GetChildInfo: React.FC = () => {
@@ -15,6 +17,21 @@ const GetChildInfo: React.FC = () => {
     const [selectedNodesHistory, setSelectedNodesHistory] = useState<string[]>([]);
     const shouldShowGoBackButton = selectedNodesHistory.length > 0;
     const [hasChildren, setHasChildren] = useState(false); // State variable to track children
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+
+    const openAddUserModal = () => {
+        const parentID = childInfo.user?.id ? parseInt(childInfo.user.id as string, 10) : null;
+        setModalContent(
+            <RegisterNewUser onClose={closeModal} parentID={parentID} />
+        );
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalContent(null); // clear modal content on close
+    };
 
     const handleFetchClick = () => {
         console.log("Working on the fetch function....");
@@ -33,19 +50,11 @@ const GetChildInfo: React.FC = () => {
         setSelectedNodesHistory(newSelectedNodesHistory);
         fetchChildInfo(childUsername);
     };
-
-    const handleRegisterClick = () => {
-        // Add your registration logic here
-        // For example, navigate to the registration page or trigger a registration modal.
-        console.log("Register button clicked.");
-    };
-
     
     const handleSearchClick = () => {
         console.log("Working on the search function...");
     
         // Clear multiple state variables
-        // setRightChildUsername("");
         setLeftGrandchildUsername([]);
         setRightGrandchildUsername([]);
         setLeftChildInfo(null); // Clear leftChildInfo
@@ -314,8 +323,12 @@ const GetChildInfo: React.FC = () => {
                 <button onClick={handleGoBackClick}>Go Back</button>
             )}
             {hasChildren && (
-                <button onClick={handleRegisterClick} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register</button>
+                <button onClick={openAddUserModal} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register</button>
             )}
+
+<Modal isOpen={isModalOpen} onClose={closeModal}>
+                {modalContent}
+            </Modal>
         </div>
     );
 }
