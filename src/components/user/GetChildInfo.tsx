@@ -19,6 +19,7 @@ const GetChildInfo: React.FC = () => {
     const [hasChildren, setHasChildren] = useState(false); // State variable to track children
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
+    // console.log(childInfo);
 
     const openAddUserModal = () => {
         const parentID = childInfo.user?.id ? parseInt(childInfo.user.id as string, 10) : null;
@@ -261,12 +262,12 @@ const GetChildInfo: React.FC = () => {
                 {leftGrandchildUsername.length > 0 ?(
                     <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
                         <div className='flex'>
-                            <div className='border border-black w-16 h-7 border-l-0 border-t-0'></div>
-                            <div className='border border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                            <div className='border border-dashed border-black w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border border-dashed border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                 ):(
@@ -307,12 +308,12 @@ const GetChildInfo: React.FC = () => {
                 {rightGrandchildUsername.length > 0 ?(
                     <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
                         <div className='flex'>
-                            <div className='border border-black w-16 h-7 border-l-0 border-t-0'></div>
-                            <div className='border border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                            <div className='border border-dashed border-black w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border border-dashed border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                 ):(
