@@ -130,14 +130,24 @@
 .tooltip {
     display: inline-block;
     position: relative;
+    z-index: 1;
 }
 
 .username-info {
     display: inline-block;
     position: relative;
-    z-index: 1; /* Ensure the username is above other elements */
+    z-index: 1;
+    text-align: center; /* Center the content */
 }
 
+.username-info img {
+    display: block;
+    margin: 0 auto 5px;
+    position: relative;
+    z-index: -99999999; /* Set z-index to -1 to send it to the back */
+}
+
+/* Adjust the z-index for tooltips to be above the user icon */
 .username-info:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
@@ -154,11 +164,13 @@
     padding: 10px;
     position: absolute;
     top: 100%; /* Position it below the username */
-    left: 0; /* Align it with the username */
-    transform: translate(0, 5px); /* Offset it slightly below */
+    left: 50%; /* Center the tooltip horizontally */
+    transform: translateX(-50%) translateY(5px); /* Offset it slightly below and center horizontally */
     opacity: 0;
     transition: opacity 0.3s;
 }
+
+
 
 .tooltiptextGrandchild {
     visibility: hidden;

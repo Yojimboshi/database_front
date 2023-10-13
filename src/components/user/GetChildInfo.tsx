@@ -181,15 +181,15 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-2 col-end-3">
                     {leftChildInfo !== null ? (
-                        <div className='tooltip text-slate-900 cursor-pointer'>
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(leftChildInfo.username)}/>
+                        <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(leftChildInfo.username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(leftChildInfo.username)}/>
                                 {leftChildInfo.username}
-                            <div className='tooltiptext flex flex-col'>
-                                <p>Left Carry Forward: {leftChildInfo.leftCarryForward}</p>
-                                <p>Right Carry Forward: {leftChildInfo.rightCarryForward}</p> 
-                                <p>Package ID: {leftChildInfo.packageId}</p>
-                            </div>
+                                <div className='tooltiptext flex flex-col'>
+                                    <p>Left Carry Forward: {leftChildInfo.leftCarryForward}</p>
+                                    <p>Right Carry Forward: {leftChildInfo.rightCarryForward}</p> 
+                                    <p>Package ID: {leftChildInfo.packageId}</p>
+                                </div>
                             </div>
                         </div>
                     ) : (
@@ -201,15 +201,15 @@ const GetChildInfo: React.FC = () => {
                 {/* Right Children */}
                 <ul className="list-disc row-start-3 row-end-4 col-start-6 col-end-7 relative">
                     {rightChildInfo !== null  ? (
-                        <div className='tooltip text-slate-900 cursor-pointer'>
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightChildInfo.username)}/>
+                        <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(rightChildInfo.username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightChildInfo.username)}/>
                                 {rightChildInfo.username}
                                 <div className='tooltiptext flex flex-col'>
-                                <p>Left Carry Forward: {rightChildInfo.leftCarryForward}</p>
-                                <p>Right Carry Forward: {rightChildInfo.rightCarryForward}</p> 
-                                <p>Package ID: {rightChildInfo.packageId}</p>
-                            </div>
+                                    <p>Left Carry Forward: {rightChildInfo.leftCarryForward}</p>
+                                    <p>Right Carry Forward: {rightChildInfo.rightCarryForward}</p> 
+                                    <p>Package ID: {rightChildInfo.packageId}</p>
+                                </div>
                             </div>
                         </div>
                     ) : (
@@ -221,13 +221,13 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-1 col-end-2">
                     {leftGrandchildUsername.length > 0 ? (
-                        <div className="tooltip text-slate-900 cursor-pointer">
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='grandchild-info' onClick={() => handleChildUsernameClick(leftGrandchildUsername[0].username)}>
+                        <div className='tooltip text-slate-900'>
+                            <div className="username-info" onClick={() => handleChildUsernameClick(leftGrandchildUsername[0].username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(leftGrandchildUsername[0].username)}/>
                                 {leftGrandchildUsername[0].username}
-                                <div className='tooltiptextGrandchild'>
+                                <div className='tooltiptext flex flex-col'>
                                     <p>Left Carry Forward: {leftGrandchildUsername[0].leftCarryForward}</p>
-                                    <p>Right Carry Forward: {leftGrandchildUsername[0].rightCarryForward}</p>
+                                    <p>Right Carry Forward: {leftGrandchildUsername[0].rightCarryForward}</p> 
                                     <p>Package ID: {leftGrandchildUsername[0].packageId}</p>
                                 </div>
                             </div>
@@ -241,13 +241,13 @@ const GetChildInfo: React.FC = () => {
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
                     {leftGrandchildUsername.length > 1 ? (
-                        <div className="tooltip text-slate-900 cursor-pointer">
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='grandchild-info' onClick={() => handleChildUsernameClick(leftGrandchildUsername[1].username)}>
+                        <div className='tooltip text-slate-900'>
+                            <div className="username-info" onClick={() => handleChildUsernameClick(leftGrandchildUsername[1].username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(leftGrandchildUsername[1].username)}/>
                                 {leftGrandchildUsername[1].username}
-                                <div className='tooltiptextGrandchild'>
+                                <div className='tooltiptext flex flex-col'>
                                     <p>Left Carry Forward: {leftGrandchildUsername[1].leftCarryForward}</p>
-                                    <p>Right Carry Forward: {leftGrandchildUsername[1].rightCarryForward}</p>
+                                    <p>Right Carry Forward: {leftGrandchildUsername[1].rightCarryForward}</p> 
                                     <p>Package ID: {leftGrandchildUsername[1].packageId}</p>
                                 </div>
                             </div>
@@ -278,12 +278,17 @@ const GetChildInfo: React.FC = () => {
                 {/* Left Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-5 col-end-6">
                     {rightGrandchildUsername.length > 0 ? (
-                        <>
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[0].username)}>
+                        <div className='tooltip text-slate-900'>
+                            <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[0].username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightGrandchildUsername[0].username)}/>
                                 {rightGrandchildUsername[0].username}
+                                <div className='tooltiptext flex flex-col'>
+                                    <p>Left Carry Forward: {rightGrandchildUsername[0].leftCarryForward}</p>
+                                    <p>Right Carry Forward: {rightGrandchildUsername[0].rightCarryForward}</p> 
+                                    <p>Package ID: {rightGrandchildUsername[0].packageId}</p>
+                                </div>
                             </div>
-                        </>
+                        </div>
                     ) : (
                         <div className='text-slate-900'>
                         </div>
@@ -291,13 +296,18 @@ const GetChildInfo: React.FC = () => {
                 </ul>
                 {/* Right Grandchildren */}
                 <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
-                    {rightGrandchildUsername.length > 1 ? (
-                        <>
-                            <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" />
-                            <div className='text-slate-900 cursor-pointer' onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}>
-                                {rightGrandchildUsername[1].username}
+                    {rightGrandchildUsername.length > 0 ? (
+                        <div className='tooltip text-slate-900'>
+                            <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}>
+                                <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}/>
+                                {rightGrandchildUsername[0].username}
+                                <div className='tooltiptext flex flex-col'>
+                                    <p>Left Carry Forward: {rightGrandchildUsername[1].leftCarryForward}</p>
+                                    <p>Right Carry Forward: {rightGrandchildUsername[1].rightCarryForward}</p> 
+                                    <p>Package ID: {rightGrandchildUsername[1].packageId}</p>
+                                </div>
                             </div>
-                        </>
+                        </div>
                     ) : (
                         <div className='text-slate-900'>
                         </div>
@@ -327,7 +337,7 @@ const GetChildInfo: React.FC = () => {
                 <button onClick={openAddUserModal} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register</button>
             )}
 
-<Modal isOpen={isModalOpen} onClose={closeModal}>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
                 {modalContent}
             </Modal>
         </div>
