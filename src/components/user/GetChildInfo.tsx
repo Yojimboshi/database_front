@@ -19,7 +19,7 @@ const GetChildInfo: React.FC = () => {
     const [hasChildren, setHasChildren] = useState(false); // State variable to track children
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-    // console.log(childInfo);
+    console.log(rightGrandchildUsername);
 
     const openAddUserModal = () => {
         const parentID = childInfo.user?.id ? parseInt(childInfo.user.id as string, 10) : null;
@@ -193,7 +193,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className='text-slate-900'>
+                        <div onClick={openAddUserModal}>
+                            Empty
                         </div>
                     )}
                 </ul>
@@ -213,7 +214,7 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="text-slate-900"></div>
+                        <div onClick={openAddUserModal}>Empty</div>
                     )}
                 </ul>
 
@@ -233,7 +234,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className='text-slate-900'>
+                        <div onClick={openAddUserModal}>
+                            Empty
                         </div>
                     )}
                 </ul>
@@ -253,7 +255,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className='text-slate-900'>
+                        <div onClick={openAddUserModal}>
+                            Empty
                         </div>
                     )}
                 </ul>
@@ -271,7 +274,7 @@ const GetChildInfo: React.FC = () => {
                         </div>
                     </div>
                 ):(
-                    <div></div>
+                    <div onClick={openAddUserModal}>Empty</div>
                 )}
 
                 {/* Right Side */}
@@ -290,17 +293,18 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className='text-slate-900'>
+                        <div onClick={openAddUserModal}>
+                            Empty
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
-                <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
+                {/* <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
                     {rightGrandchildUsername.length > 0 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}>
                                 <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}/>
-                                {rightGrandchildUsername[0].username}
+                                {rightGrandchildUsername[1].username}
                                 <div className='tooltiptext flex flex-col'>
                                     <p>Left Carry Forward: {rightGrandchildUsername[1].leftCarryForward}</p>
                                     <p>Right Carry Forward: {rightGrandchildUsername[1].rightCarryForward}</p> 
@@ -309,10 +313,11 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className='text-slate-900'>
+                        <div onClick={openAddUserModal}>
+                            Empty
                         </div>
                     )}
-                </ul>
+                </ul> */}
 
                 {/* Grandchildren Line Part */}
                 {rightGrandchildUsername.length > 0 ?(

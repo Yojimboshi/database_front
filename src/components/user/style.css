@@ -129,8 +129,8 @@
 
 .tooltip {
     display: inline-block;
-    position: relative;
-    z-index: 1;
+    /* position: relative;
+    z-index: 1; */
 }
 
 .username-info {
@@ -143,8 +143,6 @@
 .username-info img {
     display: block;
     margin: 0 auto 5px;
-    position: relative;
-    z-index: -99999999; /* Set z-index to -1 to send it to the back */
 }
 
 /* Adjust the z-index for tooltips to be above the user icon */
@@ -168,35 +166,4 @@
     transform: translateX(-50%) translateY(5px); /* Offset it slightly below and center horizontally */
     opacity: 0;
     transition: opacity 0.3s;
-}
-
-
-
-.tooltiptextGrandchild {
-    visibility: hidden;
-    width: 12rem;
-    max-width: 20rem !important;
-    background-color: gray;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 10px;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    transform: translate(0, 5px);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-
-.grandchild-info {
-    display: inline-block;
-    position: relative;
-    z-index: 1; /* Ensure the username is above other elements */
-}
-
-.grandchild-info:hover .tooltiptextGrandchild {
-    visibility: visible;
-    opacity: 1;
 }
