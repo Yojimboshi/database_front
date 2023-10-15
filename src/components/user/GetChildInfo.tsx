@@ -167,12 +167,12 @@ const GetChildInfo: React.FC = () => {
                     {/* Line */}
                     <div className='line-1 col-start-1 col-end-8 overflow-hidden flex flex-col'>
                         <div className='flex'>
-                            <div className='border border-black w-32 h-7 border-l-0 border-t-0'></div>
-                            <div className='border border-black w-32 h-7 border-r-0 border-t-0 border-l-0'></div>
+                            <div className='border-4 border-black w-32 h-7 border-l-0 border-t-0'></div>
+                            <div className='border-4 border-black w-32 h-7 border-r-0 border-t-0 border-l-0'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border border-black h-7 w-32 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border border-black h-7 w-32 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border-4 border-black h-7 w-32 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border-4 border-black h-7 w-32 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                     </>
@@ -193,8 +193,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>
-                            Empty
+                        <div onClick={openAddUserModal} className='h-full w-full'>
+                            
                         </div>
                     )}
                 </ul>
@@ -214,7 +214,7 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>Empty</div>
+                        <div onClick={openAddUserModal} className='h-full w-full'></div>
                     )}
                 </ul>
 
@@ -234,8 +234,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>
-                            Empty
+                        <div onClick={openAddUserModal} className='h-full w-full'>
+                            
                         </div>
                     )}
                 </ul>
@@ -255,8 +255,8 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>
-                            Empty
+                        <div onClick={openAddUserModal} className='h-full w-full'>
+                            
                         </div>
                     )}
                 </ul>
@@ -265,16 +265,16 @@ const GetChildInfo: React.FC = () => {
                 {leftGrandchildUsername.length > 0 ?(
                     <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
                         <div className='flex'>
-                            <div className='border border-dashed border-black w-16 h-7 border-l-0 border-t-0'></div>
-                            <div className='border border-dashed border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                            <div className='border-2 border-dashed border-red-600 w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border-2 border-dashed border-red-600 w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border-2 border-dashed border-red-600 h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border-2 border-dashed border-red-600 h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                 ):(
-                    <div onClick={openAddUserModal}>Empty</div>
+                    <div onClick={openAddUserModal} className='h-full w-full'></div>
                 )}
 
                 {/* Right Side */}
@@ -293,14 +293,14 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>
-                            Empty
+                        <div onClick={openAddUserModal} className='h-full w-full'>
+                            
                         </div>
                     )}
                 </ul>
                 {/* Right Grandchildren */}
-                {/* <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
-                    {rightGrandchildUsername.length > 0 ? (
+                <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
+                    {rightGrandchildUsername.length > 1 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}>
                                 <img src={userIcon} alt="User Icon" className="h-6 w-6 m-auto" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}/>
@@ -313,22 +313,22 @@ const GetChildInfo: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <div onClick={openAddUserModal}>
-                            Empty
+                        <div onClick={openAddUserModal} className='h-full w-full'>
+                            
                         </div>
                     )}
-                </ul> */}
+                </ul>
 
                 {/* Grandchildren Line Part */}
                 {rightGrandchildUsername.length > 0 ?(
-                    <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
+                    <div className='line-2 row-start-4 row-end-5 col-start-5 col-end-8 overflow-hidden flex flex-col'>
                         <div className='flex'>
-                            <div className='border border-dashed border-black w-16 h-7 border-l-0 border-t-0'></div>
-                            <div className='border border-dashed border-black w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
+                            <div className='border-2 border-dashed border-indigo-600 w-16 h-7 border-l-0 border-t-0'></div>
+                            <div className='border-2 border-dashed border-indigo-600 w-16 h-7 border-r-0 border-t-0 border-l-0'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border border-dashed border-black h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border-2 border-dashed border-indigo-600 h-7 w-16 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border-2 border-dashed border-indigo-600 h-7 w-16 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                 ):(

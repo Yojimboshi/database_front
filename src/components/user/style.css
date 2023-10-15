@@ -136,7 +136,7 @@
 .username-info {
     display: inline-block;
     position: relative;
-    z-index: 1;
+    /* z-index: 1; */
     text-align: center; /* Center the content */
 }
 
@@ -164,6 +164,7 @@
     top: 100%; /* Position it below the username */
     left: 50%; /* Center the tooltip horizontally */
     transform: translateX(-50%) translateY(5px); /* Offset it slightly below and center horizontally */
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s;
+    z-index: 2; /* Set a higher z-index to make the tooltips appear above other elements */
 }
