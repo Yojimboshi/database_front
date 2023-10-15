@@ -39,26 +39,36 @@ const CurrentUser: React.FC = () => {
                 `${VITE_API_BASE_URL}/users/refreshToken`,
                 {},
                 {
+                    headers: {
+                        Authorization: `${accessToken}`
+                    },
                     withCredentials: true,
                 }
             );
 
             if (refreshResponse.status === 200) {
+                console.log("Received access token:", refreshResponse.data);
                 return refreshResponse.data.accessToken;
             } else {
-                console.error('Error refreshing access token:', refreshResponse.data);
-                return null;
+                // Log the status and data for non-200 responses
+                console.error(`Received ${refreshResponse.status} response:`, refreshResponse.data);
             }
         } catch (error: any) {
-            console.error('Error refreshing access token:', error.response?.data || error.message);
-            return null;
+            if (error.response) {
+                console.error("Error from server during token refresh:", error.response.data);
+            } else {
+                console.error("Error refreshing access token:", error.message);
+            }
         }
+
+        return null;
     };
 
     const isAccessTokenExpiring = (token: string): boolean => {
         try {
             const decodedToken: DecodedToken = jwt_decode(token);
             const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
+            console.log("Access Token Time: ", decodedToken.exp - currentTime);
             return (decodedToken.exp - currentTime) <= REFRESH_TIME;
         } catch (error: any) {
             console.error("Error decoding the access token:", error.message);
@@ -80,7 +90,7 @@ const CurrentUser: React.FC = () => {
     useEffect(() => {
         const fetchCurrentUser = async () => {
             let headers: Record<string, string> = accessToken ? { Authorization: `${accessToken}` } : {};
-            
+
             const executeFetch = async () => {
                 try {
                     let response = await fetch(`${VITE_API_BASE_URL}/users/current`, { headers });
@@ -97,6 +107,7 @@ const CurrentUser: React.FC = () => {
 
             if (accessToken && isAccessTokenExpiring(accessToken)) {
                 const newAccessToken = await refreshAccessToken();
+                console.log(newAccessToken)
                 if (newAccessToken) {
                     setAccessToken(newAccessToken);
                     sessionStorage.setItem('accessToken', newAccessToken);
@@ -131,7 +142,8 @@ const CurrentUser: React.FC = () => {
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/currentPackage">Current Package</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/submitReport">Submit Report</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/crypto-wallet">Crypto Wallet</Link>
-                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/settings">User Settings</Link> 
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/settings">User Settings</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/testing">Testing</Link>
             </nav>
 
             {/* Main Content */}

@@ -11,6 +11,12 @@ export interface User {
     role: string;
     accountStatus: string;
     isEmpty: boolean;
+    parentId: number;
+    leftChildId: number;
+    rightChildId: number;
+    leftCarryForward: number;
+    rightCarryForward: number;
+    packageId: number;
 }
 
 export interface Package {
@@ -158,6 +164,7 @@ export function useUsers() {
         try {
             setLoading(true);
             const response = await axios.post(`${USER_URL}/child-package`, userData, { headers });
+            console.log(response.data);
             return response.data;
         } catch (error) {
             handleError("registering user", error);
