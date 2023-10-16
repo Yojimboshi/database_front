@@ -19,7 +19,7 @@ const GetChildInfo: React.FC = () => {
     const [hasChildren, setHasChildren] = useState(false); // State variable to track children
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-    console.log(rightGrandchildUsername);
+    // console.log(rightGrandchildUsername);
 
     const openAddUserModal = () => {
         const parentID = childInfo.user?.id ? parseInt(childInfo.user.id as string, 10) : null;
@@ -133,7 +133,7 @@ const GetChildInfo: React.FC = () => {
         if (childInfo && childInfo.user) {
             findLeftAndRightChildren(childInfo.user.id);
 
-            if(childInfo.user?.leftChildId === null){
+            if(childInfo.user?.leftChildId === null || childInfo.user?.rightChildId === null){
                 setHasChildren(true);
             }else{
                 setHasChildren(false);
