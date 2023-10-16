@@ -335,12 +335,14 @@ const GetChildInfo: React.FC = () => {
                     <div></div>
                 )}
             </div>
-            {shouldShowGoBackButton && (
-                <button onClick={handleGoBackClick}>Go Back</button>
-            )}
-            {hasChildren && (
-                <button onClick={openAddUserModal} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register</button>
-            )}
+            <div className='flex justify-between'>
+                {shouldShowGoBackButton && (
+                    <button onClick={handleGoBackClick} className='bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded' >Go Back</button>
+                )}
+                {hasChildren && (
+                    <button onClick={openAddUserModal} className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded">Register</button>
+                )}
+            </div>
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 {modalContent}
