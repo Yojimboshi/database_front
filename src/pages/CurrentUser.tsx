@@ -6,6 +6,8 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import './CurrentUser.css';
 import { User } from '../hooks/useUsers';
+import Modal from '../components/modal/Modal';
+import Reward from './Reward';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const REFRESH_TIME = 5 * 60;
@@ -21,7 +23,20 @@ const CurrentUser: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(() => sessionStorage.getItem('accessToken') || location.state?.accessToken);
     const refreshToken = Cookies.get('refreshToken') || '';
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
 
+    const openAddUserModal = () => {
+        setModalContent(
+            <Reward onClose={closeModal} />
+        );
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalContent(null); // clear modal content on close
+    };
 
     const handleLogout = () => {
         // Clear the tokens
@@ -122,6 +137,7 @@ const CurrentUser: React.FC = () => {
         };
 
         fetchCurrentUser();
+        openAddUserModal();
     }, [accessToken]);
 
     return (
@@ -151,6 +167,9 @@ const CurrentUser: React.FC = () => {
                 <h2 className="mt-0">Welcome {user ? user.username : 'Loading...'}</h2>
                 <Outlet />
             </main>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                {modalContent}
+            </Modal>
         </div>
     );
 }
