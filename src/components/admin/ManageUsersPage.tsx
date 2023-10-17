@@ -1,7 +1,7 @@
 // src/components/admin/ManageUsersPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, Outlet } from 'react-router-dom';
-import { AddUser, UserDetails, UpdateUser, BanUser } from './UserActions';
+import { AddUser, UserDetails, UpdateUser } from './UserActions';
 import useAdmin from '../../hooks/useAdmin';
 import Modal from '../modal/Modal';
 import './Admin.css';

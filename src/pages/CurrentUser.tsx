@@ -10,7 +10,7 @@ import Modal from './RewardModal';
 import Reward from './Reward';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const REFRESH_TIME = 5 * 60;
+const REFRESH_TIME = 3 * 60;
 
 interface DecodedToken {
     exp: number;
@@ -159,7 +159,7 @@ const CurrentUser: React.FC = () => {
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/submitReport">Submit Report</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/crypto-wallet">Crypto Wallet</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/settings">User Settings</Link>
-                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/testing">Testing</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/announcement-tester">Announcement Tester</Link>
             </nav>
 
             {/* Main Content */}
