@@ -9,7 +9,7 @@ interface PoolFormData {
 }
 
 const ManagePool: React.FC = () => {
-    const [formData, setFormData] = useState<PoolFormData>({ /* initial data */ });
+    const [formData, setFormData] = useState<PoolFormData>({ tokenA: '', tokenB: '' });
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
