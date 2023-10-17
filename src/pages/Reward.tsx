@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 interface RegisterNewUserProps {
     onClose: () => void;
-    parentID: number | null; // Define the parentID prop
 }
 
 // AddUserForm Component

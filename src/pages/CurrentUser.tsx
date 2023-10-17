@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import './CurrentUser.css';
 import { User } from '../hooks/useUsers';
-import Modal from '../components/modal/Modal';
+import Modal from './RewardModal';
 import Reward from './Reward';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
