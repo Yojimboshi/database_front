@@ -8,7 +8,7 @@ import './CurrentUser.css';
 import { User } from '../hooks/useUsers';
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const REFRESH_TIME = 5 * 60;
+const REFRESH_TIME = 3 * 60;
 
 interface DecodedToken {
     exp: number;

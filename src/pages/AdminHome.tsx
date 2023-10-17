@@ -17,7 +17,7 @@ interface DecodedToken {
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const REFRESH_TIME = 20 * 60 ; // 20 minutes
+const REFRESH_TIME = 3 * 60 ; // 20 minutes
 
 const AdminHome: FC = () => {
     const location = useLocation();
@@ -65,6 +65,7 @@ const AdminHome: FC = () => {
     const isAccessTokenExpiring = (token: string): boolean => {
         const decodedToken: DecodedToken = jwt_decode(token);
         const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
+        console.log(decodedToken.exp - currentTime);
         return (decodedToken.exp - currentTime) <= REFRESH_TIME;
     };
 
@@ -86,12 +87,11 @@ const AdminHome: FC = () => {
         const fetchUsers = async () => {
             try {
                 let currentToken = accessToken;
-
-                if (currentToken && isAccessTokenExpiring(currentToken) && refreshToken) {
+                if (currentToken && isAccessTokenExpiring(currentToken)) {
+                    console.log("refreshed access Token")
                     const newAccessToken = await refreshAccessToken();
                     if (newAccessToken) {
                         sessionStorage.setItem('accessToken', newAccessToken);
-                        console.log("NEW TOKEN", newAccessToken);
                         setAccessToken(newAccessToken);
                         currentToken = newAccessToken;
                     } else {

@@ -1,4 +1,4 @@
-// hooks/useAdmin.ts
+// src/hooks/useAdmin.ts
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
