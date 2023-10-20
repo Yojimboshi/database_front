@@ -17,7 +17,7 @@ function AnnouncementTester() {
             isPinned: false,
             expirationDate: new Date(),
             userId: 1,
-            category: "General",
+            category: "maintenance",
             language: "en"
         };
 

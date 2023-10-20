@@ -65,7 +65,6 @@ const AdminHome: FC = () => {
     const isAccessTokenExpiring = (token: string): boolean => {
         const decodedToken: DecodedToken = jwt_decode(token);
         const currentTime = Date.now() / 1000; // Convert to UNIX timestamp (seconds)
-        console.log(decodedToken.exp - currentTime);
         return (decodedToken.exp - currentTime) <= REFRESH_TIME;
     };
 
@@ -87,11 +86,12 @@ const AdminHome: FC = () => {
         const fetchUsers = async () => {
             try {
                 let currentToken = accessToken;
-                if (currentToken && isAccessTokenExpiring(currentToken)) {
-                    console.log("refreshed access Token")
+
+                if (currentToken && isAccessTokenExpiring(currentToken) && refreshToken) {
                     const newAccessToken = await refreshAccessToken();
                     if (newAccessToken) {
                         sessionStorage.setItem('accessToken', newAccessToken);
+                        console.log("NEW TOKEN", newAccessToken);
                         setAccessToken(newAccessToken);
                         currentToken = newAccessToken;
                     } else {
@@ -138,10 +138,12 @@ const AdminHome: FC = () => {
                 <Link to="/admin/current">Current Admin Status</Link>
                 <Link to="/adminHome/manageUsers">Manage Users</Link>
                 <Link to="/adminHome/usersList">Users List</Link>
-                <Link to="/admin/reports">View Reports</Link>
-                <Link to="/admin/settings">Settings</Link>
-                <Link to="/admin/packages">Manage Packages</Link>
-                <Link to="/admin/upgrades">Manage Upgrades</Link>
+                <Link to="/adminHome/reports">View Reports</Link>
+                <Link to="/adminHome/settings">Settings</Link>
+                <Link to="/adminHome/packages">Manage Packages</Link>
+                <Link to="/adminHome/upgrades">Manage Upgrades</Link>
+                <Link to="/adminHome/announcement-tester">Announce Test</Link>
+
             </nav>
 
             <div className="pagination-controls">

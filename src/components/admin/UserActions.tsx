@@ -270,3 +270,32 @@ export const UpdateUser: React.FC = () => {
         </div>
     );
 }
+// UnbanUser Component
+export const BanUser: React.FC = () => {
+    const { userId } = useParams();
+    const { banUser, unbanUser, fetchUsers } = useAdmin();
+    const navigate = useNavigate();
+
+    const handleBan = async () => {
+        await banUser(userId);
+        fetchUsers();
+        navigate('/adminHome/manageUsers');
+    }
+
+    const handleUnban = async () => {
+        await unbanUser(userId);
+        fetchUsers();
+        navigate('/adminHome/manageUsers');
+    }
+
+    return (
+        <div>
+            {/* Depending on your design, you can show info here and have two buttons or navigate immediately */}
+            {userId.includes('ban') ? (
+                <button onClick={handleBan}>Confirm Ban</button>
+            ) : (
+                <button onClick={handleUnban}>Confirm Unban</button>
+            )}
+        </div>
+    );
+}
