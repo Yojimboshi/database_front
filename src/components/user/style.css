@@ -120,11 +120,13 @@
 }
 
 .line-1{
-    margin-left: 5.5rem;
+    /* margin-left: 5.5rem; */
+    margin: auto;
 }
 
 .line-2{
-    margin-left: 1.7rem;
+    /* margin-left: 1.7rem; */
+    margin: auto;
 }
 
 .tooltip {

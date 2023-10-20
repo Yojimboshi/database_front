@@ -142,6 +142,7 @@ const AdminHome: FC = () => {
                 <Link to="/admin/settings">Settings</Link>
                 <Link to="/admin/packages">Manage Packages</Link>
                 <Link to="/admin/upgrades">Manage Upgrades</Link>
+                <Link to="/adminHome/announcement-tester">Announcement Tester</Link>
             </nav>
 
             <div className="pagination-controls">

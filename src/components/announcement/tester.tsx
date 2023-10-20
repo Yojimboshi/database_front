@@ -43,10 +43,11 @@ function AnnouncementTester() {
 
     return (
         <div>
-            <button onClick={testCreateAnnouncement}>Test Create Announcement</button>
+            {/* <button onClick={testCreateAnnouncement}>Test Create Announcement</button>
             <button onClick={testDeleteAnnouncement}>Test Delete Announcement</button>
             <button onClick={testGetAnnouncement}>Test Get Single Announcement</button>
-            <button onClick={testFetchAllAnnouncements}>Test Fetch All Announcements</button>
+            <button onClick={testFetchAllAnnouncements}>Test Fetch All Announcements</button> */}
+            
         </div>
     );
 }

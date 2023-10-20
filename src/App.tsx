@@ -35,6 +35,7 @@ const App: React.FC = () => {
                     <Route index element={<div>Admin Home Dashboard</div>} />
                     <Route path="manageUsers/*" element={<ManageUsersPage />} />
                     <Route path="usersList" element={<UsersList />} />
+                    <Route path="announcement-tester" element={<AnnouncementTester />} />
                     {/* ... other nested routes within AdminHome */}
                 </Route>
                 <Route path="/user/current/*" element={<CurrentUser />}>
