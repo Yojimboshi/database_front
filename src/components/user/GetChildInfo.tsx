@@ -165,14 +165,14 @@ const GetChildInfo: React.FC = () => {
                         <h3 className='text-slate-900'>{childInfo.user.username}</h3>
                     </div>
                     {/* Line */}
-                    <div className='line-1 col-start-1 col-end-8 overflow-hidden flex flex-col'>
-                        <div className='flex'>
-                            <div className='border-4 border-black w-32 h-7 border-l-0 border-t-0'></div>
-                            <div className='border-4 border-black w-32 h-7 border-r-0 border-t-0 border-l-0'></div>
+                    <div className='line-1 col-start-2 col-end-7 overflow-hidden flex flex-col w-full h-full'>
+                        <div className='flex m-auto w-10/12'>
+                            <div className='border-4 border-black border-l-0 border-t-0 h-7 w-full'></div>
+                            <div className='border-4 border-black border-r-0 border-t-0 border-l-0 h-7 w-full'></div>
                         </div>
                         <div className='flex'>
-                            <div className='border-4 border-black h-7 w-32 border-t-0 border-b-0 border-r-0'></div>
-                            <div className='border-4 border-black h-7 w-32 border-t-0 border-b-0 border-l-0'></div>
+                            <div className='border-4 border-black h-7 w-11/12 border-t-0 border-b-0 border-r-0'></div>
+                            <div className='border-4 border-black h-7 w-11/12 border-t-0 border-b-0 border-l-0'></div>
                         </div>
                     </div>
                     </>
@@ -220,7 +220,7 @@ const GetChildInfo: React.FC = () => {
 
                 {/* Left Side */}
                 {/* Left Grandchildren */}
-                <ul className="list-disc row-start-4 row-start-5 col-start-1 col-end-2">
+                {/* <ul className="list-disc row-start-4 row-start-5 col-start-1 col-end-2">
                     {leftGrandchildUsername.length > 0 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(leftGrandchildUsername[0].username)}>
@@ -238,10 +238,10 @@ const GetChildInfo: React.FC = () => {
                             
                         </div>
                     )}
-                </ul>
+                </ul> */}
 
                 {/* Right Grandchildren */}
-                <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
+                {/* <ul className="list-disc row-start-4 row-start-5 col-start-3 col-end-4">
                     {leftGrandchildUsername.length > 1 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(leftGrandchildUsername[1].username)}>
@@ -259,10 +259,10 @@ const GetChildInfo: React.FC = () => {
                             
                         </div>
                     )}
-                </ul>
+                </ul> */}
 
                 {/* Grandchildren Line Part */}
-                {leftGrandchildUsername.length > 0 ?(
+                {/* {leftGrandchildUsername.length > 0 ?(
                     <div className='line-2 col-start-1 col-end-4 overflow-hidden flex flex-col'>
                         <div className='flex'>
                             <div className='border-2 border-dashed border-red-600 w-16 h-7 border-l-0 border-t-0'></div>
@@ -275,11 +275,11 @@ const GetChildInfo: React.FC = () => {
                     </div>
                 ):(
                     <div onClick={openAddUserModal} className='h-full w-full'></div>
-                )}
+                )} */}
 
                 {/* Right Side */}
                 {/* Left Grandchildren */}
-                <ul className="list-disc row-start-4 row-start-5 col-start-5 col-end-6">
+                {/* <ul className="list-disc row-start-4 row-start-5 col-start-5 col-end-6">
                     {rightGrandchildUsername.length > 0 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[0].username)}>
@@ -297,9 +297,9 @@ const GetChildInfo: React.FC = () => {
                             
                         </div>
                     )}
-                </ul>
+                </ul> */}
                 {/* Right Grandchildren */}
-                <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
+                {/* <ul className="list-disc row-start-4 row-start-5 col-start-7 col-end-8">
                     {rightGrandchildUsername.length > 1 ? (
                         <div className='tooltip text-slate-900'>
                             <div className="username-info" onClick={() => handleChildUsernameClick(rightGrandchildUsername[1].username)}>
@@ -317,10 +317,10 @@ const GetChildInfo: React.FC = () => {
                             
                         </div>
                     )}
-                </ul>
+                </ul> */}
 
                 {/* Grandchildren Line Part */}
-                {rightGrandchildUsername.length > 0 ?(
+                {/* {rightGrandchildUsername.length > 0 ?(
                     <div className='line-2 row-start-4 row-end-5 col-start-5 col-end-8 overflow-hidden flex flex-col'>
                         <div className='flex'>
                             <div className='border-2 border-dashed border-indigo-600 w-16 h-7 border-l-0 border-t-0'></div>
@@ -333,8 +333,9 @@ const GetChildInfo: React.FC = () => {
                     </div>
                 ):(
                     <div></div>
-                )}
+                )} */}
             </div>
+
             <div className='flex justify-between'>
                 {shouldShowGoBackButton && (
                     <button onClick={handleGoBackClick} className='bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded' >Go Back</button>

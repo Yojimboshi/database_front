@@ -124,6 +124,10 @@
     margin: auto;
 }
 
+.children-line{
+    width: 60%;
+}
+
 .line-2{
     /* margin-left: 1.7rem; */
     margin: auto;
