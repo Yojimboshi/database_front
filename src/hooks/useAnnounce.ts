@@ -2,6 +2,17 @@
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 
+interface announcementDatas {
+    title: string;
+    content: string;
+    imageUrl: string;
+    isPinned: boolean;
+    expirationDate: Date;
+    userId: number;
+    category: string;
+    language: string;
+}
+
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ADMIN_ANNOUNCE_URL = `${VITE_API_BASE_URL}/admin/announce`;
 const USER_ANNOUNCE_URL = `${VITE_API_BASE_URL}/users/announce`;
@@ -29,16 +40,7 @@ export function useAnnounce() {
         setError(errorMessage);
     };
 
-    const createAnnouncement = async (announcementData: {
-        title: string;
-        content: string;
-        imageUrl: string;
-        isPinned: boolean;
-        expirationDate: Date;
-        userId: number;
-        category: string;
-        language: string;
-    }) => {
+    const createAnnouncement = async (announcementData: announcementDatas) => {
         try {
             const response = await axios.post(ADMIN_ANNOUNCE_URL, announcementData, { headers });
             return response.data;
