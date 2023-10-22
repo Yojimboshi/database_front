@@ -120,12 +120,7 @@
 }
 
 .line-1{
-    /* margin-left: 5.5rem; */
-    margin: auto;
-}
-
-.children-line{
-    width: 60%;
+    margin-left: 5.5rem;
 }
 
 .line-2{
