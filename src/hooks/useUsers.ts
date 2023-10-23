@@ -106,6 +106,7 @@ export function useUsers() {
             const response = await axios.get(`${USER_URL}/current`, { headers });
             setCurrentUserPackage(response.data.package);
             setCurrentUser(response.data);  // <--- Set the current user here
+            console.log(response.data);
         } catch (error) {
             handleError("fetching current user detail", error);
         }

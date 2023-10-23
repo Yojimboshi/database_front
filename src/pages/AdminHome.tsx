@@ -26,6 +26,7 @@ const AdminHome: FC = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(true);
+    // console.log(users);
 
     const [accessToken, setAccessToken] = useState<string | null>(() => sessionStorage.getItem('accessToken') || location.state?.accessToken);
     const refreshToken = Cookies.get('refreshToken') || '';
@@ -122,6 +123,7 @@ const AdminHome: FC = () => {
         };
 
         fetchUsers();
+        console.log(users);
     }, [page, accessToken]);
 
     return (
