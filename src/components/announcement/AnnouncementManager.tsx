@@ -1,5 +1,8 @@
+// src/components/announcement/AnnouncementManager.tsx
 import React from 'react';
 import { useAnnounce } from '../../hooks/useAnnounce';  // adjust the path as necessary
+import { GMT8_OFFSET } from '../../config/timeConfig';
+
 
 function AnnouncementTester() {
     const { 
@@ -16,14 +19,22 @@ function AnnouncementTester() {
             imageUrl: "http://example.com/image.jpg",
             isPinned: false,
             expirationDate: new Date(),
-            userId: 1,
             category: "maintenance",
             language: "en"
         };
-
-        const result = await createAnnouncement(sampleAnnouncement);
-        console.log("Creation result:", result);
+        
+        const { createdAt } = await createAnnouncement(sampleAnnouncement);
+    
+        // Convert the ISO string to a Date object
+        const createdAtDate = new Date(createdAt);
+        
+        // Add 8 hours using the GMT8_OFFSET
+        const adjustedDate = new Date(createdAtDate.getTime() + GMT8_OFFSET);
+        
+        console.log("Original Creation Time:", createdAt);
+        console.log("Adjusted Creation Time (+8 hours):", adjustedDate.toISOString());
     };
+    
 
     const testDeleteAnnouncement = async () => {
         const idToDelete = 1; // Replace with an actual ID from your data
