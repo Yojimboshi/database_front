@@ -8,20 +8,29 @@ interface announcementDatas {
     imageUrl: string;
     isPinned: boolean;
     expirationDate: Date;
-    userId: number;
+    userId: number | null;
     category: string;
     language: string;
+}
+
+export interface userDetail {
+    email: string;
+    id: number;
+    role: string;
+    username: string;
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ADMIN_ANNOUNCE_URL = `${VITE_API_BASE_URL}/admin/announce`;
 const USER_ANNOUNCE_URL = `${VITE_API_BASE_URL}/users/announce`;
 const ANNOUNCE_URL = `${VITE_API_BASE_URL}/announce`;
+const ADMIN_URL = `${VITE_API_BASE_URL}/admin`;
 
 export function useAnnounce() {
     const [announcements, setAnnouncements] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
+    const [currentUser, setCurrentUser] = useState<userDetail | null>(null);
 
     const headers = {
         Authorization: `${sessionStorage.getItem('accessToken')}`
@@ -79,6 +88,15 @@ export function useAnnounce() {
         }
     };
 
+    const fetchCurrentUserDetail = async () => {
+        try {
+            const response = await axios.get(`${ADMIN_URL}/current`, { headers });
+            setCurrentUser(response.data);  // <--- Set the current user here
+        } catch (error) {
+            handleError("fetching current user detail", error);
+        }
+    };
+
     // Additional CRUD methods for admin (e.g., create, update, delete) and user interactions (e.g., acknowledge, comment) can be added here.
 
     return {
@@ -88,6 +106,9 @@ export function useAnnounce() {
         createAnnouncement,
         deleteAnnouncement,
         getAnnouncement,
-        fetchAllAnnouncements
+        fetchAllAnnouncements,
+        fetchCurrentUserDetail,
+
+        currentUser,
     };
 }

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useAnnounce } from '../../hooks/useAnnounce';  // adjust the path as necessary
 import useAdmin from '../../hooks/useAdmin';
 import { GMT8_OFFSET } from '../../config/timeConfig';
+
 function AnnouncementTester() {
-    const { createAnnouncement, getAnnouncement, fetchAllAnnouncements } = useAnnounce();
-    const { fetchCurrentUserDetail, currentUser } = useAdmin(); // Add currentUser here
+    const { createAnnouncement, fetchCurrentUserDetail, currentUser } = useAnnounce();
     const [formData, setFormData] = useState({
         title: '',
         content: '',
@@ -17,85 +17,31 @@ function AnnouncementTester() {
     });
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
-    console.log(currentUser?.id);
-
-    useEffect(() => {
-        // Fetch the current user's detail when the component mounts
-        fetchCurrentUserDetail();
-    }, []); // Empty dependency array to run the effect once
-
-    // const testCreateAnnouncement = async () => {
-    //     const sampleAnnouncement = {
-    //         title: "Test Title",
-    //         content: "Test content for our announcement",
-    //         imageUrl: "http://example.com/image.jpg",
-    //         isPinned: false,
-    //         expirationDate: new Date(),
-    //         userId: 1,
-    //         category: "maintenance",
-    //         language: "en"
-    //     };
-
-    //     const result = await createAnnouncement(sampleAnnouncement);
-    //     console.log("Creation result:", result);
-    // };
-
-    // const testDeleteAnnouncement = async () => {
-    //     const idToDelete = 1; // Replace with an actual ID from your data
-    //     const message = await deleteAnnouncement(idToDelete);
-    //     console.log("Delete message:", message);
-    // };
-
-    // const testGetAnnouncement = async () => {
-    //     const idToFetch = 1; // Replace with an actual ID
-    //     const announcement = await getAnnouncement(idToFetch);
-    //     console.log("Fetched announcement:", announcement);
-    // };
-
-    // const testFetchAllAnnouncements = async () => {
-    //     const allAnnouncement = await fetchAllAnnouncements();  // This will internally set the state with all announcement
-    //     console.log(allAnnouncement);
-    // };
-
-    const testGetAnnouncement = async () => {
-        const idToFetch = 5; // Replace with an actual ID
-        const announcement = await getAnnouncement(idToFetch);
-        console.log("Fetched announcement:", announcement);
-    };
-
-    const getAllAnnouncements = async () => {
-        let idToFetch = 1;
-        let hasMoreAnnouncements = true;
-    
-        while (hasMoreAnnouncements) {
-            const announcement = await getAnnouncement(idToFetch);
-    
-            if (announcement) {
-                console.log("Fetched announcement:", announcement);
-                idToFetch++; // Move on to the next ID
-            } else {
-                hasMoreAnnouncements = false; // No more announcements to fetch
-            }
-        }
-    };
-
-    const testFetchAllAnnouncements = async () => {
-        const allAnnouncement = await fetchAllAnnouncements();  // This will internally set the state with all announcement
-        console.log(allAnnouncement);
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
         try {
-            console.log(formData);
-            await createAnnouncement(formData);
-            // Handle successful submission, e.g., redirect to a different page
+            // Fetch the current user's detail
+            await fetchCurrentUserDetail();
+    
+            // Update formData with the current user's ID
+            const updatedFormData = {
+                ...formData,
+                userId: currentUser?.id || 0, // Set a default value (0) if currentUser.id is undefined
+            };
+    
+            // Now you can use updatedFormData to create the announcement.
+            await createAnnouncement(updatedFormData);
+            console.log(currentUser?.id);
+            console.log(updatedFormData);
+            alert("Annoucement created successfully");
         } catch (error) {
             setError('An error occurred while creating the announcement.');
         }
         setSubmitting(false);
     };
+    
 
     return (
         <div className="p-4 max-w-md mx-auto">
@@ -154,17 +100,6 @@ function AnnouncementTester() {
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-600">User ID:</label>
-                    <input
-                        type="number"
-                        name="userId"
-                        value={currentUser?.id || 0} // Access currentUser's ID
-                        onChange={(e) => setFormData({ ...formData, userId: parseInt(e.target.value) })}
-                        required
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div>
                     <label className="block text-gray-600">Category:</label>
                     <input
                         type="text"
@@ -193,10 +128,10 @@ function AnnouncementTester() {
                         {submitting ? 'Submitting...' : 'Create Announcement'}
                     </button>
                 </div>
+                {/* <button onClick={testFetchAllAnnouncements} className="mt-4 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
+                    Test Get Announcement
+                </button> */}
             </form>
-            <button onClick={getAllAnnouncements} className="mt-4 bg-gray-200 px-3 py-2 rounded hover:bg-gray-300">
-                Test Get Announcement
-            </button>
         </div>
     );
 };

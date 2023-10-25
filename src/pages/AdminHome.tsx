@@ -140,6 +140,7 @@ const AdminHome: FC = () => {
                 <Link to="/admin/current">Current Admin Status</Link>
                 <Link to="/adminHome/manageUsers">Manage Users</Link>
                 <Link to="/adminHome/usersList">Users List</Link>
+                <Link to="/adminHome/announcementList">Announcement List</Link>
                 <Link to="/admin/reports">View Reports</Link>
                 <Link to="/admin/settings">Settings</Link>
                 <Link to="/admin/packages">Manage Packages</Link>
