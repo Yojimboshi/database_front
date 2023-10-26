@@ -4,6 +4,18 @@ import Modal from '../modal/Modal';
 import DeleteAnnouncement from './deleteModal'
 import CreateAnnouncement from './createAnnouncementForm';
 
+interface Announcement {
+    id: number;
+    title: string;
+    content: string;
+    imageURL: string;
+    pinned: boolean;
+    date: string;
+    userId: string;
+    category: string;
+    language: string;
+};
+
 function AnnouncementTester() {
     const { fetchAllAnnouncements, announcements, getAnnouncement } = useAnnounce();
     const [isFormVisible, setFormVisible] = useState(false);
