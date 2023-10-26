@@ -26,7 +26,15 @@ const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({ onClose, announ
 
     return (
         <>
-            {/* <p>{announcementDetail.title}</p> */}
+            <h2 className='text-black'>Announcement Details</h2>
+            <p className='text-black'>Title: {announcementDetail.title}</p>
+            <p className='text-black'>Content: {announcementDetail.content}</p>
+            <p className='text-black'>Image: {announcementDetail.imageUrl}</p>
+            <p className='text-black'>Pinned: {announcementDetail.isPinned}</p>
+            <p className='text-black'>Date: {announcementDetail.expirationDate}</p>
+            <p className='text-black'>User ID: {announcementDetail.userId}</p>
+            <p className='text-black'>Category: {announcementDetail.category}</p>
+            <p className='text-black'>Language: {announcementDetail.language}</p>
             <button onClick={() => handleDelete()}>Delete Announcement</button>
         </>
     );
