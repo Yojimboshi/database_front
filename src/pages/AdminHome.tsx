@@ -140,7 +140,6 @@ const AdminHome: FC = () => {
                 <Link to="/admin/current">Current Admin Status</Link>
                 <Link to="/adminHome/manageUsers">Manage Users</Link>
                 <Link to="/adminHome/usersList">Users List</Link>
-                <Link to="/adminHome/announcementList">Announcement List</Link>
                 <Link to="/admin/reports">View Reports</Link>
                 <Link to="/admin/settings">Settings</Link>
                 <Link to="/admin/packages">Manage Packages</Link>
@@ -155,8 +154,8 @@ const AdminHome: FC = () => {
             </div>
 
             {/* Main Content */}
-            <main className="admin-content">
-                <h2>Welcome [Admin Name]</h2> {/* You might replace [Admin Name] with actual admin name fetched from the API */}
+            <main className="admin-content m-auto">
+                <h2 className='text-black'>Welcome [Admin Name]</h2> {/* You might replace [Admin Name] with actual admin name fetched from the API */}
                 <Outlet /> {/* Child routes defined in App will be rendered here */}
 
             </main>

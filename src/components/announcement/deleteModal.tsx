@@ -17,8 +17,8 @@ const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({ onClose, announ
     const handleDelete = async () => {
         try{
             const announcementID = announcementDetail.id;
-            const deleteAction = await deleteAnnouncement(announcementID);
-            console.log("Announcement Deleted");
+            await deleteAnnouncement(announcementID);
+            window.location.reload();
         }catch(error:any){
             console.log("Error deleting announcement: ", error.message);
         }
@@ -26,6 +26,7 @@ const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({ onClose, announ
 
     return (
         <>
+            {/* <p>{announcementDetail.title}</p> */}
             <button onClick={() => handleDelete()}>Delete Announcement</button>
         </>
     );

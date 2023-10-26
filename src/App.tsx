@@ -17,8 +17,6 @@ import SubmitReport from './components/user/SubmitReport';
 import CryptoWallet from './components/user/CryptoWallet';
 import UserSetting from './components/user/UserSetting';
 import AnnouncementTester from './components/announcement/AnnouncementManager';  // Import the component
-import AnnouncementList from './components/announcement/announcementList'; // Corrected import
-
 
 
 const App: React.FC = () => {
@@ -37,7 +35,6 @@ const App: React.FC = () => {
                     <Route path="manageUsers/*" element={<ManageUsersPage />} />
                     <Route path="usersList" element={<UsersList />} />
                     <Route path="announcement-tester" element={<AnnouncementTester />} />
-                    <Route path="announcementList" element={<AnnouncementList />} />
                     {/* ... other nested routes within AdminHome */}
                 </Route>
                 <Route path="/user/current/*" element={<CurrentUser />}>
