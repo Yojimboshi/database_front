@@ -72,6 +72,7 @@ export function useAnnounce() {
             setLoading(true);
             const response = await axios.get(ANNOUNCE_URL, { headers });
             setAnnouncements(response.data);
+            console.log("Use Announcement: ",response);
         } catch (error) {
             handleError("fetching all announcements", error);
         } finally {

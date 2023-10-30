@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useAdmin from '../../hooks/useAdmin';
 import '../../pages/Admin.css';
 import Modal from '../modal/Modal';
@@ -22,13 +22,6 @@ const announcementList: React.FC = () => {
     const [fetched, setFetched] = useState(false);
     const [isModalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<JSX.Element | null>(null);
-    console.log(announcements);
-
-    const handleFetchClick = async () => {
-        await fetchAllAnnouncements();
-        console.log(announcements);
-        setFetched(true);
-    };
 
     const closeModal = () => {
         setModalOpen(false);
@@ -41,15 +34,21 @@ const announcementList: React.FC = () => {
         setModalOpen(true);
     };
 
+    console.log(announcements);
+
+    useEffect(() => {
+        if (!fetched) { // Check if data has been fetched
+            const fetchAnnouncement = async () => {
+                await fetchAllAnnouncements();
+                setFetched(true);
+            }
+            fetchAnnouncement();
+        }
+    }, [fetched]); // Add the 'fetched' variable to the dependency array
+
     return (
         <div>
-            <h2>Announcement List</h2>
-
-            {!fetched ? (
-                <button onClick={handleFetchClick}>Fetch Announcements</button>
-            ) : announcements.length === 0 ? (
-                <p>No announcements found</p>
-            ) : (
+            <h2 className='text-2xl font-bold mb-4 text-black'>Announcement List</h2>
                 <table>
                     <thead>
                         <tr>
@@ -66,12 +65,12 @@ const announcementList: React.FC = () => {
                     </thead>
                     <tbody>
                         {announcements.map((announcement: Announcement) => (
-                            <tr key={announcement.id}>
-                                <td onClick={() => openDeleteModal(announcement.id)}>{announcement.id}</td>
+                            <tr key={announcement.id} onClick={() => openDeleteModal(announcement.id)}>
+                                <td className='cursor-pointer'>{announcement.id}</td>
                                 <td>{announcement.title}</td>
                                 <td>{announcement.content}</td>
                                 <td>{announcement.imageUrl}</td>
-                                <td>{announcement.pinned ? 'true' : 'false'}</td>
+                                <td>{announcement.isPinned ? 'False' : 'True'}</td>
                                 <td>{announcement.expirationDate}</td>
                                 <td>{announcement.userId}</td>
                                 <td>{announcement.category}</td>
@@ -80,7 +79,6 @@ const announcementList: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
-            )}
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 {modalContent}
             </Modal>

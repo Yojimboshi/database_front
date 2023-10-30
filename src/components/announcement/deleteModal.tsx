@@ -9,34 +9,101 @@ interface DeleteAnnouncementProps {
 }
 
 const DeleteAnnouncement: React.FC<DeleteAnnouncementProps> = ({ onClose, announcementDetail }) => {
-    const [isModalOpen, setModalOpen] = useState(false);
     const { deleteAnnouncement } = useAnnounce();
 
-    console.log(announcementDetail);
-
     const handleDelete = async () => {
-        try{
+        try {
             const announcementID = announcementDetail.id;
             await deleteAnnouncement(announcementID);
             window.location.reload();
-        }catch(error:any){
+        } catch (error: any) {
             console.log("Error deleting announcement: ", error.message);
         }
     };
 
     return (
-        <>
-            <h2 className='text-black'>Announcement Details</h2>
-            <p className='text-black'>Title: {announcementDetail.title}</p>
-            <p className='text-black'>Content: {announcementDetail.content}</p>
-            <p className='text-black'>Image: {announcementDetail.imageUrl}</p>
-            <p className='text-black'>Pinned: {announcementDetail.isPinned}</p>
-            <p className='text-black'>Date: {announcementDetail.expirationDate}</p>
-            <p className='text-black'>User ID: {announcementDetail.userId}</p>
-            <p className='text-black'>Category: {announcementDetail.category}</p>
-            <p className='text-black'>Language: {announcementDetail.language}</p>
-            <button onClick={() => handleDelete()}>Delete Announcement</button>
-        </>
+        <div className='border-black border w-auto p-4'>
+            <h2 className="text-xl font-semibold mb-2 text-black">Announcement Details</h2>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Title:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.title}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Content:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.content}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Image:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.imageUrl}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Pinned:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.isPinned ? 'True' : 'False'}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Date:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.expirationDate}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>User ID:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.userId}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Category:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.category}
+                </div>
+            </div>
+
+            <div className="flex flex-row text-left">
+                <div className="w-1/3 text-black">
+                    <strong>Language:</strong>
+                </div>
+                <div className="w-2/3 text-black">
+                    {announcementDetail.language}
+                </div>
+            </div>
+
+            <button
+                className="mt-4 p-2 bg-red-500 text-white rounded"
+                onClick={handleDelete}
+            >
+                Delete Announcement
+            </button>
+        </div>
     );
 }
 

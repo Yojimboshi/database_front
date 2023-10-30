@@ -25,6 +25,7 @@ function createAnnouncement() {
         }
         fetchUser();
     },[]);
+    console.log("User Detail: ",currentUser);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -36,8 +37,10 @@ function createAnnouncement() {
             };
     
             await createAnnouncement(updatedFormData);
+            
+            alert("Announcement created. Announcement Data: " + JSON.stringify(updatedFormData)); // Use JSON.stringify to convert the object to a string
             window.location.reload();
-            // alert("Annoucement created successfully");
+            // console.log("Updated Data: ", updatedFormData); //If want to display the announcement data on the console need to hide the window.location.reload();
         } catch (error) {
             setError('An error occurred while creating the announcement.');
         }
@@ -46,7 +49,7 @@ function createAnnouncement() {
 
     return (
         <div className="p-4 max-w-md mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Create Announcement</h2>
+            <h2 className="text-2xl font-bold mb-4 text-black">Create Announcement</h2>
             {error && <p className="text-red-500">{error}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
