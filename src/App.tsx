@@ -6,6 +6,7 @@ import UserLogin from './pages/UserLogin';
 import AdminRegister from './pages/AdminRegister';
 import AdminHome from './pages/AdminHome';
 import ManageUsersPage from './components/admin/ManageUsersPage';
+import PoolManagement from './components/admin/PoolManagement';
 import UsersList from './components/admin/UsersList';
 import RegisterUser from './components/user/RegisterUser';
 import CurrentPackage from './components/user/CurrentPackage';
@@ -16,7 +17,7 @@ import GetChildInfo from './components/user/GetChildInfo';
 import SubmitReport from './components/user/SubmitReport';
 import CryptoWallet from './components/user/CryptoWallet';
 import UserSetting from './components/user/UserSetting';
-import AnnouncementTester from './components/announcement/tester';  // Import the component
+import AnnouncementTester from './components/announcement/AnnouncementManager';
 /* ... add pool management header */
 
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
                     <Route path="manageUsers/*" element={<ManageUsersPage />} />
                     <Route path="usersList" element={<UsersList />} />
                     <Route path="announcement-tester" element={<AnnouncementTester />} />
+                    <Route path="virtual-pool" element={<PoolManagement />} />
                     {/* ... add pool management route */}
                 </Route>
                 <Route path="/user/current/*" element={<CurrentUser />}>
@@ -47,6 +49,7 @@ const App: React.FC = () => {
                     <Route path="crypto-wallet" element={<CryptoWallet />} />
                     <Route path="settings" element={<UserSetting />} />
                     <Route path="announcement-tester" element={<AnnouncementTester />} />
+                    <Route path="virtual-pool" element={<PoolManagement />} />
                 </Route>
             </Routes>
         </Router>

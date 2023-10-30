@@ -144,6 +144,7 @@ const CurrentUser: React.FC = () => {
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/crypto-wallet">Crypto Wallet</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/settings">User Settings</Link>
                 <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/announcement-tester">Announcement Tester</Link>
+                <Link className="block mb-2 text-blue-700 hover:text-red-500 transition-colors" to="/user/current/virtual-pool">Virtual Pool</Link>
             </nav>
 
             {/* Main Content */}

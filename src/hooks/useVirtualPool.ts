@@ -71,8 +71,10 @@ export function useVirtualPool() {
         }
         
         try {
+            console.log("reached")
             setLoadingState(true);
             const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}`, { headers });
+            console.log("asdasd");
             setPool(response.data);  // Setting the fetched pool details to state
             return response.data;
         } catch (error) {
@@ -269,6 +271,8 @@ export function useVirtualPool() {
         performSwap,
         addLiquidityToPool,
         removeLiquidityFromPool,
+
+        //quote
         calculateAmountOut,
         calculateAmountIn,
         calculateAddLiquidityOutput,
