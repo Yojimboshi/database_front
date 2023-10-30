@@ -17,7 +17,7 @@ import SubmitReport from './components/user/SubmitReport';
 import CryptoWallet from './components/user/CryptoWallet';
 import UserSetting from './components/user/UserSetting';
 import AnnouncementTester from './components/announcement/tester';  // Import the component
-
+/* ... add pool management header */
 
 
 const App: React.FC = () => {
@@ -36,6 +36,7 @@ const App: React.FC = () => {
                     <Route path="manageUsers/*" element={<ManageUsersPage />} />
                     <Route path="usersList" element={<UsersList />} />
                     <Route path="announcement-tester" element={<AnnouncementTester />} />
+                    {/* ... add pool management route */}
                 </Route>
                 <Route path="/user/current/*" element={<CurrentUser />}>
                     <Route index element={<div>User Dashboard</div>} />
