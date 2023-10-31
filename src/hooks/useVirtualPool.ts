@@ -74,8 +74,8 @@ export function useVirtualPool() {
             console.log("reached")
             setLoadingState(true);
             const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}`, { headers });
-            console.log("asdasd");
             setPool(response.data);  // Setting the fetched pool details to state
+            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("fetching specific pool", error);
