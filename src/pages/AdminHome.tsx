@@ -17,7 +17,7 @@ interface DecodedToken {
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const REFRESH_TIME = 3 * 60 ; // 20 minutes
+const REFRESH_TIME = 2 * 60 ; // 20 minutes
 
 const AdminHome: FC = () => {
     const location = useLocation();
@@ -87,7 +87,7 @@ const AdminHome: FC = () => {
             try {
                 let currentToken = accessToken;
 
-                if (currentToken && isAccessTokenExpiring(currentToken) && refreshToken) {
+                if (currentToken && isAccessTokenExpiring(currentToken)) {
                     const newAccessToken = await refreshAccessToken();
                     if (newAccessToken) {
                         sessionStorage.setItem('accessToken', newAccessToken);

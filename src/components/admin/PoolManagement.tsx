@@ -24,43 +24,26 @@ function PoolManagement() {
     calculateAmountOut,
   } = useVirtualPool();
 
-  const testgetSpecificPool = async () => {
-    const poolData = await getSpecificPool(poolId);
-    console.log(poolData);
-  }
-
-
-  const testCalculateAmountOut = async () => {
-    const AmountOut = await calculateAmountOut("2", 23);
-    console.log(AmountOut);
-
-  }
-
-
   // Handle Interface
 
 
-  // Function to handle the function selection
   const handleFunctionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFunction(e.target.value);
   };
 
-  // Function to handle parameter changes
   const handleParamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setParams({ ...params, [name]: value });
   };
 
 
-  // Function to call the selected function with the provided parameters
+
   const callSelectedFunction = async () => {
     try {
-      // Check for required parameters for the selected function
       if (selectedFunction === 'getSpecificPool' && !poolId) {
         throw new Error('Pool ID is required');
       }
 
-      // Call the selected function with the parameters
       switch (selectedFunction) {
         case 'getSpecificPool':
           await getSpecificPool(poolId);
@@ -98,7 +81,6 @@ function PoolManagement() {
         <option value="removeLiquidityFromPool">Remove Liquidity from Pool</option>
       </select>
 
-      {/* Render input fields for the selected function */}
       {selectedFunction !== 'getSpecificPool' && (
         <div>
           <input
@@ -108,7 +90,13 @@ function PoolManagement() {
             value={params.tokenA}
             onChange={handleParamChange}
           />
-          {/* Add input fields for other parameters as needed */}
+          <input
+            type="text"
+            name="tokenB"
+            placeholder="Token B"
+            value={params.tokenB}
+            onChange={handleParamChange}
+          />
         </div>
       )}
 

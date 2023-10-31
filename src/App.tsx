@@ -17,7 +17,7 @@ import GetChildInfo from './components/user/GetChildInfo';
 import SubmitReport from './components/user/SubmitReport';
 import CryptoWallet from './components/user/CryptoWallet';
 import UserSetting from './components/user/UserSetting';
-import AnnouncementTester from './components/announcement/AnnouncementManager';
+import AnnouncementTester from './components/announcement/AnnouncementManager';  // Import the component
 /* ... add pool management header */
 
 
