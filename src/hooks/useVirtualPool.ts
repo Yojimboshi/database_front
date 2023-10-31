@@ -69,14 +69,11 @@ export function useVirtualPool() {
         if (!poolId) {
             throw new Error("Pool ID is required");
         }
-        
         try {
-            console.log("reached")
-            console.log(headers);
             setLoadingState(true);
             const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}`, { headers });
-            console.log("response reached");
             setPool(response.data);  // Setting the fetched pool details to state
+            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("fetching specific pool", error);
@@ -98,6 +95,7 @@ export function useVirtualPool() {
                 amount,
                 inputBox
             }, { headers });
+
             return response.data;
         } catch (error) {
             handleError("performing a swap", error);
