@@ -124,7 +124,7 @@ export function useVirtualPool() {
         
         try {
             setLoadingState(true);
-            const response = await axios.post(`${VIRTUAL_POOL_URL}/${poolId}/add-liquidity`, {
+            const response = await axios.post(`${VIRTUAL_POOL_URL}/add-liquidity`, {
                 tokenA,
                 tokenB,
                 amountADesired,
@@ -145,7 +145,7 @@ export function useVirtualPool() {
         
         try {
             setLoadingState(true);
-            const response = await axios.post(`${VIRTUAL_POOL_URL}/${poolId}/remove-liquidity`, {
+            const response = await axios.post(`${VIRTUAL_POOL_URL}/remove-liquidity`, {
                 tokenA,
                 tokenB,
                 liquidityTokens,
