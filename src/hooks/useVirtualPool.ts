@@ -82,14 +82,14 @@ export function useVirtualPool() {
         }
     };
 
-    const performSwap = async (poolId: string | number, tokenA: string, tokenB: string, amount: number, inputBox: string) => {
-        if (!poolId || !tokenA || !tokenB || !amount || !inputBox) {
+    const performSwap = async (tokenA: string, tokenB: string, amount: number, inputBox: string) => {
+        if (!tokenA || !tokenB || !amount || !inputBox) {
             throw new Error("Invalid parameters for performing a swap");
         }
         
         try {
             setLoadingState(true);
-            const response = await axios.post(`${VIRTUAL_POOL_URL}/${poolId}/swap`, {
+            const response = await axios.post(`${VIRTUAL_POOL_URL}/swap`, {
                 tokenA,
                 tokenB,
                 amount,
