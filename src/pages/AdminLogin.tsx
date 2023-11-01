@@ -19,7 +19,6 @@ type AxiosError = {
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const isAdmin = true;
 const AdminLogin: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         email: '',

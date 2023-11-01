@@ -9,7 +9,6 @@ interface Props {
 function PoolManagement({ isAdmin }: Props) {
   const [poolId, setPoolId] = useState('');
   const [selectedFunction, setSelectedFunction] = useState('createNewPool');
-  const [adminOnlySelectedFunction, setAdminOnlySelectedFunction] = useState('createNewPool');
   const [params, setParams] = useState<{ [key: string]: string }>({});
   const functionParams: Record<string, string[]> = {
     createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
@@ -64,21 +63,6 @@ function PoolManagement({ isAdmin }: Props) {
 
   };
 
-
-  const adminOnlyFunction = async () => {
-    try {
-      switch (adminOnlySelectedFunction) {
-        case 'createNewPool':
-          await createNewPool(params.tokenA, params.tokenB, parseFloat(params.initialTokenAReserve), parseFloat(params.initialTokenBReserve));
-          break;
-        case 'adjustPoolK':
-          await adjustPoolK(poolId, parseFloat(params.newTokenAReserve), parseFloat(params.newTokenBReserve));
-          break;
-      }
-    } catch (error) {
-
-    }
-  };
 
   const callSelectedFunction = async () => {
     try {
