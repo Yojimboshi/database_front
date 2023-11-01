@@ -2,27 +2,48 @@
 import React, { useState } from 'react';
 import { useVirtualPool } from '../../hooks/useVirtualPool';
 
-function PoolManagement() {
+interface Props {
+  isAdmin: boolean;
+}
+
+function PoolManagement({ isAdmin }: Props) {
   const [poolId, setPoolId] = useState('');
-  const [selectedFunction, setSelectedFunction] = useState('getSpecificPool');
-  const [displayData, setDisplayData] = useState([]);
-  const [params, setParams] = useState({
-    tokenA: '',
-    tokenB: '',
-    amount: 0,
-    inputBox: '',
-    amountADesired: 0,
-    amountBDesired: 0,
-    liquidityTokens: 0,
-    amountAMin: 0,
-    amountBMin: 0,
-  });
+  const [selectedFunction, setSelectedFunction] = useState('createNewPool');
+  const [params, setParams] = useState<{ [key: string]: string }>({});
+  const functionParams: Record<string, string[]> = {
+    createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
+    adjustPoolK: ['newTokenAReserve', 'newTokenBReserve'],
+    performSwap: ['tokenA', 'tokenB', 'amount', 'inputBox'],
+    addLiquidityToPool: ['tokenA', 'tokenB', 'amountADesired', 'amountBDesired'],
+    removeLiquidityFromPool: ['tokenA', 'tokenB', 'liquidityTokens', 'amountAMin', 'amountBMin'],
+    calculateAmountOut: ['InputAmount'],
+    calculateAmountIn: ['OutputAmount'],
+    calculateAddLiquidityOutput: [],
+    calculateRemoveLiquidityOutput: [],
+    getSlippage: [],
+    quote: [],
+    getLPTokenBalance: [],
+    getTotalLPTokenSupply: [],
+    checkUserCryptoBalance: [],
+  };
+
   const {
+    createNewPool,
+    adjustPoolK,
     getSpecificPool,
+    getAllPools,
     performSwap,
     addLiquidityToPool,
     removeLiquidityFromPool,
     calculateAmountOut,
+    calculateAmountIn,
+    calculateAddLiquidityOutput,
+    calculateRemoveLiquidityOutput,
+    getSlippage,
+    quote,
+    getLPTokenBalance,
+    getTotalLPTokenSupply,
+    checkUserCryptoBalance
   } = useVirtualPool();
 
   // Handle Interface
@@ -33,15 +54,14 @@ function PoolManagement() {
   };
 
   const handleParamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    try{
+    try {
       const { name, value } = e.target;
       setParams({ ...params, [name]: value });
-    }catch(error){
+    } catch (error) {
       throw new Error('Invalid input');
     }
 
   };
-
 
 
   const callSelectedFunction = async () => {
@@ -51,21 +71,58 @@ function PoolManagement() {
       }
       let displayData;
       switch (selectedFunction) {
+        case 'createNewPool':
+          await createNewPool(params.tokenA, params.tokenB, parseFloat(params.initialTokenAReserve), parseFloat(params.initialTokenBReserve));
+          break;
+        case 'adjustPoolK':
+          await adjustPoolK(poolId, parseFloat(params.newTokenAReserve), parseFloat(params.newTokenBReserve));
+          break;
         case 'getSpecificPool':
           await getSpecificPool(poolId);
           break;
+        case 'getAllPools':
+          await getAllPools();
+          break;
         case 'performSwap':
-          displayData = await performSwap(poolId, params.tokenA, params.tokenB, params.amount, params.inputBox);
+          displayData = await performSwap(poolId, params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
           console.log(displayData);
           break;
         case 'addLiquidityToPool':
-          displayData = await addLiquidityToPool(poolId, params.tokenA, params.tokenB, params.amountADesired, params.amountBDesired);
+          displayData = await addLiquidityToPool(poolId, params.tokenA, params.tokenB, parseFloat(params.amountADesired), parseFloat(params.amountBDesired));
           console.log(displayData);
           break;
         case 'removeLiquidityFromPool':
-          displayData = await removeLiquidityFromPool(poolId, params.tokenA, params.tokenB, params.liquidityTokens, params.amountAMin, params.amountBMin);
+          displayData = await removeLiquidityFromPool(poolId, params.tokenA, params.tokenB, parseFloat(params.liquidityTokens), parseFloat(params.amountAMin), parseFloat(params.amountBMin));
           console.log(displayData);
           break;
+        case 'calculateAmountOut':
+          await calculateAmountOut(poolId, parseFloat(params.InputAmount));
+          break;
+        case 'calculateAmountIn':
+          await calculateAmountIn(poolId, parseFloat(params.OutputAmount));
+          break;
+        case 'calculateAddLiquidityOutput':
+          await calculateAddLiquidityOutput(poolId)
+          break;
+        case 'calculateRemoveLiquidityOutput':
+          await calculateRemoveLiquidityOutput(poolId)
+          break;
+        case 'getSlippage':
+          await getSlippage(poolId)
+          break;
+        case 'quote':
+          await quote(poolId)
+          break;
+        case 'getLPTokenBalance':
+          await getLPTokenBalance(poolId)
+          break;
+        case 'getTotalLPTokenSupply':
+          await getTotalLPTokenSupply(poolId)
+          break;
+        case 'checkUserCryptoBalance':
+          await checkUserCryptoBalance(poolId)
+          break;
+
         default:
           throw new Error('Invalid function selection');
       }
@@ -75,122 +132,57 @@ function PoolManagement() {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between items-center">
       <div className="flex justify-between">
-        <input
-          type="text"
-          placeholder="Enter Pool ID"
-          value={poolId}
-          onChange={(e) => setPoolId(e.target.value)}
-          className="p-2 border rounded-md m-2"
-        />
+        {selectedFunction !== 'getAllPools' && (
+          <input
+            type="text"
+            placeholder="Enter Pool ID"
+            value={poolId}
+            onChange={(e) => setPoolId(e.target.value)}
+            className="p-2 border rounded-md m-2"
+          />
+        )}
         <select value={selectedFunction} onChange={handleFunctionChange} className="p-2 border rounded-md m-2">
+          {isAdmin && (
+            <>
+              <option value="createNewPool">Create new pool</option>
+              <option value="adjustPoolK">Adjust Pool K</option>
+            </>
+          )}
           <option value="getSpecificPool">Get Specific Pool</option>
+          <option value="getAllPools">Get Pools</option>
           <option value="performSwap">Perform Swap</option>
           <option value="addLiquidityToPool">Add Liquidity to Pool</option>
           <option value="removeLiquidityFromPool">Remove Liquidity from Pool</option>
+          <option value="calculateAmountOut">Calculate Amount Out</option>
+          <option value="calculateAmountIn">Calculate Amount In</option>
+          <option value="calculateAddLiquidityOutput">Calculate Add Liquidity Output</option>
+          <option value="calculateRemoveLiquidityOutput">Calculate Remove Liquidity Output</option>
+          <option value="getSlippage">Get Slippage</option>
+          <option value="quote">Quote</option>
+          <option value="getLPTokenBalance">Get LP Token Balance</option>
+          <option value="getTotalLPTokenSupply">Get Total LP Token</option>
+          <option value="checkUserCryptoBalance">Check User Balance</option>
+
+
         </select>
       </div>
-
-      <div>
-        {selectedFunction !== 'getSpecificPool' && (
-          <div>
+      {selectedFunction !== 'getSpecificPool' && selectedFunction !== 'getAllPools' && (
+        <div>
+          {functionParams[selectedFunction].map((param) => (
             <input
+              key={param}
               type="text"
-              name="tokenA"
-              placeholder="Token A"
-              value={params.tokenA}
+              name={param}
+              placeholder={param}
+              value={params[param] || ''}
               onChange={handleParamChange}
               className="p-2 border rounded-md m-2"
             />
-            <input
-              type="text"
-              name="tokenB"
-              placeholder="Token B"
-              value={params.tokenB}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-          </div>
-        )}
-
-        {selectedFunction === 'performSwap' && (
-          <div>
-            <input
-              type="text"
-              name="amount"
-              placeholder="amount"
-              value={params.amount}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-
-            <input
-              type="text"
-              name="inputBox"
-              placeholder="inputBox"
-              value={params.inputBox}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-          </div>
-
-        )}
-        {selectedFunction === 'addLiquidityToPool' && (
-          <div>
-            <input
-              type="text"
-              name="amountADesired"
-              placeholder="AmountA Desired"
-              value={params.amountADesired}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-
-            <input
-              type="text"
-              name="amountBDesired"
-              placeholder="AmountB Desired"
-              value={params.amountBDesired}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-          </div>
-
-        )}
-        {selectedFunction === 'removeLiquidityFromPool' && (
-          <div>
-            <input
-              type="text"
-              name="liquidityTokens"
-              placeholder="Liquidity Tokens"
-              value={params.liquidityTokens}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-
-            <input
-              type="text"
-              name="amountAMin"
-              placeholder="AmountA Min"
-              value={params.amountAMin}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-            <input
-              type="text"
-              name="amountBMin"
-              placeholder="AmountB Min"
-              value={params.amountBMin}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-
-          </div>
-
-        )}
-      </div>
-
+          ))}
+        </div>
+      )}
       <button onClick={callSelectedFunction} className="p-2 border rounded-md m-2 self-end">
         Execute
       </button>

@@ -82,8 +82,21 @@ export function useVirtualPool() {
         }
     };
 
-    const performSwap = async (tokenA: string, tokenB: string, amount: number, inputBox: string) => {
-        if (!tokenA || !tokenB || !amount || !inputBox) {
+    const getAllPools = async () => {
+        try {
+            setLoadingState(true);
+            const response = await axios.get(`${VIRTUAL_POOL_URL}`, { headers });
+            console.log(response.data)
+            return response.data;
+        } catch (error) {
+            handleError("fetching specific pool", error);
+        } finally {
+            setLoadingState(false);
+        }
+    };
+
+    const performSwap = async ( tokenA: string, tokenB: string, amount: number, inputBox: string) => {
+        if ( !tokenA || !tokenB || !amount || !inputBox) {
             throw new Error("Invalid parameters for performing a swap");
         }
         
@@ -255,6 +268,7 @@ export function useVirtualPool() {
         }
     };
 
+
     return {
         // State
         pool,
@@ -267,6 +281,7 @@ export function useVirtualPool() {
 
         // Common
         getSpecificPool,
+        getAllPools,
         performSwap,
         addLiquidityToPool,
         removeLiquidityFromPool,
