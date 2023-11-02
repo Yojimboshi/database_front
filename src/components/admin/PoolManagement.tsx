@@ -8,7 +8,6 @@ interface Props {
 }
 
 function PoolManagement({ isAdmin }: Props) {
-  const [poolId, setPoolId] = useState('');
   const [selectedFunction, setSelectedFunction] = useState('createNewPool');
   const [params, setParams] = useState<{ [key: string]: string }>({});
   const functionParams: Record<string, string[]> = {
@@ -113,10 +112,10 @@ function PoolManagement({ isAdmin }: Props) {
           await calculateRemoveLiquidityOutput(params.tokenA, params.tokenB, parseFloat(params.reserveA), parseFloat(params.reserveB), parseFloat(params.totalLPTokenSupply), parseFloat(params.liquidityTokens))
           break;
         case 'getSlippage':
-          await getSlippage(poolId)
+          await getSlippage()
           break;
         case 'quote':
-          await quote(poolId)
+          await quote()
           break;
         case 'getLPTokenBalance':
           displayData =await getLPTokenBalance(params.tokenA, params.tokenB)
@@ -141,15 +140,6 @@ function PoolManagement({ isAdmin }: Props) {
   return (
     <div className="h-full flex flex-col justify-between items-center">
       <div className="flex justify-between">
-        {selectedFunction !== 'getAllPools' && (
-          <input
-            type="text"
-            placeholder="Enter Pool ID"
-            value={poolId}
-            onChange={(e) => setPoolId(e.target.value)}
-            className="p-2 border rounded-md m-2"
-          />
-        )}
         <select value={selectedFunction} onChange={handleFunctionChange} className="p-2 border rounded-md m-2">
           {isAdmin && (
             <>

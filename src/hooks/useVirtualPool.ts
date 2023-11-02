@@ -153,7 +153,6 @@ export function useVirtualPool() {
                 amountAMin,
                 amountBMin
             }, { headers });
-            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("removing liquidity", error);
