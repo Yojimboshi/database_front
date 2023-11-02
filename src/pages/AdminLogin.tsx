@@ -19,7 +19,6 @@ type AxiosError = {
 }
 
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 const AdminLogin: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         email: '',
@@ -49,6 +48,7 @@ const AdminLogin: React.FC = () => {
             const { accessToken } = response.data; // Access the accessToken from the response data
             sessionStorage.setItem('accessToken', accessToken);
             setAccessToken(accessToken);
+            const isAdmin = true;
             navigate('/adminHome');
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -66,6 +66,7 @@ const AdminLogin: React.FC = () => {
         });
     };
 
+    
     return (
         <div>
             <h2>Admin Login</h2>

@@ -117,6 +117,7 @@ export function useVirtualPool() {
                 amount,
                 inputBox
             }, { headers });
+
             return response.data;
         } catch (error) {
             handleError("performing a swap", error);
@@ -273,6 +274,7 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
+
 
     return {
         // State
