@@ -14,7 +14,7 @@ function PoolManagement({ isAdmin }: Props) {
     createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
     readPoolK: ['tokenA', 'tokenB'],
     adjustPoolK: ['tokenA', 'tokenB','newTokenAReserve', 'newTokenBReserve'],
-    searchPool: ['tokenA', 'tokenB'],
+    searchPool: ['DUMMY', 'USDT'],
     performSwap: ['tokenA', 'tokenB', 'amount', 'inputBox'],
     addLiquidityToPool: ['tokenA', 'tokenB', 'amountADesired', 'amountBDesired'],
     removeLiquidityFromPool: ['tokenA', 'tokenB', 'liquidityTokens', 'amountAMin', 'amountBMin'],
@@ -82,7 +82,7 @@ function PoolManagement({ isAdmin }: Props) {
           console.log(displayData);
           break;
         case 'searchPool':
-          await searchPool();
+          await searchPool("ETH","DAI");
           break;
         case 'performSwap':
           displayData = await performSwap(params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
