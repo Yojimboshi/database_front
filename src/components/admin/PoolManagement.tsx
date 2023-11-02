@@ -1,6 +1,7 @@
 // src/components/announcement/AnnouncementManager.tsx
 import React, { useState } from 'react';
 import { useVirtualPool } from '../../hooks/useVirtualPool';
+import { parse } from 'dotenv';
 
 interface Props {
   isAdmin: boolean;
@@ -13,15 +14,15 @@ function PoolManagement({ isAdmin }: Props) {
   const functionParams: Record<string, string[]> = {
     createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
     readPoolK: ['tokenA', 'tokenB'],
-    adjustPoolK: ['tokenA', 'tokenB','newTokenAReserve', 'newTokenBReserve'],
-    searchPool: ['DUMMY', 'USDT'],
+    adjustPoolK: ['tokenA', 'tokenB', 'newTokenAReserve', 'newTokenBReserve'],
+    searchPool: ['tokenA', 'tokenB'],
     performSwap: ['tokenA', 'tokenB', 'amount', 'inputBox'],
     addLiquidityToPool: ['tokenA', 'tokenB', 'amountADesired', 'amountBDesired'],
     removeLiquidityFromPool: ['tokenA', 'tokenB', 'liquidityTokens', 'amountAMin', 'amountBMin'],
-    calculateAmountOut: ['InputAmount'],
-    calculateAmountIn: ['OutputAmount'],
-    calculateAddLiquidityOutput: [],
-    calculateRemoveLiquidityOutput: [],
+    calculateAmountOut: ['tokenA', 'tokenB', 'InputAmount'],
+    calculateAmountIn: ['tokenA', 'tokenB', 'OutputAmount'],
+    calculateAddLiquidityOutput: ['tokenA', 'tokenB', 'reserveA', 'reserveB', 'amountA'],
+    calculateRemoveLiquidityOutput: ['tokenA', 'tokenB', 'reserveA', 'reserveB', 'totalLPTokenSupply', 'liquidityTokens'],
     getSlippage: [],
     quote: [],
     getLPTokenBalance: [],
@@ -82,7 +83,8 @@ function PoolManagement({ isAdmin }: Props) {
           console.log(displayData);
           break;
         case 'searchPool':
-          await searchPool("ETH","DAI");
+          displayData = await searchPool(params.tokenA, params.tokenB);
+          console.log(displayData);
           break;
         case 'performSwap':
           displayData = await performSwap(params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
@@ -97,16 +99,18 @@ function PoolManagement({ isAdmin }: Props) {
           console.log(displayData);
           break;
         case 'calculateAmountOut':
-          await calculateAmountOut(params.tokenA, params.tokenB, parseFloat(params.InputAmount));
+          displayData = await calculateAmountOut(params.tokenA, params.tokenB, parseFloat(params.InputAmount));
+          console.log(displayData);
           break;
         case 'calculateAmountIn':
-          await calculateAmountIn(params.tokenA, params.tokenB, parseFloat(params.OutputAmount));
+          displayData = await calculateAmountIn(params.tokenA, params.tokenB, parseFloat(params.OutputAmount));
+          console.log(displayData);
           break;
         case 'calculateAddLiquidityOutput':
-          await calculateAddLiquidityOutput(poolId)
+          await calculateAddLiquidityOutput(params.tokenA, params.tokenB, parseFloat(params.reserveA), parseFloat(params.reserveB), parseFloat(params.amountA))
           break;
         case 'calculateRemoveLiquidityOutput':
-          await calculateRemoveLiquidityOutput(poolId)
+          await calculateRemoveLiquidityOutput(params.tokenA, params.tokenB, parseFloat(params.reserveA), parseFloat(params.reserveB), parseFloat(params.totalLPTokenSupply), parseFloat(params.liquidityTokens))
           break;
         case 'getSlippage':
           await getSlippage(poolId)
@@ -170,19 +174,19 @@ function PoolManagement({ isAdmin }: Props) {
         </select>
       </div>
 
-        <div>
-          {functionParams[selectedFunction].map((param) => (
-            <input
-              key={param}
-              type="text"
-              name={param}
-              placeholder={param}
-              value={params[param] || ''}
-              onChange={handleParamChange}
-              className="p-2 border rounded-md m-2"
-            />
-          ))}
-        </div>
+      <div>
+        {functionParams[selectedFunction].map((param) => (
+          <input
+            key={param}
+            type="text"
+            name={param}
+            placeholder={param}
+            value={params[param] || ''}
+            onChange={handleParamChange}
+            className="p-2 border rounded-md m-2"
+          />
+        ))}
+      </div>
 
       <button onClick={callSelectedFunction} className="p-2 border rounded-md m-2 self-end">
         Execute

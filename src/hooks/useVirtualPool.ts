@@ -91,10 +91,8 @@ export function useVirtualPool() {
             if (tokenA && tokenB) {
                 queryString = `?tokenA=${tokenA}&tokenB=${tokenB}`;
             }
-
             // Fetch pools using the constructed query string
             const response = await axios.get(`${VIRTUAL_POOL_URL}/search${queryString}`, { headers });
-            console.log("searchPool",response.data);
             setPool(response.data);  // Setting the fetched pool details to state
             return response.data;
         } catch (error) {
@@ -164,10 +162,10 @@ export function useVirtualPool() {
     };
     
 
-    const calculateAmountOut = async (tokenA: string, tokenB: string, inputAmount: number) => {
+    const calculateAmountOut = async (tokenA: string, tokenB: string, amountIn: number) => {
         try {
             setLoadingState(true);
-            const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/amount-out`, { amountIn: inputAmount }, { headers });
+            const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/amount-out`, { amountIn }, { headers });
             return response.data;
         } catch (error) {
             handleError("calculating amount out", error);
@@ -176,10 +174,11 @@ export function useVirtualPool() {
         }
     };
     
-    const calculateAmountIn = async (tokenA: string, tokenB: string, outputAmount: number) => {
+    const calculateAmountIn = async (tokenA: string, tokenB: string, amountOut: number) => {
         try {
+            console.log(tokenA)
             setLoadingState(true);
-            const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/amount-in`, { amountOut: outputAmount }, { headers });
+            const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/amount-in`, { amountOut }, { headers });
             return response.data;
         } catch (error) {
             handleError("calculating amount in", error);
@@ -189,10 +188,14 @@ export function useVirtualPool() {
     };
     
 
-    const calculateAddLiquidityOutput = async (poolId: string) => {
+    const calculateAddLiquidityOutput = async (tokenA: string, tokenB: string, reserveA: number, reserveB: number, amountA: number) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/calculate-add-liquidity-output`, { headers });
+            const response = await axios.get(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/calculate-add-liquidity-output`,{ 
+                reserveA,
+                reserveB,
+                amountA 
+            }, { headers });
             return response.data;
         } catch (error) {
             handleError("calculating add liquidity output", error);
@@ -201,10 +204,15 @@ export function useVirtualPool() {
         }
     };
 
-    const calculateRemoveLiquidityOutput = async (poolId: string) => {
+    const calculateRemoveLiquidityOutput = async (tokenA: string, tokenB: string, reserveA: number, reserveB: number, totalLPTokenSupply: number, liquidityTokens: number) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/calculate-remove-liquidity-output`, { headers });
+            const response = await axios.get(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/calculate-remove-liquidity-output`,{
+                reserveA,
+                reserveB,
+                totalLPTokenSupply,
+                liquidityTokens
+            }, { headers });
             return response.data;
         } catch (error) {
             handleError("calculating remove liquidity output", error);
