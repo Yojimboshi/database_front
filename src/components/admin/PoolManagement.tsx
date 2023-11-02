@@ -12,7 +12,9 @@ function PoolManagement({ isAdmin }: Props) {
   const [params, setParams] = useState<{ [key: string]: string }>({});
   const functionParams: Record<string, string[]> = {
     createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
-    adjustPoolK: ['newTokenAReserve', 'newTokenBReserve'],
+    readPoolK: ['tokenA', 'tokenB'],
+    adjustPoolK: ['tokenA', 'tokenB','newTokenAReserve', 'newTokenBReserve'],
+    searchPool: ['tokenA', 'tokenB'],
     performSwap: ['tokenA', 'tokenB', 'amount', 'inputBox'],
     addLiquidityToPool: ['tokenA', 'tokenB', 'amountADesired', 'amountBDesired'],
     removeLiquidityFromPool: ['tokenA', 'tokenB', 'liquidityTokens', 'amountAMin', 'amountBMin'],
@@ -29,9 +31,9 @@ function PoolManagement({ isAdmin }: Props) {
 
   const {
     createNewPool,
+    readPoolK,
     adjustPoolK,
-    getSpecificPool,
-    getAllPools,
+    searchPool,
     performSwap,
     addLiquidityToPool,
     removeLiquidityFromPool,
@@ -66,40 +68,39 @@ function PoolManagement({ isAdmin }: Props) {
 
   const callSelectedFunction = async () => {
     try {
-      if (selectedFunction === 'getSpecificPool' && !poolId) {
-        throw new Error('Pool ID is required');
-      }
       let displayData;
       switch (selectedFunction) {
         case 'createNewPool':
           await createNewPool(params.tokenA, params.tokenB, parseFloat(params.initialTokenAReserve), parseFloat(params.initialTokenBReserve));
           break;
+        case 'readPoolK':
+          displayData = await readPoolK(params.tokenA, params.tokenB);
+          console.log(displayData);
+          break;
         case 'adjustPoolK':
-          await adjustPoolK(poolId, parseFloat(params.newTokenAReserve), parseFloat(params.newTokenBReserve));
+          displayData = await adjustPoolK(params.tokenA, params.tokenB, parseFloat(params.newTokenAReserve), parseFloat(params.newTokenBReserve));
+          console.log(displayData);
           break;
-        case 'getSpecificPool':
-          await getSpecificPool(poolId);
-          break;
-        case 'getAllPools':
-          await getAllPools();
+        case 'searchPool':
+          await searchPool();
           break;
         case 'performSwap':
-          displayData = await performSwap(poolId, params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
+          displayData = await performSwap(params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
           console.log(displayData);
           break;
         case 'addLiquidityToPool':
-          displayData = await addLiquidityToPool(poolId, params.tokenA, params.tokenB, parseFloat(params.amountADesired), parseFloat(params.amountBDesired));
+          displayData = await addLiquidityToPool(params.tokenA, params.tokenB, parseFloat(params.amountADesired), parseFloat(params.amountBDesired));
           console.log(displayData);
           break;
         case 'removeLiquidityFromPool':
-          displayData = await removeLiquidityFromPool(poolId, params.tokenA, params.tokenB, parseFloat(params.liquidityTokens), parseFloat(params.amountAMin), parseFloat(params.amountBMin));
+          displayData = await removeLiquidityFromPool(params.tokenA, params.tokenB, parseFloat(params.liquidityTokens), parseFloat(params.amountAMin), parseFloat(params.amountBMin));
           console.log(displayData);
           break;
         case 'calculateAmountOut':
-          await calculateAmountOut(poolId, parseFloat(params.InputAmount));
+          await calculateAmountOut(params.tokenA, params.tokenB, parseFloat(params.InputAmount));
           break;
         case 'calculateAmountIn':
-          await calculateAmountIn(poolId, parseFloat(params.OutputAmount));
+          await calculateAmountIn(params.tokenA, params.tokenB, parseFloat(params.OutputAmount));
           break;
         case 'calculateAddLiquidityOutput':
           await calculateAddLiquidityOutput(poolId)
@@ -147,11 +148,11 @@ function PoolManagement({ isAdmin }: Props) {
           {isAdmin && (
             <>
               <option value="createNewPool">Create new pool</option>
+              <option value="readPoolK">Read Pool K</option>
               <option value="adjustPoolK">Adjust Pool K</option>
             </>
           )}
-          <option value="getSpecificPool">Get Specific Pool</option>
-          <option value="getAllPools">Get Pools</option>
+          <option value="searchPool">Search Pool</option>
           <option value="performSwap">Perform Swap</option>
           <option value="addLiquidityToPool">Add Liquidity to Pool</option>
           <option value="removeLiquidityFromPool">Remove Liquidity from Pool</option>
@@ -168,7 +169,7 @@ function PoolManagement({ isAdmin }: Props) {
 
         </select>
       </div>
-      {selectedFunction !== 'getSpecificPool' && selectedFunction !== 'getAllPools' && (
+
         <div>
           {functionParams[selectedFunction].map((param) => (
             <input
@@ -182,7 +183,7 @@ function PoolManagement({ isAdmin }: Props) {
             />
           ))}
         </div>
-      )}
+
       <button onClick={callSelectedFunction} className="p-2 border rounded-md m-2 self-end">
         Execute
       </button>

@@ -83,8 +83,7 @@ export function useVirtualPool() {
     };
 
     const searchPool = async (tokenA?: string, tokenB?: string) => {
-        try {
-            console.log("reached");
+        try { 
             setLoadingState(true);
 
             // Build the query string based on the tokens provided
@@ -97,7 +96,6 @@ export function useVirtualPool() {
             const response = await axios.get(`${VIRTUAL_POOL_URL}/search${queryString}`, { headers });
 
             setPool(response.data);  // Setting the fetched pool details to state
-            console.log(response.data);
             return response.data;
         } catch (error) {
             handleError("searching for pool", error);
