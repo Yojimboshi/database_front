@@ -25,8 +25,8 @@ function PoolManagement({ isAdmin }: Props) {
     calculateRemoveLiquidityOutput: ['tokenA', 'tokenB', 'reserveA', 'reserveB', 'totalLPTokenSupply', 'liquidityTokens'],
     getSlippage: [],
     quote: [],
-    getLPTokenBalance: [],
-    getTotalLPTokenSupply: [],
+    getLPTokenBalance: ['tokenA', 'tokenB'],
+    getTotalLPTokenSupply: ['tokenA', 'tokenB'],
     checkUserCryptoBalance: [],
   };
 
@@ -119,13 +119,15 @@ function PoolManagement({ isAdmin }: Props) {
           await quote(poolId)
           break;
         case 'getLPTokenBalance':
-          await getLPTokenBalance(poolId)
+          displayData =await getLPTokenBalance(params.tokenA, params.tokenB)
+          console.log(displayData);
           break;
         case 'getTotalLPTokenSupply':
-          await getTotalLPTokenSupply(poolId)
+          displayData =await getTotalLPTokenSupply(params.tokenA, params.tokenB)
+          console.log(displayData);
           break;
         case 'checkUserCryptoBalance':
-          await checkUserCryptoBalance(poolId)
+          await checkUserCryptoBalance();
           break;
 
         default:

@@ -83,9 +83,9 @@ export function useVirtualPool() {
     };
 
     const searchPool = async (tokenA?: string, tokenB?: string) => {
-        try { 
+        try {
             setLoadingState(true);
-            
+
             // Build the query string based on the tokens provided
             let queryString = '';
             if (tokenA && tokenB) {
@@ -106,7 +106,7 @@ export function useVirtualPool() {
         if (!tokenA || !tokenB || !amount || !inputBox) {
             throw new Error("Invalid parameters for performing a swap");
         }
-    
+
         try {
             setLoadingState(true);
             const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/swap`, {
@@ -121,12 +121,12 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
-    
+
     const addLiquidityToPool = async (tokenA: string, tokenB: string, amountADesired: number, amountBDesired: number) => {
         if (!tokenA || !tokenB || !amountADesired || !amountBDesired) {
             throw new Error("Invalid parameters for adding liquidity");
         }
-    
+
         try {
             setLoadingState(true);
             const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/add-liquidity`, {
@@ -140,12 +140,12 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
-    
+
     const removeLiquidityFromPool = async (tokenA: string, tokenB: string, liquidityTokens: number, amountAMin: number, amountBMin: number) => {
         if (!tokenA || !tokenB || !liquidityTokens || !amountAMin || !amountBMin) {
             throw new Error("Invalid parameters for removing liquidity");
         }
-    
+
         try {
             setLoadingState(true);
             const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/remove-liquidity`, {
@@ -153,6 +153,7 @@ export function useVirtualPool() {
                 amountAMin,
                 amountBMin
             }, { headers });
+            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("removing liquidity", error);
@@ -160,7 +161,7 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
-    
+
 
     const calculateAmountOut = async (tokenA: string, tokenB: string, amountIn: number) => {
         try {
@@ -186,7 +187,7 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
-    
+
 
     const calculateAddLiquidityOutput = async (tokenA: string, tokenB: string, reserveA: number, reserveB: number, amountA: number) => {
         try {
@@ -245,10 +246,11 @@ export function useVirtualPool() {
         }
     };
 
-    const getLPTokenBalance = async (poolId: string) => {
+    // task TO DO
+    const getLPTokenBalance = async (tokenA: string, tokenB: string) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/get-lp-token-balance`, { headers });
+            const response = await axios.get(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/get-lp-token-balance`, { headers });
             return response.data;
         } catch (error) {
             handleError("getting LP token balance", error);
@@ -257,10 +259,11 @@ export function useVirtualPool() {
         }
     };
 
-    const getTotalLPTokenSupply = async (poolId: string) => {
+    // task TO DO
+    const getTotalLPTokenSupply = async (tokenA: string, tokenB: string) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/get-total-lp-token-supply`, { headers });
+            const response = await axios.get(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/get-total-lp-token-supply`, { headers });
             return response.data;
         } catch (error) {
             handleError("getting total LP token supply", error);
@@ -269,10 +272,20 @@ export function useVirtualPool() {
         }
     };
 
-    const checkUserCryptoBalance = async (poolId: string) => {
+
+    const checkUserCryptoBalance = async (username?: string) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/check-user-crypto-balance`, { headers });
+            // endpoint empty = fetch all users (only admin)
+            // endpoint = username fetch only 1 user
+            // (for normal user) = only fetch own balance
+            let endpoint = `${VIRTUAL_POOL_URL}/check-user-crypto-balance`;
+            if (username) {
+                endpoint += `?username=${username}`;
+            }
+
+            const response = await axios.get(endpoint, { headers });
+            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("checking user crypto balance", error);
@@ -280,6 +293,8 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
+
+
 
 
     return {
