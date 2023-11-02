@@ -261,10 +261,19 @@ export function useVirtualPool() {
         }
     };
 
-    const checkUserCryptoBalance = async (poolId: string) => {
+    const checkUserCryptoBalance = async (username?: string) => {
         try {
             setLoadingState(true);
-            const response = await axios.get(`${VIRTUAL_POOL_URL}/${poolId}/check-user-crypto-balance`, { headers });
+            // endpoint empty = fetch all users (only admin)
+            // endpoint = username fetch only 1 user
+            // (for normal user) = only fetch own balance
+            let endpoint = `${VIRTUAL_POOL_URL}/check-user-crypto-balance`;
+            if (username) {
+                endpoint += `?username=${username}`;
+            }
+    
+            const response = await axios.get(endpoint, { headers });
+            console.log(response.data)
             return response.data;
         } catch (error) {
             handleError("checking user crypto balance", error);
@@ -272,6 +281,8 @@ export function useVirtualPool() {
             setLoadingState(false);
         }
     };
+    
+    
 
 
     return {

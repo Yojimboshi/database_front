@@ -121,7 +121,7 @@ function PoolManagement({ isAdmin }: Props) {
           await getTotalLPTokenSupply(poolId)
           break;
         case 'checkUserCryptoBalance':
-          await checkUserCryptoBalance(poolId)
+          await checkUserCryptoBalance()
           break;
 
         default:
