@@ -1,14 +1,15 @@
 // src/components/announcement/AnnouncementManager.tsx
 import React, { useState } from 'react';
 import { useVirtualPool } from '../../hooks/useVirtualPool';
-import { parse } from 'dotenv';
-
+import Slider from 'react-slider';
+import "./PoolManagement.css";
 interface Props {
   isAdmin: boolean;
 }
 
 function PoolManagement({ isAdmin }: Props) {
   const [selectedFunction, setSelectedFunction] = useState('createNewPool');
+  const [sliderValue, setSliderValue] = useState(0);
   const [params, setParams] = useState<{ [key: string]: string }>({});
   const functionParams: Record<string, string[]> = {
     createNewPool: ['tokenA', 'tokenB', 'initialTokenAReserve', 'initialTokenBReserve'],
@@ -58,6 +59,9 @@ function PoolManagement({ isAdmin }: Props) {
   const handleParamChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const { name, value } = e.target;
+      if (name === 'amount') {
+        setSliderValue(parseFloat(value));
+      }
       setParams({ ...params, [name]: value });
     } catch (error) {
       throw new Error('Invalid input');
@@ -83,7 +87,7 @@ function PoolManagement({ isAdmin }: Props) {
           break;
         case 'searchPool':
           displayData = await searchPool(params.tokenA, params.tokenB);
-          console.log(displayData);
+          console.log(displayData.pools[0]);
           break;
         case 'performSwap':
           displayData = await performSwap(params.tokenA, params.tokenB, parseFloat(params.amount), params.inputBox);
@@ -118,11 +122,11 @@ function PoolManagement({ isAdmin }: Props) {
           await quote()
           break;
         case 'getLPTokenBalance':
-          displayData =await getLPTokenBalance(params.tokenA, params.tokenB)
+          displayData = await getLPTokenBalance(params.tokenA, params.tokenB)
           console.log(displayData);
           break;
         case 'getTotalLPTokenSupply':
-          displayData =await getTotalLPTokenSupply(params.tokenA, params.tokenB)
+          displayData = await getTotalLPTokenSupply(params.tokenA, params.tokenB)
           console.log(displayData);
           break;
         case 'checkUserCryptoBalance':
@@ -139,7 +143,7 @@ function PoolManagement({ isAdmin }: Props) {
 
   return (
     <div className="h-full flex flex-col justify-between items-center">
-      <div className="flex justify-between">
+      <div className="flex">
         <select value={selectedFunction} onChange={handleFunctionChange} className="p-2 border rounded-md m-2">
           {isAdmin && (
             <>
@@ -168,18 +172,43 @@ function PoolManagement({ isAdmin }: Props) {
 
       <div>
         {functionParams[selectedFunction].map((param) => (
-          <input
-            key={param}
-            type="text"
-            name={param}
-            placeholder={param}
-            value={params[param] || ''}
-            onChange={handleParamChange}
-            className="p-2 border rounded-md m-2"
-          />
+          param === 'amount' || param === 'amountADesired' || param === 'amountBDesired' || param === 'liquidityTokens' ? (
+            <div key={param} className="m-2">
+              <input
+                type="text"
+                name={param}
+                placeholder={param}
+                value={params[param] || ''}
+                onChange={handleParamChange}
+                className="p-2 border rounded-md m-2"
+              />
+              <div className="shared-track">
+                <Slider
+                  min={0}
+                  max={10000}
+                  step={1}
+                  value={sliderValue}
+                  onChange={(value) => {
+                    setSliderValue(value);
+                    setParams({ ...params, [param]: value.toString() });
+                  }}
+                  className="w-full px-3 py-2 rounded-md bg-green-100 text-blue-600" // Common class for shared track
+                />
+              </div>
+            </div>
+          ) : (
+            <input
+              key={param}
+              type="text"
+              name={param}
+              placeholder={param}
+              value={params[param] || ''}
+              onChange={handleParamChange}
+              className="p-2 border rounded-md m-2"
+            />
+          )
         ))}
       </div>
-
       <button onClick={callSelectedFunction} className="p-2 border rounded-md m-2 self-end">
         Execute
       </button>

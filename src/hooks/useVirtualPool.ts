@@ -176,7 +176,6 @@ export function useVirtualPool() {
     
     const calculateAmountIn = async (tokenA: string, tokenB: string, amountOut: number) => {
         try {
-            console.log(tokenA)
             setLoadingState(true);
             const response = await axios.post(`${VIRTUAL_POOL_URL}/${tokenA}/${tokenB}/amount-in`, { amountOut }, { headers });
             return response.data;
